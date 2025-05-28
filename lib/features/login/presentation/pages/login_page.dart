@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:zeeppay/features/login/presentation/bloc/login_bloc/login_bloc.dart';
-import 'package:zeeppay/features/login/presentation/bloc/login_event/login_event.dart';
+import 'package:zeeppay/features/login/presentation/bloc/login_bloc.dart';
+import 'package:zeeppay/features/login/presentation/bloc/login_event.dart';
 import 'package:zeeppay/features/login/presentation/mixin/login_page_mixin.dart';
 import 'package:zeeppay/features/login/presentation/widgets/text_input_custom_login.dart';
 import 'package:zeeppay/shared/bloc/common_state.dart';
@@ -25,7 +25,6 @@ class LoginPage extends StatelessWidget with LoginPageMixin {
               children: [
                 SizedBox(
                   width: MediaQuery.sizeOf(context).width * 0.4,
-
                   child: Column(
                     spacing: SizesApp.space12,
                     children: [
@@ -46,6 +45,7 @@ class LoginPage extends StatelessWidget with LoginPageMixin {
                         iconFunction: () {},
                       ),
                       BlocListener<LoginBloc, CommonState>(
+                        bloc: loginBloc,
                         listener: (context, state) {
                           if (state is LoadingState) {
                             showDialog(
@@ -58,13 +58,13 @@ class LoginPage extends StatelessWidget with LoginPageMixin {
                             );
                           }
                           if (state is SuccessState) {
-                            context.go('/settings');
+                            context.go('/home');
                           }
                         },
                         child: PrimaryButton(
                           buttonName: "Login",
                           functionPrimaryButton: () {
-                            context.read<LoginBloc>().add(
+                            loginBloc.add(
                               RealizeLogin(
                                 login: controllerLogin.text,
                                 password: controllerPassword.text,
