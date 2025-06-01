@@ -55,18 +55,28 @@ class LoginPage extends StatelessWidget with LoginPageMixin {
                         listener: (context, state) {
                           if (state is LoadingState) {
                             showDialog(
+                              barrierDismissible: false,
                               context: context,
                               builder: (context) {
-                                return Center(
-                                  child: CircularProgressIndicator(
-                                    color: Colors.black,
+                                return SizedBox(
+                                  width: MediaQuery.sizeOf(context).width * 0.2,
+                                  height:
+                                      MediaQuery.sizeOf(context).height * 0.2,
+                                  child: Center(
+                                    child: CircularProgressIndicator(
+                                      color: Colors.black,
+                                    ),
                                   ),
                                 );
                               },
                             );
                           }
                           if (state is SuccessState) {
-                            context.go('/home');
+                            if (state.data == 'configura') {
+                              context.go('/settings');
+                            } else {
+                              context.go('/home');
+                            }
                           }
                         },
                         child: PrimaryButton(

@@ -12,7 +12,7 @@ class Routes {
       GoRoute(path: '/login', builder: (context, state) => LoginPage()),
       GoRoute(
         path: '/settings',
-        builder: (context, state) => const ConfigurationPage(),
+        builder: (context, state) => ConfigurationPage(),
       ),
       GoRoute(path: '/home', builder: (contex, state) => const HomePage()),
       GoRoute(path: '/payments', builder: (contex, state) => PaymentsPage()),

@@ -40,4 +40,18 @@ class StorePosModel {
         .map((json) => StorePosModel.fromJson(json as Map<String, dynamic>))
         .toList();
   }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'name': name,
+      'attendance_area': attendanceArea,
+      'public': public,
+      'address_id': addressId,
+      'tenant_id': tenantId,
+      'created_at': createdAt,
+      'updated_at': updatedAt,
+      'deleted_at': deletedAt,
+    };
+  }
 }
