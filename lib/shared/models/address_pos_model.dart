@@ -1,4 +1,4 @@
-import 'package:zeeppay/features/login/domain/models/coordnates_pos_model.dart';
+import 'package:zeeppay/shared/models/coordnates_pos_model.dart';
 
 class AddressPosModel {
   final String id;

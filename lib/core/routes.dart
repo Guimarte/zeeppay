@@ -3,7 +3,7 @@ import 'package:zeeppay/features/configuration/presentation/page/configuration_p
 import 'package:zeeppay/features/home/presentation/pages/home_page.dart';
 import 'package:zeeppay/features/login/presentation/pages/login_page.dart';
 import 'package:zeeppay/features/payments/presentation/pages/payments_page.dart';
-import 'package:zeeppay/features/splash/page/splash_page.dart';
+import 'package:zeeppay/features/splash/presentation/page/splash_page.dart';
 
 class Routes {
   final GoRouter goRouter = GoRouter(

@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -21,8 +22,13 @@ class LoginPage extends StatelessWidget with LoginPageMixin {
             height: MediaQuery.sizeOf(context).height,
             width: MediaQuery.sizeOf(context).width,
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
               children: [
+                CachedNetworkImage(
+                  imageUrl: posDataStore.posData!.settings.themePos.logo,
+                  placeholder: (context, url) =>
+                      const CircularProgressIndicator(),
+                  errorWidget: (context, url, error) => const Icon(Icons.error),
+                ),
                 SizedBox(
                   width: MediaQuery.sizeOf(context).width * 0.4,
                   child: Column(
@@ -52,7 +58,9 @@ class LoginPage extends StatelessWidget with LoginPageMixin {
                               context: context,
                               builder: (context) {
                                 return Center(
-                                  child: CircularProgressIndicator(color: Colors.black,),
+                                  child: CircularProgressIndicator(
+                                    color: Colors.black,
+                                  ),
                                 );
                               },
                             );

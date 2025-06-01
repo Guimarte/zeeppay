@@ -1,21 +1,22 @@
 import 'package:dio/dio.dart';
 import 'package:zeeppay/core/default_options.dart';
 import 'package:zeeppay/core/pos_data_store.dart';
-import 'package:zeeppay/features/login/domain/external/urls_login.dart';
-import 'package:zeeppay/features/login/domain/models/pos_settings.dart';
+import 'package:zeeppay/features/splash/domain/external/urls_splash.dart';
 import 'package:zeeppay/shared/dio/dio_implementation.dart';
+import 'package:zeeppay/shared/models/pos_settings.dart';
 
-abstract class LoginSettingsStoreRepository {
+abstract class SplashSettingsStoreRepository {
   Future<PosDataModel> call();
 }
 
-class LoginSettingsRepositoryImpl implements LoginSettingsStoreRepository {
-  ZeeppayDio dioImplementation = ZeeppayDio();
+class SplashSettingsStoreRepositoryImpl
+    implements SplashSettingsStoreRepository {
+  ZeeppayDio zeeppayDio = ZeeppayDio();
   @override
   Future<PosDataModel> call() async {
     final token = DefaultOptions.baseTokenStore;
-    final response = await dioImplementation.get(
-      url: UrlsLogin().loginTenant,
+    final response = await zeeppayDio.get(
+      url: UrlsLogin.loginTenant,
       options: Options(headers: {'Authorization': 'Bearer $token'}),
     );
 
@@ -24,9 +25,7 @@ class LoginSettingsRepositoryImpl implements LoginSettingsStoreRepository {
     }
     ZeeppayDio.authInterceptor.setToken(response!.data['access_token']);
 
-    final requestStore = await dioImplementation.get(
-      url: UrlsLogin().settingsPos,
-    );
+    final requestStore = await zeeppayDio.get(url: UrlsLogin.settingsPos);
 
     if (requestStore!.statusCode == 200) {
       PosDataStore().posData = PosDataModel.fromJson(requestStore.data['data']);

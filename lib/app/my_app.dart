@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:zeeppay/core/routes.dart';
+import 'package:zeeppay/theme/theme_app.dart';
 
 class MyApp extends StatelessWidget {
   final Routes routes;
@@ -8,11 +9,10 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-      ),
-      routerConfig: Routes().goRouter,
+      title: 'Zeeppay',
+      debugShowCheckedModeBanner: false,
+      theme: ThemeApp().themeStandard,
+      routerConfig: routes.goRouter,
     );
   }
 }

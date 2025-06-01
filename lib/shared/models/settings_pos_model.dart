@@ -1,6 +1,6 @@
-import 'package:zeeppay/features/login/domain/models/network_pos.dart';
-import 'package:zeeppay/features/login/domain/models/store_pos_model.dart';
-import 'package:zeeppay/features/login/domain/models/theme_pos_model.dart';
+import 'package:zeeppay/shared/models/network_pos.dart';
+import 'package:zeeppay/shared/models/store_pos_model.dart';
+import 'package:zeeppay/shared/models/theme_pos_model.dart';
 
 class SettingsPosModel {
   final NetworkPos netWork;

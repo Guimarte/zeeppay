@@ -1,17 +1,31 @@
 import 'package:flutter/material.dart';
+import 'package:zeeppay/core/pos_data_store.dart';
 
 class ColorsApp {
-  final Color primary = Color(0xff1E88E5);
-  final Color secondary = Color(0xffB0BEC5);
-  final Color background = Color(0xffF5F5F5);
-  final Color primaryButton = Color(0xff1E88E5);
-  final Color primaryButtonText = Color(0xffFFFFFF);
-  final Color secondaryButton = Color(0xffECEFF1);
-  final Color secondaryButtonText = Color(0xff1E88E5);
-  final Color disableButton = Color(0xffCFD8DC);
-  final Color disableButtonText = Color(0xff90A4AE);
-  final Color eraseButtonCard = Color(0xFFFFEB3B);
-  final Color confirmButtonCard = Color(0xFF66BB6A);
+  final _posColors = PosDataStore().posData?.settings.themePos.colors;
 
-  ColorsApp();
+  static const _defaultPrimary = Color(0xFF1E88E5);
+  static const _defaultSecondary = Color(0xFFB0BEC5);
+  static const _defaultBackground = Color(0xFFF5F5F5);
+
+  Color get primary => _toColor(_posColors?.primary) ?? _defaultPrimary;
+  Color get secondary => _toColor(_posColors?.secondary) ?? _defaultSecondary;
+  Color get background =>
+      _toColor(_posColors?.background) ?? _defaultBackground;
+
+  Color get primaryButton => primary;
+  Color get primaryButtonText => Colors.white;
+  Color get secondaryButton => const Color(0xffECEFF1);
+  Color get secondaryButtonText => primary;
+  Color get disableButton => const Color(0xffCFD8DC);
+  Color get disableButtonText => const Color(0xff90A4AE);
+  Color get eraseButtonCard => const Color(0xFFFFEB3B);
+  Color get confirmButtonCard => const Color(0xFF66BB6A);
+
+  Color? _toColor(String? hex) {
+    if (hex == null) return null;
+    hex = hex.replaceAll('#', '');
+    if (hex.length == 6) hex = 'FF$hex';
+    return Color(int.parse(hex, radix: 16));
+  }
 }

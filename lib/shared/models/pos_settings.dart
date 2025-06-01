@@ -1,4 +1,4 @@
-import 'package:zeeppay/features/login/domain/models/settings_pos_model.dart';
+import 'package:zeeppay/shared/models/settings_pos_model.dart';
 
 class PosDataModel {
   final String id;

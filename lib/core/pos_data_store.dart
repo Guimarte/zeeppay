@@ -1,4 +1,4 @@
-import 'package:zeeppay/features/login/domain/models/pos_settings.dart';
+import 'package:zeeppay/shared/models/pos_settings.dart';
 
 class PosDataStore {
   PosDataModel? _posData;
