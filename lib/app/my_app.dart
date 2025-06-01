@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:zeeppay/core/routes.dart';
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final Routes routes;
+  const MyApp({super.key, required this.routes});
 
   @override
   Widget build(BuildContext context) {

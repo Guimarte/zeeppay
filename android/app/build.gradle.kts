@@ -30,13 +30,77 @@ android {
         versionName = flutter.versionName
     }
 
-    buildTypes {
-        release {
-            // TODO: Add your own signing config for the release build.
-            // Signing with the debug keys for now, so `flutter run --release` works.
-            signingConfig = signingConfigs.getByName("debug")
-        }
+    signingConfigs {
+    create("release") {
+        storeFile = file("../../keys/AndroidDefaultDev_Enhanced.jks")
+        storePassword = "GertecDefaultNDevelopmentKeyStore"
+        keyAlias = "androidenhanceddev"
+        keyPassword = "Gertec"
     }
+    getByName("debug") {
+        storeFile = file("../../keys/Development_GertecDeveloper_CustomerAPP.jks")
+        storePassword = "Development@GertecDeveloper2018"
+        keyAlias = "developmentgertecdeveloper_customerapp"
+        keyPassword = "Development@GertecDeveloper2018"
+}   
+    }
+
+    buildTypes {
+         getByName("release") {
+        isMinifyEnabled = false
+        isShrinkResources = false
+        proguardFiles(
+            getDefaultProguardFile("proguard-android-optimize.txt"),
+            "proguard-rules.pro"
+        )
+        signingConfig = signingConfigs.getByName("release")
+    }
+    getByName("debug") {
+        // isShrinkResources = false
+        // isMinifyEnabled = false
+        //  proguardFiles(
+        //     getDefaultProguardFile("proguard-android-optimize.txt"),
+        //     "proguard-rules.pro"
+        // )
+        signingConfig = signingConfigs.getByName("debug") 
+    }
+    }
+
+
+    flavorDimensions += "product"
+        productFlavors{
+        create("devee"){
+                dimension = "product"
+                applicationIdSuffix = ".devee"
+                versionNameSuffix = "-devee"
+            }
+          create("yano")  {
+                dimension = "product"
+                applicationIdSuffix = ".yano"
+                versionNameSuffix = "-yano"
+            }
+           create ("bandcard") {
+                dimension = "product"
+                applicationIdSuffix = ".bandcard"
+                versionNameSuffix = "-bandcard"
+            }
+               create ("jbcard"){
+                dimension = "product"
+                applicationIdSuffix = ".jbcard"
+                versionNameSuffix = "-jbcard"
+            }
+               create ("taustepay"){
+                dimension = "product"
+                applicationIdSuffix = ".taustepay"
+                versionNameSuffix = "-taustepay"
+            }
+               create ("queirozpremium"){
+                dimension = "product"
+                applicationIdSuffix = ".queirozpremium"
+                versionNameSuffix = "-queirozpremium"
+            }
+        }
+    
 }
 
 flutter {

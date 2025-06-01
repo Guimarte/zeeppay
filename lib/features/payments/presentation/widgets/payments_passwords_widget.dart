@@ -5,7 +5,6 @@ import 'package:zeeppay/features/payments/presentation/widgets/input_password_ca
 
 class PaymentsPasswordsWidget extends StatelessWidget {
   PaymentsPasswordsWidget({super.key, required this.controllerPasswordCard});
-
   final TextEditingController controllerPasswordCard;
   final numbers = [
     '1',

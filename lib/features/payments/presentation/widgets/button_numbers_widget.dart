@@ -18,7 +18,10 @@ class ButtonNumbersWidget extends StatelessWidget {
       child: Container(
         width: 30,
         height: 30,
-        decoration: BoxDecoration(border: Border.all(color: Colors.black)),
+        decoration: BoxDecoration(
+          border: Border.all(color: Colors.black),
+          borderRadius: BorderRadius.all(Radius.circular(8)),
+        ),
         child: Center(
           child: Text(number, style: TextStyle(fontWeight: FontWeight.bold)),
         ),

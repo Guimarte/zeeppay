@@ -12,27 +12,30 @@ class PaymentsPage extends StatelessWidget with PaymentsMixin {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SizedBox(
-        height: MediaQuery.sizeOf(context).height,
-        child: BlocBuilder<PaymentsBloc, PaymentsState>(
-          bloc: paymentsBloc,
-          builder: (context, state) {
-            switch (state) {
-              case PaymentsStateGetPassword():
-                return PaymentsPasswordsWidget(
-                  controllerPasswordCard: controllerPasswordCard,
-                );
-              case PaymentsStateLoading():
-                return Center(child: CircularProgressIndicator());
-              default:
-                return PaymentsTypePaymentWidget(
-                  function: () {
-                    paymentsBloc.add(PaymentsEventGetPassword());
-                  },
-                );
-            }
-          },
+    return SafeArea(
+      child: Scaffold(
+        appBar: AppBar(title: Text(flavorConfig.name), centerTitle: true),
+        body: SizedBox(
+          height: MediaQuery.sizeOf(context).height,
+          child: BlocBuilder<PaymentsBloc, PaymentsState>(
+            bloc: paymentsBloc,
+            builder: (context, state) {
+              switch (state) {
+                case PaymentsStateGetPassword():
+                  return PaymentsPasswordsWidget(
+                    controllerPasswordCard: controllerPasswordCard,
+                  );
+                case PaymentsStateLoading():
+                  return Center(child: CircularProgressIndicator());
+                default:
+                  return PaymentsTypePaymentWidget(
+                    function: () {
+                      paymentsBloc.add(PaymentsEventGetPassword());
+                    },
+                  );
+              }
+            },
+          ),
         ),
       ),
     );

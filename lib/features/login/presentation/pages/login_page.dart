@@ -52,7 +52,7 @@ class LoginPage extends StatelessWidget with LoginPageMixin {
                               context: context,
                               builder: (context) {
                                 return Center(
-                                  child: CircularProgressIndicator(),
+                                  child: CircularProgressIndicator(color: Colors.black,),
                                 );
                               },
                             );
