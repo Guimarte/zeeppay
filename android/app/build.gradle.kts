@@ -1,14 +1,22 @@
+import java.util.Properties
+import java.io.FileInputStream
+
 plugins {
     id("com.android.application")
     id("kotlin-android")
-    // The Flutter Gradle Plugin must be applied after the Android and Kotlin Gradle plugins.
     id("dev.flutter.flutter-gradle-plugin")
+}
+
+val keystoreProperties = Properties()
+val keystorePropertiesFile = file("key.properties")
+if (keystorePropertiesFile.exists()) {
+    keystoreProperties.load(FileInputStream(keystorePropertiesFile))
 }
 
 android {
     namespace = "com.example.zeeppay"
     compileSdk = flutter.compileSdkVersion
-    ndkVersion = flutter.ndkVersion
+    ndkVersion = "27.0.12077973"
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
@@ -24,83 +32,73 @@ android {
         applicationId = "com.example.zeeppay"
         // You can update the following values to match your application needs.
         // For more information, see: https://flutter.dev/to/review-gradle-config.
-        minSdk = flutter.minSdkVersion
+        minSdk = 22
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
         versionName = flutter.versionName
     }
 
-    signingConfigs {
+   signingConfigs {
     create("release") {
-        storeFile = file("../../keys/AndroidDefaultDev_Enhanced.jks")
-        storePassword = "GertecDefaultNDevelopmentKeyStore"
-        keyAlias = "androidenhanceddev"
-        keyPassword = "Gertec"
+        keyAlias = keystoreProperties["keyAlias"]?.toString() ?: error("Missing keyAlias in key.properties")
+        keyPassword = keystoreProperties["keyPassword"]?.toString() ?: error("Missing keyPassword in key.properties")
+        storeFile = keystoreProperties["storeFile"]?.toString()?.let { file(it) }
+            ?: error("Missing storeFile in key.properties")
+        storePassword = keystoreProperties["storePassword"]?.toString() ?: error("Missing storePassword in key.properties")
     }
-    getByName("debug") {
-        storeFile = file("../../keys/Development_GertecDeveloper_CustomerAPP.jks")
-        storePassword = "Development@GertecDeveloper2018"
-        keyAlias = "developmentgertecdeveloper_customerapp"
-        keyPassword = "Development@GertecDeveloper2018"
-}   
-    }
+}
 
-    buildTypes {
-         getByName("release") {
+
+
+   buildTypes {
+    getByName("release") {
         isMinifyEnabled = false
         isShrinkResources = false
-        proguardFiles(
-            getDefaultProguardFile("proguard-android-optimize.txt"),
-            "proguard-rules.pro"
-        )
         signingConfig = signingConfigs.getByName("release")
     }
     getByName("debug") {
-        // isShrinkResources = false
-        // isMinifyEnabled = false
-        //  proguardFiles(
-        //     getDefaultProguardFile("proguard-android-optimize.txt"),
-        //     "proguard-rules.pro"
-        // )
-        signingConfig = signingConfigs.getByName("debug") 
+        isDebuggable = true
+        signingConfig = signingConfigs.getByName("release")
     }
-    }
+}
 
-
-    flavorDimensions += "product"
-        productFlavors{
-        create("devee"){
-                dimension = "product"
-                applicationIdSuffix = ".devee"
-                versionNameSuffix = "-devee"
-            }
-          create("yano")  {
-                dimension = "product"
-                applicationIdSuffix = ".yano"
-                versionNameSuffix = "-yano"
-            }
-           create ("bandcard") {
-                dimension = "product"
-                applicationIdSuffix = ".bandcard"
-                versionNameSuffix = "-bandcard"
-            }
-               create ("jbcard"){
-                dimension = "product"
-                applicationIdSuffix = ".jbcard"
-                versionNameSuffix = "-jbcard"
-            }
-               create ("taustepay"){
-                dimension = "product"
-                applicationIdSuffix = ".taustepay"
-                versionNameSuffix = "-taustepay"
-            }
-               create ("queirozpremium"){
-                dimension = "product"
-                applicationIdSuffix = ".queirozpremium"
-                versionNameSuffix = "-queirozpremium"
-            }
-        }
     
+    flavorDimensions += "product"
+    productFlavors {
+        create("devee") {
+            dimension = "product"
+            applicationIdSuffix = ".devee"
+            versionNameSuffix = "-devee"
+        }
+        create("yano") {
+            dimension = "product"
+            applicationIdSuffix = ".yano"
+            versionNameSuffix = "-yano"
+        }
+        create("bandcard") {
+            dimension = "product"
+            applicationIdSuffix = ".bandcard"
+            versionNameSuffix = "-bandcard"
+        }
+        create("jbcard") {
+            dimension = "product"
+            applicationIdSuffix = ".jbcard"
+            versionNameSuffix = "-jbcard"
+        }
+        create("taustepay") {
+            dimension = "product"
+            applicationIdSuffix = ".taustepay"
+            versionNameSuffix = "-taustepay"
+        }
+        create("queirozpremium") {
+            dimension = "product"
+            applicationIdSuffix = ".queirozpremium"
+            versionNameSuffix = "-queirozpremium"
+        }
+    }
+}
+dependencies {
+    implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.aar"))))
 }
 
 flutter {
