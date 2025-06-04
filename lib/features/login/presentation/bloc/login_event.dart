@@ -1,7 +1,12 @@
 abstract class LoginEvent {}
 
 class RealizeLogin extends LoginEvent {
-  String login;
+  String username;
   String password;
-  RealizeLogin({required this.login, required this.password});
+  bool saveCredentials;
+  RealizeLogin({
+    required this.username,
+    required this.password,
+    required this.saveCredentials,
+  });
 }

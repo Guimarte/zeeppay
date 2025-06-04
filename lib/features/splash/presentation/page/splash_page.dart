@@ -24,13 +24,13 @@ class _SplashPageState extends State<SplashPage>
         } else if (state is FailureState) {
           ScaffoldMessenger.of(
             context,
-          ).showSnackBar(SnackBar(content: Text('Erro: ${state.message}')));
+          ).showSnackBar(SnackBar(content: Text(state.message)));
         }
       },
       builder: (context, state) {
         return Scaffold(
           body: Center(
-            child: Image.asset('assets/default/splash.png', width: 200),
+            child: Image.asset('assets/default/splash.png', width: 150),
           ),
         );
       },

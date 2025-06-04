@@ -1,5 +1,7 @@
 import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:zeeppay/features/login/domain/repository/login_repository.dart';
+import 'package:zeeppay/features/login/domain/usecase/login_usecase.dart';
 import 'package:zeeppay/features/login/presentation/bloc/login_bloc.dart';
 import 'package:zeeppay/features/payments/presentation/bloc/payments_bloc.dart';
 import 'package:zeeppay/features/splash/domain/repository/splash_settings_store_repository.dart';
@@ -18,10 +20,14 @@ void setupDependencies(SharedPreferences prefs) async {
   getIt.registerLazySingleton<SplashSettingsStoreRepository>(
     () => SplashSettingsStoreRepositoryImpl(),
   );
+  getIt.registerLazySingleton<LoginRepository>(() => LoginRepositoryImpl());
 
   // Register Usecases (depende do repositório)
   getIt.registerLazySingleton<SplashUsecase>(
     () => SplashUsecase(getIt<SplashSettingsStoreRepository>()),
+  );
+  getIt.registerLazySingleton<LoginUsecase>(
+    () => LoginUsecaseImpl(getIt<LoginRepository>()),
   );
 
   // Register Blocs (depende do Usecase)
@@ -29,7 +35,9 @@ void setupDependencies(SharedPreferences prefs) async {
     () => SplashBloc(splashUsecase: getIt<SplashUsecase>()),
   );
 
-  getIt.registerFactory<LoginBloc>(() => LoginBloc());
+  getIt.registerFactory<LoginBloc>(
+    () => LoginBloc(loginUsecase: getIt<LoginUsecase>()),
+  );
 
   getIt.registerFactory<PaymentsBloc>(() => PaymentsBloc());
 }

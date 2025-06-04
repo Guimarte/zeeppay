@@ -25,7 +25,7 @@ class PrimaryButton extends StatelessWidget {
             borderRadius: BorderRadius.circular(12),
           ),
         ),
-        child: Text(buttonName),
+        child: Text(buttonName, style: TextStyle(color: colorsApp.text)),
       ),
     );
   }

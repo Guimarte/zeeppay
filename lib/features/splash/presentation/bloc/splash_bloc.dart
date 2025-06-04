@@ -11,7 +11,17 @@ class SplashBloc extends Bloc<SplashEvent, CommonState> {
   SplashUsecase splashUsecase;
 
   _start(SplashEventStart event, Emitter<CommonState> emitter) async {
-    await splashUsecase.startSplash();
-    emitter(SuccessState('Splash concluída'));
+    try {
+      await splashUsecase.startSplash();
+      emitter(SuccessState('Splash concluída'));
+      return;
+    } catch (e) {
+      emitter(
+        FailureState(
+          'Erro ao iniciar splash: Por favor, verifique sua conexão com a internet e reinicie o aplicativo.',
+        ),
+      );
+      return;
+    }
   }
 }

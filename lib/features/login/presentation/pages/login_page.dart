@@ -5,32 +5,39 @@ import 'package:go_router/go_router.dart';
 import 'package:zeeppay/features/login/presentation/bloc/login_bloc.dart';
 import 'package:zeeppay/features/login/presentation/bloc/login_event.dart';
 import 'package:zeeppay/features/login/presentation/mixin/login_page_mixin.dart';
+import 'package:zeeppay/features/login/presentation/widgets/check_box.dart';
 import 'package:zeeppay/features/login/presentation/widgets/text_input_custom_login.dart';
 import 'package:zeeppay/shared/bloc/common_state.dart';
 import 'package:zeeppay/shared/widgets/primary_button.dart';
 import 'package:zeeppay/theme/sizes_app.dart';
 
-class LoginPage extends StatelessWidget with LoginPageMixin {
-  LoginPage({super.key});
+class LoginPage extends StatefulWidget {
+  const LoginPage({super.key});
 
+  @override
+  State<LoginPage> createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> with LoginPageMixin {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
         body: SingleChildScrollView(
           child: SizedBox(
-            height: MediaQuery.sizeOf(context).height,
             width: MediaQuery.sizeOf(context).width,
+            height: MediaQuery.sizeOf(context).height,
             child: Column(
               children: [
                 CachedNetworkImage(
                   imageUrl: posDataStore.posData!.settings.themePos.logo,
                   placeholder: (context, url) =>
-                      const CircularProgressIndicator(),
+                      const Center(child: CircularProgressIndicator()),
+                  fit: BoxFit.fitHeight,
                   errorWidget: (context, url, error) => const Icon(Icons.error),
                 ),
                 SizedBox(
-                  width: MediaQuery.sizeOf(context).width * 0.4,
+                  width: MediaQuery.sizeOf(context).width * 0.6,
                   child: Column(
                     spacing: SizesApp.space12,
                     children: [
@@ -49,6 +56,19 @@ class LoginPage extends StatelessWidget with LoginPageMixin {
                         hintText: hintTextPassword,
                         textInputType: inputTypePassword,
                         iconFunction: () {},
+                      ),
+                      BlocBuilder<LoginBloc, CommonState>(
+                        bloc: loginBloc,
+                        builder: (context, state) {
+                          return CheckBoxWidget(
+                            isChecked: isChecked,
+                            onChanged: (value) {
+                              setState(() {
+                                isChecked = value!;
+                              });
+                            },
+                          );
+                        },
                       ),
                       BlocListener<LoginBloc, CommonState>(
                         bloc: loginBloc,
@@ -72,7 +92,7 @@ class LoginPage extends StatelessWidget with LoginPageMixin {
                             );
                           }
                           if (state is SuccessState) {
-                            if (state.data == 'configura') {
+                            if (state.data == false) {
                               context.go('/settings');
                             } else {
                               context.go('/home');
@@ -84,8 +104,9 @@ class LoginPage extends StatelessWidget with LoginPageMixin {
                           functionPrimaryButton: () {
                             loginBloc.add(
                               RealizeLogin(
-                                login: controllerLogin.text,
+                                username: controllerLogin.text,
                                 password: controllerPassword.text,
+                                saveCredentials: isChecked,
                               ),
                             );
                           },
