@@ -3,6 +3,7 @@ import 'package:zeeppay/features/configuration/presentation/page/configuration_p
 import 'package:zeeppay/features/home/presentation/pages/home_page.dart';
 import 'package:zeeppay/features/login/presentation/pages/login_page.dart';
 import 'package:zeeppay/features/payments/presentation/pages/payments_page.dart';
+import 'package:zeeppay/features/profile/presentation/pages/profile_page.dart';
 import 'package:zeeppay/features/splash/presentation/page/splash_page.dart';
 
 class Routes {
@@ -16,6 +17,7 @@ class Routes {
       ),
       GoRoute(path: '/home', builder: (contex, state) => const HomePage()),
       GoRoute(path: '/payments', builder: (contex, state) => PaymentsPage()),
+      GoRoute(path: '/profile', builder: (contex, state) => (ProfilePage())),
     ],
   );
 }

@@ -24,6 +24,7 @@ class ButtonPaymentsWidget extends StatelessWidget {
       },
       child: Container(
         decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(8),
           border: Border.all(color: Colors.black),
           color: isConfirmButton
               ? colors.confirmButtonCard

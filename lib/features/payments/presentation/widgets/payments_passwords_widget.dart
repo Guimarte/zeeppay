@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:zeeppay/features/payments/presentation/widgets/button_numbers_widget.dart';
 import 'package:zeeppay/features/payments/presentation/widgets/button_payments_widget.dart';
 import 'package:zeeppay/features/payments/presentation/widgets/input_password_card_widget.dart';
+import 'package:zeeppay/shared/widgets/button_numbers_widget.dart';
+import 'package:zeeppay/shared/widgets/digital_keyboard.dart';
 
 class PaymentsPasswordsWidget extends StatelessWidget {
   PaymentsPasswordsWidget({super.key, required this.controllerPasswordCard});
+
   final TextEditingController controllerPasswordCard;
+
   final numbers = [
     '1',
     '2',
@@ -20,12 +23,15 @@ class PaymentsPasswordsWidget extends StatelessWidget {
     '0',
     'confirm',
   ];
+
   @override
   Widget build(BuildContext context) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Center(
+        Expanded(child: SizedBox()),
+        Expanded(
+          flex: 2,
           child: SizedBox(
             width: MediaQuery.sizeOf(context).width * 0.7,
             child: InputPasswordCardWidget(
@@ -33,53 +39,35 @@ class PaymentsPasswordsWidget extends StatelessWidget {
             ),
           ),
         ),
-        Center(
-          child: SizedBox(
-            width: MediaQuery.sizeOf(context).width * 0.7,
-            child: GridView.count(
-              shrinkWrap: true,
-              crossAxisCount: 3,
-              mainAxisSpacing: 8,
-              crossAxisSpacing: 8,
-              physics: NeverScrollableScrollPhysics(),
-              children: numbers.map((e) {
-                switch (e) {
-                  case ('erase'):
-                    return ButtonPaymentsWidget(
-                      function: () {
-                        if (controllerPasswordCard.text.isNotEmpty) {
-                          controllerPasswordCard.text = controllerPasswordCard
-                              .text
-                              .substring(
-                                0,
-                                controllerPasswordCard.text.length - 1,
-                              );
-                        }
-                      },
-                      cardText: 'Corrigir',
-                      isConfirmButton: false,
-                      icon: Icons.backspace,
-                    );
-                  case ('confirm'):
-                    return ButtonPaymentsWidget(
-                      function: () {
-                        print(controllerPasswordCard.text);
-                      },
-                      cardText: 'Confirmar',
-                      isConfirmButton: true,
-                    );
-                  default:
-                    return ButtonNumbersWidget(
-                      number: e,
-                      function: (string) {
-                        if (controllerPasswordCard.text.length == 6) {
-                          return;
-                        }
-                        controllerPasswordCard.text += string;
-                      },
-                    );
+        Expanded(
+          flex: 10,
+          child: DigitalKeyboard(
+            numbers: numbers,
+            controller: controllerPasswordCard,
+            confirmButton: ButtonPaymentsWidget(
+              function: () {
+                print(controllerPasswordCard.text);
+              },
+              cardText: 'Confirmar',
+              isConfirmButton: true,
+            ),
+            eraseButton: ButtonPaymentsWidget(
+              function: () {
+                if (controllerPasswordCard.text.isNotEmpty) {
+                  controllerPasswordCard.text = controllerPasswordCard.text
+                      .substring(0, controllerPasswordCard.text.length - 1);
                 }
-              }).toList(),
+              },
+              cardText: '',
+              isConfirmButton: false,
+              icon: Icons.backspace,
+            ),
+            numberButton: (String number) => ButtonNumbersWidget(
+              number: number,
+              function: (string) {
+                if (controllerPasswordCard.text.length == 6) return;
+                controllerPasswordCard.text += string;
+              },
             ),
           ),
         ),

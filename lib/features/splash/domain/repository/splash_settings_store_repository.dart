@@ -17,7 +17,7 @@ class SplashSettingsStoreRepositoryImpl
       isStoreRequest: true,
     );
 
-    if (requestStore!.statusCode == 200) {
+    if (requestStore.statusCode == 200) {
       PosDataStore().posData = PosDataModel.fromJson(requestStore.data['data']);
       return PosDataModel.fromJson(requestStore.data['data']);
     } else {

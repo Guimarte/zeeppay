@@ -1,8 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:zeeppay/core/pos_data_store.dart';
 import 'package:zeeppay/features/home/presentation/widgets/card_widget.dart';
-import 'package:zeeppay/shared/service/print_service.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -25,7 +25,8 @@ class HomePage extends StatelessWidget {
                     CardWidget(
                       cardName: "VENDAS",
                       onTap: () {
-                        PrinterService.printReceive();
+                        context.go('/payments');
+                        // PrinterService.printReceive();
                       },
                     ),
                     CardWidget(cardName: "PERFIL", onTap: () {}),

@@ -14,7 +14,6 @@ class PaymentsPage extends StatelessWidget with PaymentsMixin {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        appBar: AppBar(title: Text(flavorConfig.name), centerTitle: true),
         body: SizedBox(
           height: MediaQuery.sizeOf(context).height,
           child: BlocBuilder<PaymentsBloc, PaymentsState>(
