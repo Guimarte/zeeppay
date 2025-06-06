@@ -1,3 +1,5 @@
 class UrlsProfile {
-  static const String getConsultarPerfil = '/Cliente/ConsultarPerfil';
+  static String getConsultarPerfil(String cpf) {
+    return '/Cliente/ConsultarPerfil?strClient=$cpf';
+  }
 }

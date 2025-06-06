@@ -6,6 +6,14 @@ class ProfileStateInitial extends ProfileState {}
 
 class ProfileStateLoading extends ProfileState {}
 
+class ProfileStateSearchCpf extends ProfileState {}
+
+class ProfileStateSearchCard extends ProfileState {
+  final String cardNumber;
+
+  ProfileStateSearchCard({required this.cardNumber});
+}
+
 class ProfileStateSucess extends ProfileState {
   final ClienteModel cliente;
   ProfileStateSucess({required this.cliente});

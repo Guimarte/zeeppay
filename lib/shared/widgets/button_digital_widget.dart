@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:zeeppay/core/injector.dart';
 import 'package:zeeppay/theme/colors_app.dart';
 
-class ButtonPaymentsWidget extends StatelessWidget {
-  const ButtonPaymentsWidget({
+class ButtonDigitalWidget extends StatelessWidget {
+  const ButtonDigitalWidget({
     super.key,
     this.icon,
     required this.cardText,
@@ -36,7 +36,11 @@ class ButtonPaymentsWidget extends StatelessWidget {
             isConfirmButton ? SizedBox.shrink() : Icon(icon),
             isConfirmButton ? SizedBox.shrink() : SizedBox(width: 4),
 
-            Text(cardText, style: TextStyle(fontWeight: FontWeight.bold)),
+            Text(
+              cardText,
+              textAlign: TextAlign.center,
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
           ],
         ),
       ),

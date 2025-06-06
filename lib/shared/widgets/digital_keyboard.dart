@@ -4,14 +4,12 @@ class DigitalKeyboard extends StatelessWidget {
   const DigitalKeyboard({
     super.key,
     required this.numbers,
-    required this.controller,
     required this.confirmButton,
     required this.eraseButton,
     required this.numberButton,
   });
 
   final List<String> numbers;
-  final TextEditingController controller;
   final Widget confirmButton;
   final Widget eraseButton;
   final Widget Function(String) numberButton;

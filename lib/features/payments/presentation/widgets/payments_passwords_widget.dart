@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:zeeppay/features/payments/presentation/widgets/button_payments_widget.dart';
 import 'package:zeeppay/features/payments/presentation/widgets/input_password_card_widget.dart';
+import 'package:zeeppay/shared/widgets/button_digital_widget.dart';
 import 'package:zeeppay/shared/widgets/button_numbers_widget.dart';
 import 'package:zeeppay/shared/widgets/digital_keyboard.dart';
 
@@ -43,15 +43,14 @@ class PaymentsPasswordsWidget extends StatelessWidget {
           flex: 10,
           child: DigitalKeyboard(
             numbers: numbers,
-            controller: controllerPasswordCard,
-            confirmButton: ButtonPaymentsWidget(
+            confirmButton: ButtonDigitalWidget(
               function: () {
                 print(controllerPasswordCard.text);
               },
               cardText: 'Confirmar',
               isConfirmButton: true,
             ),
-            eraseButton: ButtonPaymentsWidget(
+            eraseButton: ButtonDigitalWidget(
               function: () {
                 if (controllerPasswordCard.text.isNotEmpty) {
                   controllerPasswordCard.text = controllerPasswordCard.text
