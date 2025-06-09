@@ -8,34 +8,24 @@ class CpfFormFieldWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
+
     return SizedBox(
       width: width * 0.7,
-      child: TextFormField(
+      child: TextField(
         controller: cpfController,
-        keyboardType: TextInputType.none,
-        inputFormatters: [
-          FilteringTextInputFormatter.digitsOnly,
-          CpfInputFormatter(),
-        ],
+        enabled: false, // impede edição manual
+        textAlign: TextAlign.center,
+        style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
         decoration: InputDecoration(
-          labelText: 'CPF',
           hintText: '000.000.000-00',
-          prefixIcon: Icon(Icons.perm_identity),
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(16)),
-          focusedBorder: OutlineInputBorder(
+          prefixIcon: const Icon(Icons.perm_identity),
+          filled: true,
+          fillColor: Colors.grey.shade200,
+          disabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(16),
-            borderSide: BorderSide(color: Colors.deepPurple, width: 2),
+            borderSide: const BorderSide(color: Colors.grey),
           ),
         ),
-        validator: (value) {
-          if (value == null || value.isEmpty) {
-            return 'Informe o CPF';
-          }
-          if (!isValidCPF(value)) {
-            return 'CPF inválido';
-          }
-          return null;
-        },
       ),
     );
   }

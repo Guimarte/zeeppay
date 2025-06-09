@@ -20,7 +20,7 @@ class _SplashPageState extends State<SplashPage>
       bloc: splashBloc,
       listener: (context, state) {
         if (state is SuccessState) {
-          context.go('/login');
+          context.push('/login');
         } else if (state is FailureState) {
           ScaffoldMessenger.of(
             context,

@@ -8,8 +8,8 @@ import 'package:zeeppay/features/login/presentation/mixin/login_page_mixin.dart'
 import 'package:zeeppay/features/login/presentation/widgets/check_box.dart';
 import 'package:zeeppay/features/login/presentation/widgets/text_input_custom_login.dart';
 import 'package:zeeppay/shared/bloc/common_state.dart';
+import 'package:zeeppay/shared/widgets/dialog_loading.dart';
 import 'package:zeeppay/shared/widgets/primary_button.dart';
-import 'package:zeeppay/theme/sizes_app.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -19,100 +19,110 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> with LoginPageMixin {
+  bool _obscurePassword = true;
+
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+    final theme = Theme.of(context);
+
     return SafeArea(
       child: Scaffold(
-        body: SingleChildScrollView(
-          child: SizedBox(
-            width: MediaQuery.sizeOf(context).width,
-            height: MediaQuery.sizeOf(context).height,
+        body: Center(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 CachedNetworkImage(
                   imageUrl: posDataStore.posData!.settings.themePos.logo,
                   placeholder: (context, url) =>
                       const Center(child: CircularProgressIndicator()),
-                  fit: BoxFit.fitHeight,
-                  errorWidget: (context, url, error) => const Icon(Icons.error),
+                  errorWidget: (context, url, error) =>
+                      const Icon(Icons.error, size: 48, color: Colors.red),
+                  height: 200,
+                  fit: BoxFit.contain,
                 ),
-                SizedBox(
-                  width: MediaQuery.sizeOf(context).width * 0.6,
-                  child: Column(
-                    spacing: SizesApp.space12,
-                    children: [
-                      TextInputCustomLogin(
-                        suffixIcon: null,
-                        controller: controllerLogin,
-                        isPassword: false,
-                        hintText: hintTextLogin,
-                        textInputType: inputTypeLogin,
-                        iconFunction: () {},
-                      ),
-                      TextInputCustomLogin(
-                        suffixIcon: null,
-                        controller: controllerPassword,
-                        isPassword: true,
-                        hintText: hintTextPassword,
-                        textInputType: inputTypePassword,
-                        iconFunction: () {},
-                      ),
-                      BlocBuilder<LoginBloc, CommonState>(
-                        bloc: loginBloc,
-                        builder: (context, state) {
-                          return CheckBoxWidget(
-                            isChecked: isChecked,
-                            onChanged: (value) {
-                              setState(() {
-                                isChecked = value!;
-                              });
-                            },
-                          );
-                        },
-                      ),
-                      BlocListener<LoginBloc, CommonState>(
-                        bloc: loginBloc,
-                        listener: (context, state) {
-                          if (state is LoadingState) {
-                            showDialog(
-                              barrierDismissible: false,
-                              context: context,
-                              builder: (context) {
-                                return SizedBox(
-                                  width: MediaQuery.sizeOf(context).width * 0.2,
-                                  height:
-                                      MediaQuery.sizeOf(context).height * 0.2,
-                                  child: Center(
-                                    child: CircularProgressIndicator(
-                                      color: Colors.black,
-                                    ),
-                                  ),
-                                );
-                              },
-                            );
-                          }
-                          if (state is SuccessState) {
-                            if (state.data == false) {
-                              context.go('/settings');
-                            } else {
-                              context.go('/home');
-                            }
-                          }
-                        },
-                        child: PrimaryButton(
-                          buttonName: "Login",
-                          functionPrimaryButton: () {
-                            loginBloc.add(
-                              RealizeLogin(
-                                username: controllerLogin.text,
-                                password: controllerPassword.text,
-                                saveCredentials: isChecked,
-                              ),
-                            );
-                          },
+                const SizedBox(height: 20),
+                TextInputCustomLogin(
+                  controller: controllerLogin,
+                  isPassword: false,
+                  hintText: hintTextLogin,
+                  textInputType: inputTypeLogin,
+                  suffixIcon: Icons.person,
+                  iconFunction: () {},
+                ),
+                const SizedBox(height: 16),
+                TextInputCustomLogin(
+                  controller: controllerPassword,
+                  isPassword: _obscurePassword,
+                  hintText: hintTextPassword,
+                  textInputType: inputTypePassword,
+                  suffixIcon: _obscurePassword
+                      ? Icons.visibility
+                      : Icons.visibility_off,
+                  iconFunction: () {
+                    setState(() {
+                      _obscurePassword = !_obscurePassword;
+                    });
+                  },
+                ),
+                const SizedBox(height: 20),
+                BlocBuilder<LoginBloc, CommonState>(
+                  bloc: loginBloc,
+                  builder: (context, state) {
+                    return CheckBoxWidget(
+                      isChecked: isChecked,
+                      onChanged: (value) {
+                        setState(() {
+                          isChecked = value!;
+                        });
+                      },
+                    );
+                  },
+                ),
+                const SizedBox(height: 24),
+                BlocListener<LoginBloc, CommonState>(
+                  bloc: loginBloc,
+                  listener: (context, state) {
+                    if (state is LoadingState) {
+                      dialogLoading(
+                        context,
+                        theme,
+                        Center(
+                          child: CircularProgressIndicator(
+                            color: theme.colorScheme.primary,
+                          ),
                         ),
-                      ),
-                    ],
+                      );
+                    }
+                    if (state is SuccessState) {
+                      ScaffoldMessenger.of(context).hideCurrentSnackBar();
+
+                      if (state.data == false) {
+                        context.go('/settings');
+                      } else {
+                        context.go('/home');
+                      }
+                    }
+                    if (state is FailureState) {
+                      ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text('Erro: ${state.message}')),
+                      );
+                    }
+                  },
+                  child: PrimaryButton(
+                    buttonName: "Login",
+                    functionPrimaryButton: () {
+                      loginBloc.add(
+                        RealizeLogin(
+                          username: controllerLogin.text,
+                          password: controllerPassword.text,
+                          saveCredentials: isChecked,
+                        ),
+                      );
+                    },
                   ),
                 ),
               ],

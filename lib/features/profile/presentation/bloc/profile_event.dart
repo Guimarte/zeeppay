@@ -13,3 +13,5 @@ class ProfileCardEventLoad extends ProfileEvent {
 }
 
 class ProfileCpfEventSet extends ProfileEvent {}
+
+class ProfileSetInitialEvent extends ProfileEvent {}

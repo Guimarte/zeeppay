@@ -45,6 +45,8 @@ dependencies:
   cached_network_image: ^3.4.1
   flutter_native_splash: ^2.4.6
   flutter_masked_text2: ^0.9.1
+  intl: ^0.20.2
+  fl_chart: ^1.0.0
 
 flutter_native_splash:
   color: "#ffffff"

@@ -5,6 +5,7 @@ import 'package:zeeppay/features/profile/presentation/bloc/profile_event.dart';
 import 'package:zeeppay/features/profile/presentation/bloc/profile_state.dart';
 import 'package:zeeppay/features/profile/presentation/mixin/profile_page_mixin.dart';
 import 'package:zeeppay/features/profile/presentation/widgets/initial_profile_widget.dart';
+import 'package:zeeppay/features/profile/presentation/widgets/loaded_profile_widget.dart';
 import 'package:zeeppay/features/profile/presentation/widgets/search_cpf_profile_widget.dart';
 
 class ProfilePage extends StatelessWidget with ProfilePageMixin {
@@ -37,6 +38,12 @@ class ProfilePage extends StatelessWidget with ProfilePageMixin {
                     ),
                   );
                 },
+              );
+            }
+            if (state is ProfileStateSucess) {
+              return LoadedProfileWidget(
+                client: state.cliente.first,
+                profileBloc: profileBloc,
               );
             }
             return Center(

@@ -47,7 +47,8 @@ class PaymentsPasswordsWidget extends StatelessWidget {
               function: () {
                 print(controllerPasswordCard.text);
               },
-              cardText: 'Confirmar',
+              icon: Icons.check_circle,
+              cardText: '',
               isConfirmButton: true,
             ),
             eraseButton: ButtonDigitalWidget(

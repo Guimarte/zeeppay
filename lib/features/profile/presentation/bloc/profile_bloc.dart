@@ -8,6 +8,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     on<ProfileCpfEventLoad>(_geClientCpf);
     on<ProfileCardEventLoad>(_loadProfileCard);
     on<ProfileCpfEventSet>(_setProfileCpf);
+    on<ProfileSetInitialEvent>(_setInitialState);
   }
 
   ProfileUsecase profileUsecase;
@@ -19,7 +20,6 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     emit(ProfileStateLoading());
     try {
       final cliente = await profileUsecase.call(event.document);
-      print(cliente);
       emit(ProfileStateSucess(cliente: cliente));
     } catch (e) {
       emit(ProfileStateError(message: e.toString()));
@@ -28,7 +28,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
 
   Future<void> _loadProfileCard(
     ProfileCardEventLoad event,
-    Emitter<ProfileState> emit,
+    Emitter<ProfileState> emitter,
   ) async {
     //   emit(ProfileStateLoading());
     //   try {
@@ -40,11 +40,18 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     // }
   }
 
+  void _setInitialState(
+    ProfileSetInitialEvent event,
+    Emitter<ProfileState> emitter,
+  ) {
+    emitter(ProfileStateInitial());
+  }
+
   Future<void> _setProfileCpf(
     ProfileCpfEventSet event,
-    Emitter<ProfileState> emit,
+    Emitter<ProfileState> emitter,
   ) async {
-    emit(ProfileStateSearchCpf());
+    emitter(ProfileStateSearchCpf());
     // emit(ProfileStateLoading());
     // try {
     //   final cliente = await profileUsecase(cpf: cpf);

@@ -10,8 +10,10 @@ class SearchCpfProfileWidget extends StatelessWidget {
     required this.cpfController,
     required this.onConfirm,
   });
+
   final TextEditingController cpfController;
   final Function() onConfirm;
+
   final List<String> numbers = [
     '1',
     '2',
@@ -29,31 +31,36 @@ class SearchCpfProfileWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      child: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          spacing: 16,
-          children: [
-            Expanded(child: SizedBox()),
-            Expanded(
-              flex: 2,
-              child: CpfFormFieldWidget(cpfController: cpfController),
-            ),
-            Expanded(
-              flex: 10,
-              child: DigitalKeyboard(
+    final theme = Theme.of(context);
+
+    return SafeArea(
+      child: Container(
+        color: Colors.grey[100],
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+          child: Column(
+            children: [
+              const SizedBox(height: 16),
+              Text(
+                'Digite seu CPF:',
+                style: theme.textTheme.headlineSmall?.copyWith(
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(height: 16),
+              CpfFormFieldWidget(cpfController: cpfController),
+              const Spacer(),
+              DigitalKeyboard(
                 numbers: numbers,
                 confirmButton: ButtonDigitalWidget(
-                  cardText: "Confirmar",
+                  icon: Icons.check_circle,
+                  cardText: '',
                   isConfirmButton: true,
-                  function: () {
-                    onConfirm();
-                  },
+                  function: onConfirm,
                 ),
                 eraseButton: ButtonDigitalWidget(
-                  cardText: "",
                   icon: Icons.backspace,
+                  cardText: '',
                   isConfirmButton: false,
                   function: () {
                     if (cpfController.text.isNotEmpty) {
@@ -72,8 +79,8 @@ class SearchCpfProfileWidget extends StatelessWidget {
                   },
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

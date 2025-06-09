@@ -6,24 +6,28 @@ class ButtonNumbersWidget extends StatelessWidget {
     required this.number,
     required this.function,
   });
+
   final String number;
-  final Function(String string) function;
+  final Function(String) function;
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        function(number);
-      },
-      child: Container(
-        width: 30,
-        height: 30,
-        decoration: BoxDecoration(
-          border: Border.all(color: Colors.black),
-          borderRadius: BorderRadius.all(Radius.circular(8)),
+    return SizedBox(
+      width: 60,
+      height: 60,
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          backgroundColor: Colors.white,
+          side: const BorderSide(color: Colors.black),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+          elevation: 2,
         ),
-        child: Center(
-          child: Text(number, style: TextStyle(fontWeight: FontWeight.bold)),
+        onPressed: () => function(number),
+        child: Text(
+          number,
+          style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
         ),
       ),
     );

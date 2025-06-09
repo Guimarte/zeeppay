@@ -10,31 +10,63 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final logoUrl = PosDataStore().posData!.settings.themePos.logo;
+
     return SafeArea(
       child: Scaffold(
-        body: SizedBox(
-          height: MediaQuery.sizeOf(context).height * 1,
-          child: Center(
+        backgroundColor: Colors.grey[100],
+        body: Center(
+          child: Padding(
+            padding: const EdgeInsets.all(24),
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
+                const SizedBox(height: 24),
+
                 CachedNetworkImage(
-                  imageUrl: PosDataStore().posData!.settings.themePos.logo,
+                  imageUrl: logoUrl,
+                  height: 200,
+                  fit: BoxFit.contain,
                 ),
+
+                Text(
+                  'Bem-vindo!',
+                  style: theme.textTheme.headlineSmall?.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+
+                const SizedBox(height: 8),
+
+                Text(
+                  'Escolha uma opção abaixo:',
+                  style: theme.textTheme.bodyMedium,
+                ),
+
+                const SizedBox(height: 32),
+
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    CardWidget(
-                      cardName: "VENDAS",
-                      onTap: () {
-                        // context.go('/payments');
-                        PrinterService.lerCartao();
-                      },
+                    Expanded(
+                      child: CardWidget(
+                        cardName: "VENDAS",
+                        icon: Icons.shopping_cart,
+                        onTap: () {
+                          PrinterService.printReceive();
+                        },
+                      ),
                     ),
-                    CardWidget(
-                      cardName: "PERFIL",
-                      onTap: () {
-                        context.go('/profile');
-                      },
+                    const SizedBox(width: 16),
+                    Expanded(
+                      child: CardWidget(
+                        cardName: "PERFIL",
+                        icon: Icons.person,
+                        onTap: () {
+                          context.push('/profile');
+                        },
+                      ),
                     ),
                   ],
                 ),

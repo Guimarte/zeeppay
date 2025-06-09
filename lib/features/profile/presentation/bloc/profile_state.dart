@@ -15,7 +15,7 @@ class ProfileStateSearchCard extends ProfileState {
 }
 
 class ProfileStateSucess extends ProfileState {
-  final ClienteModel cliente;
+  final List<ClienteModel> cliente;
   ProfileStateSucess({required this.cliente});
 }
 

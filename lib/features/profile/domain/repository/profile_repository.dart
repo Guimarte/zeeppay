@@ -6,7 +6,7 @@ import 'package:zeeppay/shared/database/database.dart';
 import 'package:zeeppay/shared/dio/dio_implementation.dart';
 
 abstract class ProfileRepository {
-  Future<ClienteModel> call(String cpf);
+  Future<List<ClienteModel>> call(String cpf);
 }
 
 class ProfileRepositoryImpl implements ProfileRepository {
@@ -17,15 +17,15 @@ class ProfileRepositoryImpl implements ProfileRepository {
   ProfileRepositoryImpl();
 
   @override
-  Future<ClienteModel> call(String cpf) async {
+  Future<List<ClienteModel>> call(String cpf) async {
     final response = await zeeppayDio.get(
       url:
-          '${posData.posData!.settings.netWork.endpoint}${UrlsProfile.getConsultarPerfil(cpf)}',
+          '${posData.posData!.settings.netWork.endpoint}${UrlsProfile.getConsultarPerfil("31871423899")}',
 
       password: database.getString("password") ?? '',
       username: database.getString("user") ?? '',
     );
 
-    return ClienteModel.fromJson(response.data);
+    return ClienteModel.fromJsonList(response.data);
   }
 }
