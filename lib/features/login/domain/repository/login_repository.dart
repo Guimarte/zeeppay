@@ -8,12 +8,12 @@ abstract class LoginRepository {
 
 class LoginRepositoryImpl implements LoginRepository {
   ZeeppayDio zeeppayDio = ZeeppayDio();
-  PosDataStore get posData => PosDataStore();
+  SettingsPosDataStore get posData => SettingsPosDataStore();
 
   @override
   Future<String> call(String username, String password) async {
     final requestStore = await zeeppayDio.post(
-      url: UrlsDefault.urlLogin(posData.posData!.settings.netWork.endpoint),
+      url: UrlsDefault.urlLogin(posData.settings!.erCardsModel.endpoint),
       isLoginRequest: true,
       data: {
         'username': username,

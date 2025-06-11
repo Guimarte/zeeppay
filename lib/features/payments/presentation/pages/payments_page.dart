@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:zeeppay/features/payments/presentation/bloc/payments_bloc.dart';
-import 'package:zeeppay/features/payments/presentation/bloc/payments_event.dart';
 import 'package:zeeppay/features/payments/presentation/bloc/payments_state.dart';
 import 'package:zeeppay/features/payments/presentation/pages/mixin/payments_mixin.dart';
 import 'package:zeeppay/features/payments/presentation/widgets/payments_passwords_widget.dart';
@@ -28,9 +27,12 @@ class PaymentsPage extends StatelessWidget with PaymentsMixin {
                   return Center(child: CircularProgressIndicator());
                 default:
                   return PaymentsTypePaymentWidget(
-                    function: () {
-                      paymentsBloc.add(PaymentsEventGetPassword());
-                    },
+                    paymentsBloc: paymentsBloc,
+                    onVistaTap: () {},
+                    onParceladoTap: () {},
+                    // function: () {
+                    //   paymentsBloc.add(PaymentsEventGetPassword());
+                    // },
                   );
               }
             },

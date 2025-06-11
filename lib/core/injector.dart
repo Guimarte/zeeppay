@@ -7,7 +7,9 @@ import 'package:zeeppay/features/payments/presentation/bloc/payments_bloc.dart';
 import 'package:zeeppay/features/profile/domain/repository/profile_repository.dart';
 import 'package:zeeppay/features/profile/domain/usecase/profile_usecase.dart';
 import 'package:zeeppay/features/profile/presentation/bloc/profile_bloc.dart';
-import 'package:zeeppay/features/splash/domain/repository/splash_settings_store_repository.dart';
+import 'package:zeeppay/features/splash/domain/repository/splash_ercards_repository.dart';
+import 'package:zeeppay/features/splash/domain/repository/splash_store_repository.dart';
+import 'package:zeeppay/features/splash/domain/repository/splash_theme_repository.dart';
 import 'package:zeeppay/features/splash/domain/usecase/splash_usecase.dart';
 import 'package:zeeppay/features/splash/presentation/bloc/splash_bloc.dart';
 import 'package:zeeppay/shared/database/database.dart';
@@ -22,8 +24,14 @@ void setupDependencies(SharedPreferences prefs) async {
   getIt.registerSingleton<ColorsApp>(ColorsApp());
 
   // Register Repositories (mais baixo nível)
-  getIt.registerLazySingleton<SplashSettingsStoreRepository>(
-    () => SplashSettingsStoreRepositoryImpl(),
+  getIt.registerLazySingleton<SplashStoreRepository>(
+    () => SplashStoreRepositoryImpl(),
+  );
+  getIt.registerLazySingleton<SplashERCardsRepository>(
+    () => SplashERCardsRepositoryImpl(),
+  );
+  getIt.registerLazySingleton<SplashThemeRepository>(
+    () => SplashThemeRepositoryImpl(),
   );
   getIt.registerLazySingleton<LoginRepository>(() => LoginRepositoryImpl());
 
@@ -31,7 +39,11 @@ void setupDependencies(SharedPreferences prefs) async {
 
   // Register Usecases (depende do repositório)
   getIt.registerLazySingleton<SplashUsecase>(
-    () => SplashUsecase(getIt<SplashSettingsStoreRepository>()),
+    () => SplashUsecase(
+      getIt<SplashStoreRepository>(),
+      getIt<SplashERCardsRepository>(),
+      getIt<SplashThemeRepository>(),
+    ),
   );
   getIt.registerLazySingleton<LoginUsecase>(
     () => LoginUsecaseImpl(getIt<LoginRepository>()),

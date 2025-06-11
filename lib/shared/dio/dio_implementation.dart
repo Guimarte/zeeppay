@@ -12,7 +12,7 @@ class ZeeppayDio {
   static final LoginInterceptor _loginInterceptor = LoginInterceptor();
   static final Dio _dio = Dio();
 
-  PosDataStore get posDataStore => PosDataStore();
+  SettingsPosDataStore get posDataStore => SettingsPosDataStore();
 
   Future<Response> get({
     required String url,
@@ -37,7 +37,7 @@ class ZeeppayDio {
         _dio.interceptors.add(_authInterceptor);
       } else if (username != null && password != null) {
         final response = await _dio.post(
-          UrlsDefault.urlLogin(posDataStore.posData!.settings.netWork.endpoint),
+          UrlsDefault.urlLogin(posDataStore.settings!.erCardsModel.endpoint),
           options: Options(
             headers: {'Content-Type': 'application/x-www-form-urlencoded'},
           ),
@@ -77,7 +77,7 @@ class ZeeppayDio {
   }) async {
     try {
       final response = await _dio.post(
-        UrlsDefault.urlLogin(posDataStore.posData!.settings.netWork.endpoint),
+        UrlsDefault.urlLogin(posDataStore.settings!.erCardsModel.endpoint),
         options: Options(
           headers: {'Content-Type': 'application/x-www-form-urlencoded'},
         ),

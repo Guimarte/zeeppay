@@ -11,7 +11,7 @@ abstract class ProfileRepository {
 
 class ProfileRepositoryImpl implements ProfileRepository {
   ZeeppayDio zeeppayDio = ZeeppayDio();
-  PosDataStore get posData => PosDataStore();
+  SettingsPosDataStore get posData => SettingsPosDataStore();
   final database = getIt<Database>();
 
   ProfileRepositoryImpl();
@@ -20,7 +20,7 @@ class ProfileRepositoryImpl implements ProfileRepository {
   Future<List<ClienteModel>> call(String cpf) async {
     final response = await zeeppayDio.get(
       url:
-          '${posData.posData!.settings.netWork.endpoint}${UrlsProfile.getConsultarPerfil("31871423899")}',
+          '${posData.settings!.erCardsModel.endpoint}${UrlsProfile.getConsultarPerfil("31871423899")}',
 
       password: database.getString("password") ?? '',
       username: database.getString("user") ?? '',

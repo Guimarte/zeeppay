@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:zeeppay/core/pos_data_store.dart';
 
 class ColorsApp {
-  final _posColors = PosDataStore().posData?.settings.themePos.colors;
+  final _posColors = SettingsPosDataStore().settings?.themePos.colors;
 
   static const _defaultPrimary = Color(0xFF1E88E5);
   static const _defaultSecondary = Color(0xFFB0BEC5);

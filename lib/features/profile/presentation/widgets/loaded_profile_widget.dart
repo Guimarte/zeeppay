@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:zeeppay/features/profile/domain/models/cliente_model.dart';
+import 'package:zeeppay/features/profile/presentation/bloc/profile_bloc.dart';
 import 'package:zeeppay/features/profile/presentation/bloc/profile_event.dart';
 import 'package:zeeppay/features/profile/presentation/widgets/card_limit_client_widget.dart';
 import 'package:zeeppay/features/profile/presentation/widgets/card_profile_widget.dart';
@@ -9,7 +10,7 @@ import 'package:zeeppay/shared/service/print_service.dart';
 
 class LoadedProfileWidget extends StatelessWidget {
   final ClienteModel client;
-  final profileBloc;
+  final ProfileBloc profileBloc;
   const LoadedProfileWidget({
     super.key,
     required this.client,

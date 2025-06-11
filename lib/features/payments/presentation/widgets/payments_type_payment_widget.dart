@@ -1,34 +1,83 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
+import 'package:zeeppay/features/payments/presentation/bloc/payments_bloc.dart';
+import 'package:zeeppay/shared/widgets/card_widget.dart';
 
 class PaymentsTypePaymentWidget extends StatelessWidget {
-  PaymentsTypePaymentWidget({super.key, required this.function});
-  final Function() function;
-
-  final numbers = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'];
+  final VoidCallback onVistaTap;
+  final VoidCallback? onParceladoTap;
+  final PaymentsBloc paymentsBloc;
+  const PaymentsTypePaymentWidget({
+    super.key,
+    required this.onVistaTap,
+    this.onParceladoTap,
+    required this.paymentsBloc,
+  });
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Center(
-          child: SizedBox(
-            width: MediaQuery.sizeOf(context).width * 0.7,
-            child: Center(
-              child: Column(
+    final theme = Theme.of(context);
+    return SafeArea(
+      child: Container(
+        color: Colors.grey[100],
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+          child: Column(
+            spacing: 16,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  ElevatedButton(
-                    onPressed: () {
-                      function();
+                  BlocBuilder(
+                    bloc: paymentsBloc,
+                    builder: (context, state) {
+                      return GestureDetector(
+                        child: Icon(Icons.arrow_back),
+                        onTap: () {
+                          context.pop();
+                        },
+                      );
                     },
-                    child: Text("A vista"),
                   ),
-                  ElevatedButton(onPressed: () {}, child: Text("Parcelado")),
                 ],
               ),
-            ),
+              const SizedBox(height: 100),
+              Text(
+                'Tipo de pagamento',
+                style: theme.textTheme.headlineSmall?.copyWith(
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(height: 8),
+              Text(
+                'Escolha a forma que deseja realizar o pagamento:',
+                style: theme.textTheme.bodyMedium,
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 32),
+              Row(
+                children: [
+                  Expanded(
+                    child: CardWidget(
+                      cardName: "À vista",
+                      icon: Icons.attach_money,
+                      onTap: onVistaTap,
+                    ),
+                  ),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: CardWidget(
+                      cardName: "Parcelado",
+                      icon: Icons.payments,
+                      onTap: onParceladoTap ?? () {},
+                    ),
+                  ),
+                ],
+              ),
+            ],
           ),
         ),
-      ],
+      ),
     );
   }
 }

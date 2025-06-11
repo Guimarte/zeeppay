@@ -6,7 +6,7 @@ import 'package:zeeppay/shared/database/database.dart';
 import 'package:zeeppay/shared/models/store_pos_model.dart';
 
 mixin ConfigurationPageMixin {
-  PosDataStore get posDataStore => PosDataStore();
+  SettingsPosDataStore get posDataStore => SettingsPosDataStore();
   final database = getIt<Database>();
 
   void setData({required StorePosModel store}) {

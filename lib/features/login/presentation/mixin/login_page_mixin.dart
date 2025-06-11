@@ -7,7 +7,7 @@ import 'package:zeeppay/shared/database/database.dart';
 import '../bloc/login_bloc.dart';
 
 mixin LoginPageMixin<T extends StatefulWidget> on State<LoginPage> {
-  PosDataStore get posDataStore => PosDataStore();
+  SettingsPosDataStore get posDataStore => SettingsPosDataStore();
   final loginBloc = getIt.get<LoginBloc>();
   final dataBase = getIt.get<Database>();
   final controllerLogin = TextEditingController();

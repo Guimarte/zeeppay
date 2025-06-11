@@ -5,5 +5,7 @@ class UrlsLogin {
   static String get urlDefault =>
       'https://${_flavorConfig.subdomain}.zeeppay.com.br/api';
   static String get loginTenant => '$urlDefault/auth/api-keys/access-token';
-  static String get settingsPos => '$urlDefault/settings/pos-settings';
+  static String get ercards => '$urlDefault/settings/ercards';
+  static String get theme => '$urlDefault/settings/theme';
+  static String get store => '$urlDefault/stores';
 }

@@ -23,7 +23,6 @@ class _LoginPageState extends State<LoginPage> with LoginPageMixin {
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
     final theme = Theme.of(context);
 
     return SafeArea(
@@ -35,7 +34,7 @@ class _LoginPageState extends State<LoginPage> with LoginPageMixin {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 CachedNetworkImage(
-                  imageUrl: posDataStore.posData!.settings.themePos.logo,
+                  imageUrl: posDataStore.settings!.themePos.logo,
                   placeholder: (context, url) =>
                       const Center(child: CircularProgressIndicator()),
                   errorWidget: (context, url, error) =>

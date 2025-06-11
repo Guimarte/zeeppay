@@ -48,7 +48,7 @@ Próxima Fatura: ${Formatters.formatDateTime(client.dataProximaFatura)}
     await _channel.invokeMethod('printProfile', {"content": content});
   }
 
-  Future<void> lerCartao() async {
+  static Future<void> lerCartao() async {
     try {
       final result = await _channel.invokeMethod('readCard');
       print(result);

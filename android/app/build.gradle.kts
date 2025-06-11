@@ -98,6 +98,11 @@ android {
             applicationIdSuffix = ".queirozpremium"
             versionNameSuffix = "-queirozpremium"
         }
+        create("tridicopay") {
+            dimension = "product"
+            applicationIdSuffix = ".tridicopay"
+            versionNameSuffix = "-tridicopay"
+        }
     }
 }
 dependencies {

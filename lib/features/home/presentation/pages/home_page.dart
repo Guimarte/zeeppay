@@ -2,7 +2,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:zeeppay/core/pos_data_store.dart';
-import 'package:zeeppay/shared/service/print_service.dart';
 import 'package:zeeppay/shared/widgets/card_widget.dart';
 
 class HomePage extends StatelessWidget {
@@ -11,7 +10,7 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final logoUrl = PosDataStore().posData!.settings.themePos.logo;
+    final logoUrl = SettingsPosDataStore().settings!.themePos.logo;
 
     return SafeArea(
       child: Scaffold(
@@ -54,7 +53,7 @@ class HomePage extends StatelessWidget {
                         cardName: "VENDAS",
                         icon: Icons.shopping_cart,
                         onTap: () {
-                          PrinterService.printReceive();
+                          context.push('/payments');
                         },
                       ),
                     ),

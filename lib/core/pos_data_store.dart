@@ -1,25 +1,26 @@
-import 'package:zeeppay/shared/models/pos_settings.dart';
+import 'package:zeeppay/shared/models/settings_pos_model.dart';
 
-class PosDataStore {
-  PosDataModel? _posData;
+class SettingsPosDataStore {
+  SettingsPosModel? _settings;
 
-  static final PosDataStore _instance = PosDataStore._internal();
+  static final SettingsPosDataStore _instance =
+      SettingsPosDataStore._internal();
 
-  factory PosDataStore() {
+  factory SettingsPosDataStore() {
     return _instance;
   }
 
-  PosDataStore._internal();
+  SettingsPosDataStore._internal();
 
-  PosDataModel? get posData => _posData;
+  SettingsPosModel? get settings => _settings;
 
-  set posData(PosDataModel? data) {
-    _posData = data;
+  set posData(SettingsPosModel? data) {
+    _settings = data;
   }
 
-  bool get hasData => _posData != null;
+  bool get hasData => _settings != null;
 
   void clear() {
-    _posData = null;
+    _settings = null;
   }
 }

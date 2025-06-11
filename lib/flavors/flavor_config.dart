@@ -1,4 +1,12 @@
-enum Flavor { yano, bandcard, jbcard, taustepay, queirozpremium, devee }
+enum Flavor {
+  yano,
+  bandcard,
+  jbcard,
+  taustepay,
+  queirozpremium,
+  devee,
+  tridicopay,
+}
 
 class FlavorConfig {
   final Flavor flavor;

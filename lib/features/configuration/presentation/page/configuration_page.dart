@@ -24,7 +24,7 @@ class ConfigurationPage extends StatelessWidget with ConfigurationPageMixin {
               SizedBox(
                 width: MediaQuery.sizeOf(context).width * 0.8,
                 child: DropDownStores(
-                  stores: posDataStore.posData!.settings.store,
+                  stores: posDataStore.settings!.store,
                   onChanged: (store) {
                     setData(store: store);
                   },

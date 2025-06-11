@@ -10,7 +10,7 @@ class InitialProfileWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final logoUrl = PosDataStore().posData!.settings.themePos.logo;
+    final logoUrl = SettingsPosDataStore().settings!.themePos.logo;
 
     return SafeArea(
       child: Container(
