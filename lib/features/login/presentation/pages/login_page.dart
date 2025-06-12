@@ -112,7 +112,7 @@ class _LoginPageState extends State<LoginPage> with LoginPageMixin {
                     }
                   },
                   child: PrimaryButton(
-                    buttonName: "Login",
+                    buttonName: "Entrar",
                     functionPrimaryButton: () {
                       loginBloc.add(
                         RealizeLogin(
