@@ -67,6 +67,12 @@ class MainActivity : FlutterActivity() {
                             result.error("CARD_ERROR", "Erro ao ler cartão", null)
                         }
                     }
+                }"stopReadCard"->{
+                    try {
+                        val ppComp = PPComp.getInstance(this)
+                        ppComp.PP_Abort()
+                        result.success(null)
+                    } catch (e: Exception) {
                 }
                 else -> result.notImplemented()
             }

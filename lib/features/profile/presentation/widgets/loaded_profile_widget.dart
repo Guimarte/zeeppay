@@ -6,7 +6,7 @@ import 'package:zeeppay/features/profile/presentation/bloc/profile_event.dart';
 import 'package:zeeppay/features/profile/presentation/widgets/card_limit_client_widget.dart';
 import 'package:zeeppay/features/profile/presentation/widgets/card_profile_widget.dart';
 import 'package:zeeppay/features/profile/presentation/widgets/invoice_widget.dart';
-import 'package:zeeppay/shared/service/print_service.dart';
+import 'package:zeeppay/shared/service/gertec_service.dart';
 
 class LoadedProfileWidget extends StatelessWidget {
   final ClienteModel client;
@@ -40,7 +40,7 @@ class LoadedProfileWidget extends StatelessWidget {
                 ),
                 GestureDetector(
                   child: Icon(Icons.print),
-                  onTap: () => PrinterService.printClientProfile(client),
+                  onTap: () => GertecService.printClientProfile(client),
                 ),
               ],
             ),

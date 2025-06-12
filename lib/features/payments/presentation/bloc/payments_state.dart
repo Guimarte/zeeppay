@@ -8,8 +8,12 @@ class PaymentsStateTypePayment extends PaymentsState {}
 
 class PaymentsStateGetCardNumber extends PaymentsState {}
 
-class PaymentsStateGetPassword extends PaymentsState {}
+class PaymentsStatePutPassword extends PaymentsState {}
 
 class PaymentsStateEndTransaction extends PaymentsState {}
+
+class PaymentsStatePutValue extends PaymentsState {}
+
+class PaymentsStatePutCard extends PaymentsState {}
 
 class PaymentsStateError extends PaymentsState {}

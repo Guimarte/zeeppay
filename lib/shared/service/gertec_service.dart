@@ -2,7 +2,7 @@ import 'package:flutter/services.dart';
 import 'package:zeeppay/features/profile/domain/models/cliente_model.dart';
 import 'package:zeeppay/shared/formatters/formatters.dart';
 
-class PrinterService {
+class GertecService {
   static const _channel = MethodChannel('com.example.zeeppay/printer');
 
   static Future<void> printReceive() async {
@@ -48,12 +48,18 @@ Próxima Fatura: ${Formatters.formatDateTime(client.dataProximaFatura)}
     await _channel.invokeMethod('printProfile', {"content": content});
   }
 
-  static Future<void> lerCartao() async {
+  static Future<String> readCard() async {
     try {
       final result = await _channel.invokeMethod('readCard');
-      print(result);
+      return result;
     } catch (e) {
-      print("Erro ao ler cartão: $e");
+      return "Erro ao ler cartão: $e";
     }
+  }
+
+  static Future<void> stopReadCard() async {
+    try {
+      await _channel.invokeMethod('stopReadCard');
+    } catch (e) {}
   }
 }

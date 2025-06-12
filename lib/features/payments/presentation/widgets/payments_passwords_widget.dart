@@ -26,52 +26,61 @@ class PaymentsPasswordsWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Expanded(child: SizedBox()),
-        Expanded(
-          flex: 2,
-          child: SizedBox(
-            width: MediaQuery.sizeOf(context).width * 0.7,
-            child: InputPasswordCardWidget(
-              controllerPasswordCard: controllerPasswordCard,
-            ),
+    final theme = Theme.of(context);
+
+    return SafeArea(
+      child: Container(
+        color: Colors.grey[100],
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              SizedBox(height: 16),
+              Text(
+                'Digite a sua senha:',
+                style: theme.textTheme.headlineSmall?.copyWith(
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              Spacer(),
+              InputPasswordTextFormField(
+                controllerPasswordCard: controllerPasswordCard,
+              ),
+              Spacer(),
+              DigitalKeyboard(
+                numbers: numbers,
+                confirmButton: ButtonDigitalWidget(
+                  function: () {
+                    print(controllerPasswordCard.text);
+                  },
+                  icon: Icons.check_circle,
+                  cardText: '',
+                  isConfirmButton: true,
+                ),
+                eraseButton: ButtonDigitalWidget(
+                  function: () {
+                    if (controllerPasswordCard.text.isNotEmpty) {
+                      controllerPasswordCard.text = controllerPasswordCard.text
+                          .substring(0, controllerPasswordCard.text.length - 1);
+                    }
+                  },
+                  cardText: '',
+                  isConfirmButton: false,
+                  icon: Icons.backspace,
+                ),
+                numberButton: (String number) => ButtonNumbersWidget(
+                  number: number,
+                  function: (string) {
+                    if (controllerPasswordCard.text.length == 6) return;
+                    controllerPasswordCard.text += string;
+                  },
+                ),
+              ),
+            ],
           ),
         ),
-        Expanded(
-          flex: 10,
-          child: DigitalKeyboard(
-            numbers: numbers,
-            confirmButton: ButtonDigitalWidget(
-              function: () {
-                print(controllerPasswordCard.text);
-              },
-              icon: Icons.check_circle,
-              cardText: '',
-              isConfirmButton: true,
-            ),
-            eraseButton: ButtonDigitalWidget(
-              function: () {
-                if (controllerPasswordCard.text.isNotEmpty) {
-                  controllerPasswordCard.text = controllerPasswordCard.text
-                      .substring(0, controllerPasswordCard.text.length - 1);
-                }
-              },
-              cardText: '',
-              isConfirmButton: false,
-              icon: Icons.backspace,
-            ),
-            numberButton: (String number) => ButtonNumbersWidget(
-              number: number,
-              function: (string) {
-                if (controllerPasswordCard.text.length == 6) return;
-                controllerPasswordCard.text += string;
-              },
-            ),
-          ),
-        ),
-      ],
+      ),
     );
   }
 }

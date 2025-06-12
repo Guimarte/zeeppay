@@ -47,6 +47,7 @@ dependencies:
   flutter_masked_text2: ^0.9.1
   intl: ^0.20.2
   fl_chart: ^1.0.0
+  lottie: ^3.3.1
 
 flutter_native_splash:
   color: "#ffffff"

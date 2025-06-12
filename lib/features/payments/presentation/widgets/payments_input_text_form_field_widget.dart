@@ -1,21 +1,16 @@
 import 'package:flutter/material.dart';
 
-class InputPasswordTextFormField extends StatelessWidget {
-  const InputPasswordTextFormField({
-    super.key,
-    required this.controllerPasswordCard,
-  });
+class PaymentValueTextFieldWidget extends StatelessWidget {
+  final TextEditingController controller;
 
-  final TextEditingController controllerPasswordCard;
+  const PaymentValueTextFieldWidget({super.key, required this.controller});
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
     return TextFormField(
-      controller: controllerPasswordCard,
-      obscureText: true,
-      obscuringCharacter: '*',
+      controller: controller,
       readOnly: true,
       textAlign: TextAlign.center,
       style: theme.textTheme.displaySmall?.copyWith(
@@ -25,7 +20,7 @@ class InputPasswordTextFormField extends StatelessWidget {
       decoration: InputDecoration(
         filled: true,
         fillColor: Colors.white,
-        hintText: '',
+        hintText: 'R\$ 0,00',
         hintStyle: TextStyle(
           color: Colors.grey[400],
           fontSize: 28,
