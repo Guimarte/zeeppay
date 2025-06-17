@@ -10,3 +10,9 @@ class PaymentsEventSetInicialState extends PaymentsEvent {}
 class PaymentsEventPutValueState extends PaymentsEvent {}
 
 class PaymentsEventPutCardState extends PaymentsEvent {}
+
+class PaymentsEventPutPaymentType extends PaymentsEvent {
+  final String paymentType;
+
+  PaymentsEventPutPaymentType({required this.paymentType});
+}

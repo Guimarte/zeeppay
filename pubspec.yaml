@@ -2,7 +2,7 @@ name: zeeppay
 description: "A new Flutter project."
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
-publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+publish_to: "none" # Remove this line if you wish to publish to pub.dev
 
 # The following defines the version and build number for your application.
 # A version number is three numbers separated by dots, like 1.2.43
@@ -20,8 +20,6 @@ version: 1.0.0+1
 
 environment:
   sdk: ^3.8.0
-
-
 
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
@@ -48,6 +46,8 @@ dependencies:
   intl: ^0.20.2
   fl_chart: ^1.0.0
   lottie: ^3.3.1
+  pointycastle: ^4.0.0
+  convert: ^3.1.2
 
 flutter_native_splash:
   color: "#ffffff"
@@ -74,7 +74,6 @@ dev_dependencies:
 
 # The following section is specific to Flutter packages.
 flutter:
-
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.
@@ -85,20 +84,19 @@ flutter:
     - assets/default/
     - path: assets/flavors/bandcard/
       flavors:
-          - bandcard
+        - bandcard
     - path: assets/flavors/devee/
       flavors:
-          - devee    
+        - devee
     - path: assets/flavors/queirozpremium/
       flavors:
-          - queirozpremium    
+        - queirozpremium
     - path: assets/flavors/taustepay/
       flavors:
-          - taustepay 
+        - taustepay
     - path: assets/flavors/jbcard/
       flavors:
-          - jbcard
-    
+        - jbcard
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

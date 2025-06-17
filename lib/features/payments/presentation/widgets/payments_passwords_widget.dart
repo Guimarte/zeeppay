@@ -1,11 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:zeeppay/features/payments/presentation/bloc/payments_bloc.dart';
 import 'package:zeeppay/features/payments/presentation/widgets/input_password_card_widget.dart';
 import 'package:zeeppay/shared/widgets/button_digital_widget.dart';
 import 'package:zeeppay/shared/widgets/button_numbers_widget.dart';
 import 'package:zeeppay/shared/widgets/digital_keyboard.dart';
 
 class PaymentsPasswordsWidget extends StatelessWidget {
-  PaymentsPasswordsWidget({super.key, required this.controllerPasswordCard});
+  PaymentsPasswordsWidget({
+    super.key,
+    required this.controllerPasswordCard,
+    required this.paymentsBloc,
+  });
+  final PaymentsBloc paymentsBloc;
 
   final TextEditingController controllerPasswordCard;
 
@@ -28,59 +35,66 @@ class PaymentsPasswordsWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    return SafeArea(
-      child: Container(
-        color: Colors.grey[100],
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              SizedBox(height: 16),
-              Text(
-                'Digite a sua senha:',
-                style: theme.textTheme.headlineSmall?.copyWith(
-                  fontWeight: FontWeight.bold,
-                ),
+    return BlocBuilder(
+      bloc: paymentsBloc,
+      builder: (context, state) {
+        return SafeArea(
+          child: Container(
+            color: Colors.grey[100],
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SizedBox(height: 16),
+                  Text(
+                    'Digite a sua senha:',
+                    style: theme.textTheme.headlineSmall?.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  Spacer(),
+                  InputPasswordTextFormField(
+                    controllerPasswordCard: controllerPasswordCard,
+                  ),
+                  Spacer(),
+                  DigitalKeyboard(
+                    numbers: numbers,
+                    confirmButton: ButtonDigitalWidget(
+                      function: () {},
+                      icon: Icons.check_circle,
+                      cardText: '',
+                      isConfirmButton: true,
+                    ),
+                    eraseButton: ButtonDigitalWidget(
+                      function: () {
+                        if (controllerPasswordCard.text.isNotEmpty) {
+                          controllerPasswordCard.text = controllerPasswordCard
+                              .text
+                              .substring(
+                                0,
+                                controllerPasswordCard.text.length - 1,
+                              );
+                        }
+                      },
+                      cardText: '',
+                      isConfirmButton: false,
+                      icon: Icons.backspace,
+                    ),
+                    numberButton: (String number) => ButtonNumbersWidget(
+                      number: number,
+                      function: (string) {
+                        if (controllerPasswordCard.text.length == 6) return;
+                        controllerPasswordCard.text += string;
+                      },
+                    ),
+                  ),
+                ],
               ),
-              Spacer(),
-              InputPasswordTextFormField(
-                controllerPasswordCard: controllerPasswordCard,
-              ),
-              Spacer(),
-              DigitalKeyboard(
-                numbers: numbers,
-                confirmButton: ButtonDigitalWidget(
-                  function: () {
-                    print(controllerPasswordCard.text);
-                  },
-                  icon: Icons.check_circle,
-                  cardText: '',
-                  isConfirmButton: true,
-                ),
-                eraseButton: ButtonDigitalWidget(
-                  function: () {
-                    if (controllerPasswordCard.text.isNotEmpty) {
-                      controllerPasswordCard.text = controllerPasswordCard.text
-                          .substring(0, controllerPasswordCard.text.length - 1);
-                    }
-                  },
-                  cardText: '',
-                  isConfirmButton: false,
-                  icon: Icons.backspace,
-                ),
-                numberButton: (String number) => ButtonNumbersWidget(
-                  number: number,
-                  function: (string) {
-                    if (controllerPasswordCard.text.length == 6) return;
-                    controllerPasswordCard.text += string;
-                  },
-                ),
-              ),
-            ],
+            ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 }

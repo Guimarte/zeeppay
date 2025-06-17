@@ -42,6 +42,7 @@ class _PaymentsPageState extends State<PaymentsPage> with PaymentsMixin {
                   case PaymentsStatePutPassword():
                     return PaymentsPasswordsWidget(
                       controllerPasswordCard: controllerPasswordCard,
+                      paymentsBloc: paymentsBloc,
                     );
                   case PaymentsStateLoading():
                     return const Center(child: CircularProgressIndicator());
