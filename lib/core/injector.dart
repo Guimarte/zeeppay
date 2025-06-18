@@ -4,7 +4,9 @@ import 'package:zeeppay/features/login/domain/repository/login_repository.dart';
 import 'package:zeeppay/features/login/domain/usecase/login_usecase.dart';
 import 'package:zeeppay/features/login/presentation/bloc/login_bloc.dart';
 import 'package:zeeppay/features/payments/domain/repository/payments_repository.dart';
+import 'package:zeeppay/features/payments/domain/repository/printer_receive_repository.dart';
 import 'package:zeeppay/features/payments/domain/usecase/payments_usecase.dart';
+import 'package:zeeppay/features/payments/domain/usecase/printer_receive_usecase.dart';
 import 'package:zeeppay/features/payments/presentation/bloc/payments_bloc.dart';
 import 'package:zeeppay/features/profile/domain/repository/profile_repository.dart';
 import 'package:zeeppay/features/profile/domain/usecase/profile_usecase.dart';
@@ -41,6 +43,11 @@ void setupDependencies(SharedPreferences prefs) async {
   getIt.registerLazySingleton<PaymentsRepository>(
     () => PaymentsRepositoryImpl(),
   );
+
+  getIt.registerLazySingleton<PrinterReceiveRepository>(
+    () => PrinterReceiveRepositoryImpl(),
+  );
+
   getIt.registerLazySingleton<LoginRepository>(() => LoginRepositoryImpl());
 
   getIt.registerLazySingleton<ProfileRepository>(() => ProfileRepositoryImpl());
@@ -64,6 +71,12 @@ void setupDependencies(SharedPreferences prefs) async {
     () => PaymentsUsecaseImpl(paymentsRepository: getIt<PaymentsRepository>()),
   );
 
+  getIt.registerLazySingleton<PrinterReceiveUseCase>(
+    () => PrinterReceiveUseCaseImpl(
+      printerReceiveRepository: getIt<PrinterReceiveRepository>(),
+    ),
+  );
+
   // Register Blocs (depende do Usecase)
   getIt.registerFactory<SplashBloc>(
     () => SplashBloc(splashUsecase: getIt<SplashUsecase>()),
@@ -74,7 +87,10 @@ void setupDependencies(SharedPreferences prefs) async {
   );
 
   getIt.registerFactory<PaymentsBloc>(
-    () => PaymentsBloc(paymentsUsecase: getIt<PaymentsUsecase>()),
+    () => PaymentsBloc(
+      paymentsUsecase: getIt<PaymentsUsecase>(),
+      printerReceiveUseCase: getIt<PrinterReceiveUseCase>(),
+    ),
   );
 
   getIt.registerFactory<ProfileBloc>(

@@ -1,4 +1,5 @@
 import 'package:flutter/services.dart';
+import 'package:zeeppay/features/payments/domain/model/receive_model.dart';
 import 'package:zeeppay/features/profile/domain/models/cliente_model.dart';
 import 'package:zeeppay/shared/formatters/formatters.dart';
 
@@ -43,6 +44,47 @@ Próxima Fatura: ${Formatters.formatDateTime(client.dataProximaFatura, 'dd/MM/yy
 Última Fatura: ${Formatters.formatDateTime(client.dataUltimaFatura, 'dd/MM/yyyy')}
 
 ============================
+''';
+
+    await _channel.invokeMethod('printProfile', {"content": content});
+  }
+
+  static Future<void> printComprovanteOperacao(ReceiveModel model) async {
+    final content =
+        '''
+========= COMPROVANTE =========
+
+Lojista: ${model.lojista}
+CNPJ: ${model.cnpj}
+Fone: ${model.fone}
+Endereço: ${model.endereco}
+
+-------------------------------
+
+Cliente: ${model.cliente}
+Telefone Cliente: ${model.foneCliente}
+Cartão: ${model.cartao}
+
+-------------------------------
+
+Tipo de Operação: ${model.tipoOperacao}
+Parcelamento: ${model.tipoParcelamento == 1 ? "À Vista" : "Parcelado"}
+Prazo: ${model.prazo}x
+Valor Total: R\$ ${model.valor}
+Prestação: R\$ ${model.prestacao}
+CET Anual: ${model.cetAno}%
+
+-------------------------------
+
+Data: ${model.data}
+Hora: ${model.hora}
+NSU Terminal: ${model.nsuTerminal}
+NSU Processadora: ${model.nsuProcessadora}
+Autorização: ${model.autorizacao}
+
+===============================
+
+      *** Obrigado! ***
 ''';
 
     await _channel.invokeMethod('printProfile', {"content": content});
