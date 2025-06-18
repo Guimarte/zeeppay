@@ -20,13 +20,13 @@ class GertecService {
 
 Nome: ${client.nome}
 CPF: ${client.cpf}
-Nascimento: ${Formatters.formatDateTime(client.dataNascimento)}
+Nascimento: ${Formatters.formatDateTime(client.dataNascimento, 'dd/MM/yyyy')}
 Email: ${client.email}
 Telefone: (${client.ddd1}) ${client.telefone1}
 
 Produto: ${client.produtoDescricao}
 Número do Cartão: ${client.numeroCartao}
-Validade: ${Formatters.formatDateTime(client.validade)}
+Validade: ${Formatters.formatDateTime(client.validade, 'dd/MM/yyyy')}
 
 Limite Total: R\$ ${client.limite.toStringAsFixed(2)}
 Limite Disponível: R\$ ${client.limiteDisponivelCompras.toStringAsFixed(2)}
@@ -39,8 +39,8 @@ Score: ${client.score}
 Qtd. Compras: ${client.quantidadeCompras}
 Forma de Pagamento: ${client.formaPagamento}
 
-Próxima Fatura: ${Formatters.formatDateTime(client.dataProximaFatura)}
-Última Fatura: ${Formatters.formatDateTime(client.dataUltimaFatura)}
+Próxima Fatura: ${Formatters.formatDateTime(client.dataProximaFatura, 'dd/MM/yyyy')}
+Última Fatura: ${Formatters.formatDateTime(client.dataUltimaFatura, 'dd/MM/yyyy')}
 
 ============================
 ''';

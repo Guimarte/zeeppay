@@ -24,6 +24,7 @@ class HomePage extends StatelessWidget {
                 const SizedBox(height: 24),
 
                 CachedNetworkImage(
+                  errorWidget: (context, url, error) => const Icon(Icons.error),
                   imageUrl: logoUrl,
                   height: 200,
                   fit: BoxFit.contain,

@@ -98,7 +98,7 @@ android {
             applicationIdSuffix = ".queirozpremium"
             versionNameSuffix = "-queirozpremium"
         }
-        create("tridicopay") {
+        create("tridico") {
             dimension = "product"
             applicationIdSuffix = ".tridicopay"
             versionNameSuffix = "-tridicopay"

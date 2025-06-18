@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:lottie/lottie.dart';
 import 'package:zeeppay/features/payments/presentation/bloc/payments_bloc.dart';
 import 'package:zeeppay/features/payments/presentation/bloc/payments_event.dart';
+import 'package:zeeppay/features/payments/presentation/widgets/custom_back_button_widget.dart';
 
 class PaymentsInsertCardWidget extends StatelessWidget {
   final PaymentsBloc paymentsBloc;
@@ -26,9 +27,8 @@ class PaymentsInsertCardWidget extends StatelessWidget {
                   BlocBuilder(
                     bloc: paymentsBloc,
                     builder: (context, state) {
-                      return GestureDetector(
-                        child: Icon(Icons.arrow_back),
-                        onTap: () {
+                      return CustomBackButtonWidget(
+                        backButton: () {
                           context.pop();
                         },
                       );

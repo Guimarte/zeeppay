@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:zeeppay/features/payments/presentation/bloc/payments_bloc.dart';
+import 'package:zeeppay/features/payments/presentation/widgets/custom_back_button_widget.dart';
 import 'package:zeeppay/features/payments/presentation/widgets/input_password_card_widget.dart';
+import 'package:zeeppay/shared/models/sell_model.dart';
 import 'package:zeeppay/shared/widgets/button_digital_widget.dart';
 import 'package:zeeppay/shared/widgets/button_numbers_widget.dart';
 import 'package:zeeppay/shared/widgets/digital_keyboard.dart';
@@ -11,10 +14,12 @@ class PaymentsPasswordsWidget extends StatelessWidget {
     super.key,
     required this.controllerPasswordCard,
     required this.paymentsBloc,
+    required this.onConfirm,
   });
   final PaymentsBloc paymentsBloc;
 
   final TextEditingController controllerPasswordCard;
+  final Function() onConfirm;
 
   final numbers = [
     '1',
@@ -46,6 +51,11 @@ class PaymentsPasswordsWidget extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
+                  CustomBackButtonWidget(
+                    backButton: () {
+                      context.pop();
+                    },
+                  ),
                   SizedBox(height: 16),
                   Text(
                     'Digite a sua senha:',
@@ -61,7 +71,9 @@ class PaymentsPasswordsWidget extends StatelessWidget {
                   DigitalKeyboard(
                     numbers: numbers,
                     confirmButton: ButtonDigitalWidget(
-                      function: () {},
+                      function: () {
+                        onConfirm();
+                      },
                       icon: Icons.check_circle,
                       cardText: '',
                       isConfirmButton: true,

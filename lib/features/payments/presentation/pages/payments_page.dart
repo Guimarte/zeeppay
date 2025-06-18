@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:zeeppay/features/payments/presentation/bloc/payments_bloc.dart';
 import 'package:zeeppay/features/payments/presentation/bloc/payments_event.dart';
 import 'package:zeeppay/features/payments/presentation/bloc/payments_state.dart';
@@ -8,6 +9,7 @@ import 'package:zeeppay/features/payments/presentation/widgets/payments_input_va
 import 'package:zeeppay/features/payments/presentation/widgets/payments_insert_card_widget.dart';
 import 'package:zeeppay/features/payments/presentation/widgets/payments_passwords_widget.dart';
 import 'package:zeeppay/features/payments/presentation/widgets/payments_type_payment_widget.dart';
+import 'package:zeeppay/shared/bloc/common_state.dart';
 
 class PaymentsPage extends StatefulWidget {
   const PaymentsPage({super.key});
@@ -30,9 +32,13 @@ class _PaymentsPageState extends State<PaymentsPage> with PaymentsMixin {
                 final cardNumber = await readCard();
                 if (!mounted) return;
 
-                paymentsBloc.add(
-                  PaymentsEventGetPassword(cardNumber: cardNumber),
-                );
+                setCardNumber(cardNumber);
+                paymentsBloc.add(PaymentsEventGetPassword());
+              }
+              if (state is PaymentsStateSuccess) {
+                resetDatas();
+                paymentsBloc.add(PaymentsEventSetInicialState());
+                context.pop();
               }
             },
             child: BlocBuilder<PaymentsBloc, PaymentsState>(
@@ -41,6 +47,12 @@ class _PaymentsPageState extends State<PaymentsPage> with PaymentsMixin {
                 switch (state) {
                   case PaymentsStatePutPassword():
                     return PaymentsPasswordsWidget(
+                      onConfirm: () {
+                        setPassword(controllerPasswordCard.text);
+                        paymentsBloc.add(
+                          PaymentsEventTransact(sellModel: sellModel),
+                        );
+                      },
                       controllerPasswordCard: controllerPasswordCard,
                       paymentsBloc: paymentsBloc,
                     );
@@ -48,22 +60,30 @@ class _PaymentsPageState extends State<PaymentsPage> with PaymentsMixin {
                     return const Center(child: CircularProgressIndicator());
                   case PaymentsStatePutValue():
                     return PaymentsInputValueWidget(
-                      functionConfirm: () =>
-                          paymentsBloc.add(PaymentsEventPutCardState()),
+                      functionConfirm: () {
+                        setValue(controllerValue.text);
+                        paymentsBloc.add(PaymentsEventPutCardState());
+                      },
                       paymentsBloc: paymentsBloc,
                       valueController: controllerValue,
                     );
                   case PaymentsStatePutCard():
-                    return PaymentsInsertCardWidget(
-                      paymentsBloc: paymentsBloc,
-                    ); // <- Só visual agora
+                    return PaymentsInsertCardWidget(paymentsBloc: paymentsBloc);
+
                   default:
+                    resetDatas();
                     return PaymentsTypePaymentWidget(
                       paymentsBloc: paymentsBloc,
                       onVistaTap: () {
+                        setPaymentType('1');
+
                         paymentsBloc.add(PaymentsEventPutValueState());
                       },
-                      onParceladoTap: () {},
+                      onParceladoTap: () {
+                        setPaymentType('2');
+
+                        paymentsBloc.add(PaymentsEventPutValueState());
+                      },
                     );
                 }
               },

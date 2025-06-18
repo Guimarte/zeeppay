@@ -1,95 +1,71 @@
 class SellModel {
   //CAMPO SENHA DEVE SER ENVIADO CRIPTOGTAFADO COM A SENHA + CHAVE HEX
-  final String senha;
+  String? senha;
 
-  final String tipoCriptografia = "3des";
+  String? tipoCriptografia = "3DES";
 
   //NUMERACAO DO PLASTICO SERA RETORNADA NO ENDPOINT /Cliente/ConsultarPerfil, VARIAVEL: strPlasticoTitular, NO QUAL ESTARÁ DENTRO DE lstPlasticos ou será coletada direto pela leitora
-  final String plastico;
+  String? plastico;
 
   // (1 - COMPRA A VISTA, 2 - PARCELADO SEM JUROS, 3 - COMPRA COM JUROS)
-  final String tipoParcelamento;
+  String? tipoParcelamento;
 
-  final String tipoOperacao = "C";
+  String? tipoOperacao = "C";
 
   //VALOR DA VENDA
-  final double valorCompra;
+  double? valorCompra;
 
-  final bool calculaPrestacao = true;
+  //CALCULA PRESTAÇÃO DEVE SER ENVIADO COMO TRUE, CASO CONTRARIO NÃO SERÁ POSSIVEL REALIZAR A VENDA
+  bool? calculaPrestacao = true;
 
   //ENVIAR NSU DA COMPRA
-  final String nsuCaptura;
+  String? nsuCaptura;
 
   //ENVIAR 0 + CNPJ
-  final String codigoEstabelecimento;
+  String? codigoEstabelecimento;
 
   //PODE SER ENVIADO QUALQUER NUMERAÇÃO
-  final String terminal;
+  String? terminal;
 
   //DATA DA COMPRA NO FORMATO: AAAA-MM-DD
-  final String dataCompra;
+  String? dataCompra;
 
   //DATA DA COMPRA E HORARIO NO FORMATO: AAAA-MM-DDTHH:MM:SS.916Z
-  final String dataLocal;
+  String? dataLocal;
 
   //PRAZO SE REFERE A QUANTIDADE DE PARCELAS QUE A COMPRA POSSUI, 1: A VISTA, 2: 2X E ASSIM CONSEQUENTEMENTE
-  final String prazo;
+  String? prazo;
 
   //EM CASO DA COMPRA SER A VISTA, PLANO NÃO DEVERÁ SER INFORMADO, MAS CASO FOR PARCELADA COM JUROS ENVIAR PLANO "1"
-  final String plano;
+  String? plano;
 
-  final String produto = "";
+  String? produto = "";
 
-  final String cartao = "";
+  String? cartao = "";
 
-  final String cpf = "";
+  String? cpf = "";
 
-  final String usuario;
-
-  SellModel copyWith({
-    String? senha,
-    String? plastico,
-    String? tipoParcelamento,
-    double? valorCompra,
-    String? nsuCaptura,
-    String? codigoEstabelecimento,
-    String? terminal,
-    String? dataCompra,
-    String? dataLocal,
-    String? prazo,
-    String? plano,
-    String? usuario,
-  }) {
-    return SellModel(
-      senha: senha ?? this.senha,
-      plastico: plastico ?? this.plastico,
-      tipoParcelamento: tipoParcelamento ?? this.tipoParcelamento,
-      valorCompra: valorCompra ?? this.valorCompra,
-      nsuCaptura: nsuCaptura ?? this.nsuCaptura,
-      codigoEstabelecimento:
-          codigoEstabelecimento ?? this.codigoEstabelecimento,
-      terminal: terminal ?? this.terminal,
-      dataCompra: dataCompra ?? this.dataCompra,
-      dataLocal: dataLocal ?? this.dataLocal,
-      prazo: prazo ?? this.prazo,
-      plano: plano ?? this.plano,
-      usuario: usuario ?? this.usuario,
-    );
-  }
+  String? usuario;
 
   SellModel({
-    required this.senha,
-    required this.plastico,
-    required this.tipoParcelamento,
-    required this.valorCompra,
-    required this.nsuCaptura,
-    required this.codigoEstabelecimento,
-    required this.terminal,
-    required this.dataCompra,
-    required this.dataLocal,
-    required this.prazo,
-    required this.plano,
-    required this.usuario,
+    this.senha,
+    this.tipoCriptografia,
+    this.plastico,
+    this.tipoParcelamento,
+    this.tipoOperacao,
+    this.valorCompra,
+    this.calculaPrestacao,
+    this.nsuCaptura,
+    this.codigoEstabelecimento,
+    this.terminal,
+    this.dataCompra,
+    this.dataLocal,
+    this.prazo,
+    this.plano,
+    this.produto,
+    this.cartao,
+    this.cpf,
+    this.usuario,
   });
 
   Map<String, dynamic> toJson() {
@@ -99,7 +75,7 @@ class SellModel {
       "strPlastico": plastico,
       "intTipoParcelamento": tipoParcelamento,
       "strTipoOperacao": tipoOperacao,
-      "dblValorCompra": valorCompra.toStringAsFixed(2),
+      "dblValorCompra": valorCompra!.toStringAsFixed(2),
       "blnCalculaPrestacao": calculaPrestacao,
       "strNsuCaptura": nsuCaptura,
       "strCodigoEstabelecimento": codigoEstabelecimento,
@@ -113,5 +89,28 @@ class SellModel {
       "strCpf": cpf,
       "strUsuario": usuario,
     };
+  }
+
+  factory SellModel.empty() {
+    return SellModel(
+      senha: null,
+      tipoCriptografia: "3DES",
+      plastico: null,
+      tipoParcelamento: null,
+      tipoOperacao: "C",
+      valorCompra: 0.0,
+      calculaPrestacao: true,
+      nsuCaptura: null,
+      codigoEstabelecimento: null,
+      terminal: null,
+      dataCompra: null,
+      dataLocal: null,
+      prazo: null,
+      plano: null,
+      produto: "",
+      cartao: "",
+      cpf: "",
+      usuario: null,
+    );
   }
 }

@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class Formatters {
-  static String formatDateTime(DateTime dateTime) {
-    return DateFormat('dd/MM/yyyy').format(dateTime);
+  static String formatDateTime(DateTime dateTime, String formatModel) {
+    return DateFormat(formatModel).format(dateTime);
   }
 
   static String formatCurrency(double value) {
@@ -27,5 +27,17 @@ class Formatters {
       field.text = field.text.substring(0, field.text.length - 1);
     }
     return field.text;
+  }
+
+  static double parseCurrency(String valorStr) {
+    try {
+      final clean = valorStr
+          .replaceAll('R\$', '')
+          .replaceAll('.', '')
+          .replaceAll(',', '.');
+      return double.parse(clean);
+    } catch (e) {
+      return 0.0; // ou lança exceção, depende do seu caso
+    }
   }
 }

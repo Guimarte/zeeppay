@@ -15,11 +15,8 @@ class LoginRepositoryImpl implements LoginRepository {
     final requestStore = await zeeppayDio.post(
       url: UrlsDefault.urlLogin(posData.settings!.erCardsModel.endpoint),
       isLoginRequest: true,
-      data: {
-        'username': username,
-        'password': password,
-        'grant_type': 'password',
-      },
+      password: password,
+      username: username,
     );
     return requestStore.data['access_token'] as String;
   }

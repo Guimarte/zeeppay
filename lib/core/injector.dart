@@ -3,6 +3,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:zeeppay/features/login/domain/repository/login_repository.dart';
 import 'package:zeeppay/features/login/domain/usecase/login_usecase.dart';
 import 'package:zeeppay/features/login/presentation/bloc/login_bloc.dart';
+import 'package:zeeppay/features/payments/domain/repository/payments_repository.dart';
+import 'package:zeeppay/features/payments/domain/usecase/payments_usecase.dart';
 import 'package:zeeppay/features/payments/presentation/bloc/payments_bloc.dart';
 import 'package:zeeppay/features/profile/domain/repository/profile_repository.dart';
 import 'package:zeeppay/features/profile/domain/usecase/profile_usecase.dart';
@@ -13,6 +15,7 @@ import 'package:zeeppay/features/splash/domain/repository/splash_theme_repositor
 import 'package:zeeppay/features/splash/domain/usecase/splash_usecase.dart';
 import 'package:zeeppay/features/splash/presentation/bloc/splash_bloc.dart';
 import 'package:zeeppay/shared/database/database.dart';
+import 'package:zeeppay/shared/models/sell_model.dart';
 import 'package:zeeppay/theme/colors_app.dart';
 
 final getIt = GetIt.instance;
@@ -22,6 +25,7 @@ void setupDependencies(SharedPreferences prefs) async {
   getIt.registerSingleton<SharedPreferences>(prefs);
   getIt.registerSingleton<Database>(Database(prefs));
   getIt.registerSingleton<ColorsApp>(ColorsApp());
+  getIt.registerSingleton<SellModel>(SellModel());
 
   // Register Repositories (mais baixo nível)
   getIt.registerLazySingleton<SplashStoreRepository>(
@@ -32,6 +36,10 @@ void setupDependencies(SharedPreferences prefs) async {
   );
   getIt.registerLazySingleton<SplashThemeRepository>(
     () => SplashThemeRepositoryImpl(),
+  );
+
+  getIt.registerLazySingleton<PaymentsRepository>(
+    () => PaymentsRepositoryImpl(),
   );
   getIt.registerLazySingleton<LoginRepository>(() => LoginRepositoryImpl());
 
@@ -52,6 +60,10 @@ void setupDependencies(SharedPreferences prefs) async {
     () => ProfileUsecaseImpl(getIt<ProfileRepository>()),
   );
 
+  getIt.registerLazySingleton<PaymentsUsecase>(
+    () => PaymentsUsecaseImpl(paymentsRepository: getIt<PaymentsRepository>()),
+  );
+
   // Register Blocs (depende do Usecase)
   getIt.registerFactory<SplashBloc>(
     () => SplashBloc(splashUsecase: getIt<SplashUsecase>()),
@@ -61,7 +73,9 @@ void setupDependencies(SharedPreferences prefs) async {
     () => LoginBloc(loginUsecase: getIt<LoginUsecase>()),
   );
 
-  getIt.registerFactory<PaymentsBloc>(() => PaymentsBloc());
+  getIt.registerFactory<PaymentsBloc>(
+    () => PaymentsBloc(paymentsUsecase: getIt<PaymentsUsecase>()),
+  );
 
   getIt.registerFactory<ProfileBloc>(
     () => ProfileBloc(profileUsecase: getIt<ProfileUsecase>()),

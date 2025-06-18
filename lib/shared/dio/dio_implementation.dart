@@ -1,7 +1,9 @@
 import 'package:dio/dio.dart';
+import 'package:get_it/get_it.dart';
 import 'package:zeeppay/core/default_options.dart';
 import 'package:zeeppay/core/pos_data_store.dart';
 import 'package:zeeppay/features/splash/domain/external/urls_splash.dart';
+import 'package:zeeppay/shared/database/database.dart';
 import 'package:zeeppay/shared/dio/auth_inteceptor.dart';
 import 'package:zeeppay/shared/dio/login_interceptor.dart';
 import 'package:zeeppay/shared/exception/api_exception.dart';
@@ -11,8 +13,11 @@ class ZeeppayDio {
   static final AuthInterceptor _authInterceptor = AuthInterceptor();
   static final LoginInterceptor _loginInterceptor = LoginInterceptor();
   static final Dio _dio = Dio();
+  String? username;
+  String? password;
 
   SettingsPosDataStore get posDataStore => SettingsPosDataStore();
+  Database get database => GetIt.instance<Database>();
 
   Future<Response> get({
     required String url,
@@ -72,8 +77,10 @@ class ZeeppayDio {
 
   Future<Response> post({
     required String url,
-    required Map<String, dynamic> data,
+    Map<String, dynamic>? data,
     bool isLoginRequest = false,
+    String? username,
+    String? password,
   }) async {
     try {
       final response = await _dio.post(
@@ -81,7 +88,11 @@ class ZeeppayDio {
         options: Options(
           headers: {'Content-Type': 'application/x-www-form-urlencoded'},
         ),
-        data: data,
+        data: {
+          'grant_type': 'password',
+          'username': username ?? database.getString("userToken"),
+          'password': password ?? database.getString("passwordToken"),
+        },
       );
 
       if (isLoginRequest) {
@@ -91,11 +102,15 @@ class ZeeppayDio {
       _loginInterceptor.setToken(response.data['access_token']);
       _dio.interceptors.add(_loginInterceptor);
 
-      return await _dio.post(url, data: data);
+      return await _dio.post(
+        url,
+        data: data,
+        options: Options(headers: {'Content-Type': 'application/json'}),
+      );
     } on DioException catch (e) {
       throw ApiException(
         message:
-            e.response?.data['error_description'] ??
+            e.response?.data['strMensagem'] ??
             e.message ??
             'Erro ao fazer POST',
         statusCode: e.response?.statusCode,

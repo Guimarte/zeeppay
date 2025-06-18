@@ -16,4 +16,14 @@ class PaymentsStatePutValue extends PaymentsState {}
 
 class PaymentsStatePutCard extends PaymentsState {}
 
-class PaymentsStateError extends PaymentsState {}
+class PaymentsStateError extends PaymentsState {
+  String? error;
+
+  PaymentsStateError({this.error});
+}
+
+class PaymentsStateSuccess extends PaymentsState {
+  String? message;
+
+  PaymentsStateSuccess({this.message});
+}

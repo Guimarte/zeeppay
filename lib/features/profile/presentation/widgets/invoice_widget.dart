@@ -24,11 +24,11 @@ class InvoiceCardWidget extends StatelessWidget {
             const SizedBox(height: 12),
             _buildRow(
               'Data de Vencimento:',
-              Formatters.formatDateTime(client.dataUltimaFatura),
+              Formatters.formatDateTime(client.dataUltimaFatura, 'dd/MM/yyyy'),
             ),
             _buildRow(
               'Data de Fechamento:',
-              Formatters.formatDateTime(client.dataProximaFatura),
+              Formatters.formatDateTime(client.dataProximaFatura, 'dd/MM/yyyy'),
             ),
             _buildRow(
               'Valor Total:',

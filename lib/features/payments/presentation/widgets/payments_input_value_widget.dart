@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:zeeppay/features/payments/presentation/bloc/payments_bloc.dart';
+import 'package:zeeppay/features/payments/presentation/widgets/custom_back_button_widget.dart';
 import 'package:zeeppay/features/payments/presentation/widgets/payments_input_text_form_field_widget.dart';
 import 'package:zeeppay/shared/formatters/formatters.dart';
 import 'package:zeeppay/shared/widgets/button_digital_widget.dart';
@@ -28,6 +30,11 @@ class PaymentsInputValueWidget extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
           child: Column(
             children: [
+              CustomBackButtonWidget(
+                backButton: () {
+                  context.pop();
+                },
+              ),
               const SizedBox(height: 16),
               Text(
                 'Digite o valor a ser pago:',

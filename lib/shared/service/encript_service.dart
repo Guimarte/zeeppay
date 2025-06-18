@@ -1,44 +1,44 @@
 import 'dart:convert';
 import 'dart:typed_data';
+import 'package:convert/convert.dart';
 import 'package:pointycastle/export.dart';
 
 class EncriptService {
-  static Uint8List _createUint8ListFromString(String data) {
-    return Uint8List.fromList(utf8.encode(data));
+  static Uint8List _keyFromHex(String hexKey) {
+    return Uint8List.fromList(hex.decode(hexKey));
   }
 
-  static String encrypt3DES(String plainText, String key) {
-    final keyBytes = _createUint8ListFromString(key);
-
-    final input = _createUint8ListFromString(plainText);
-
-    final cipher = PaddedBlockCipher('DESede/ECB/PKCS7')
-      ..init(
-        true,
-        PaddedBlockCipherParameters<KeyParameter, Null>(
-          KeyParameter(keyBytes),
-          null,
-        ),
-      );
-
-    final encrypted = cipher.process(input);
-    return base64.encode(encrypted);
+  static Uint8List _stringToUint8List(String text) {
+    return Uint8List.fromList(utf8.encode(text));
   }
 
-  static String decrypt3DES(String encryptedBase64, String key) {
-    final keyBytes = _createUint8ListFromString(key);
-    final encryptedBytes = base64.decode(encryptedBase64);
+  static String encrypt3DES(String plainText, String hexKey) {
+    final keyBytes = _keyFromHex(hexKey);
+    final input = _stringToUint8List(plainText);
 
-    final cipher = PaddedBlockCipher('DESede/ECB/PKCS7')
-      ..init(
-        false,
-        PaddedBlockCipherParameters<KeyParameter, Null>(
-          KeyParameter(keyBytes),
-          null,
-        ),
+    if (input.length != 8) {
+      throw ArgumentError(
+        'Plaintext deve ter exatamente 8 bytes para DESede sem padding.',
       );
+    }
 
-    final decrypted = cipher.process(encryptedBytes);
-    return utf8.decode(decrypted);
+    final cipher = DESedeEngine()..init(true, KeyParameter(keyBytes));
+
+    final output = Uint8List(cipher.blockSize);
+    cipher.processBlock(input, 0, output, 0);
+
+    return hex.encode(output);
+  }
+
+  static String decrypt3DESNoPadding(String hexEncrypted, String hexKey) {
+    final keyBytes = _keyFromHex(hexKey);
+    final encryptedBytes = Uint8List.fromList(hex.decode(hexEncrypted));
+
+    final cipher = DESedeEngine()..init(false, KeyParameter(keyBytes));
+
+    final output = Uint8List(cipher.blockSize);
+    cipher.processBlock(encryptedBytes, 0, output, 0);
+
+    return utf8.decode(output);
   }
 }

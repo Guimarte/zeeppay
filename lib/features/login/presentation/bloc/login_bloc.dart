@@ -23,6 +23,8 @@ class LoginBloc extends Bloc<LoginEvent, CommonState> {
     }
 
     if (database.getString("store") != null) {
+      database.setString("userToken", event.username);
+      database.setString("passwordToken", event.password);
       emitter(SuccessState(true));
       return;
     }
