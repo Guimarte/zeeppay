@@ -8,6 +8,7 @@ import 'package:zeeppay/features/payments/presentation/pages/mixin/payments_mixi
 import 'package:zeeppay/features/payments/presentation/widgets/payments_input_value_widget.dart';
 import 'package:zeeppay/features/payments/presentation/widgets/payments_insert_card_widget.dart';
 import 'package:zeeppay/features/payments/presentation/widgets/payments_passwords_widget.dart';
+import 'package:zeeppay/features/payments/presentation/widgets/payments_term_widget.dart';
 import 'package:zeeppay/features/payments/presentation/widgets/payments_type_payment_widget.dart';
 import 'package:zeeppay/shared/bloc/common_state.dart';
 
@@ -69,7 +70,11 @@ class _PaymentsPageState extends State<PaymentsPage> with PaymentsMixin {
                     );
                   case PaymentsStatePutCard():
                     return PaymentsInsertCardWidget(paymentsBloc: paymentsBloc);
-
+                  case PaymentsStateTerm():
+                    return PaymentsTermWidget(
+                      paymentsBloc: paymentsBloc,
+                      functionPrimaryButton: () {},
+                    );
                   default:
                     resetDatas();
                     return PaymentsTypePaymentWidget(
@@ -82,7 +87,7 @@ class _PaymentsPageState extends State<PaymentsPage> with PaymentsMixin {
                       onParceladoTap: () {
                         setPaymentType('2');
 
-                        paymentsBloc.add(PaymentsEventPutValueState());
+                        paymentsBloc.add(PaymentsEventTerm());
                       },
                     );
                 }

@@ -21,8 +21,8 @@ class ColorsApp {
   Color get secondaryButtonText => primary;
   Color get disableButton => const Color(0xffCFD8DC);
   Color get disableButtonText => const Color(0xff90A4AE);
-  Color get eraseButtonCard => const Color(0xFFFFEB3B);
-  Color get confirmButtonCard => const Color(0xFF66BB6A);
+  Color get eraseButtonCard => const Color(0xFFFDE63E);
+  Color get confirmButtonCard => const Color(0xFF00A854);
 
   Color? _toColor(String? hex) {
     if (hex == null) return null;

@@ -12,11 +12,11 @@ abstract class PrinterReceiveRepository {
 }
 
 class PrinterReceiveRepositoryImpl implements PrinterReceiveRepository {
-  ZeeppayDio zeeppayDio = ZeeppayDio();
+  final ZeeppayDio zeeppayDio = ZeeppayDio();
   SettingsPosDataStore get posData => SettingsPosDataStore();
 
   @override
-  Future<Either<Failure, Response<dynamic>>> call(String nsu) async {
+  Future<Either<Failure, Response>> call(String nsu) async {
     try {
       final response = await zeeppayDio.get(
         url: UrlsPayments.getReceive(
@@ -25,12 +25,7 @@ class PrinterReceiveRepositoryImpl implements PrinterReceiveRepository {
         ),
         isLoginRequest: false,
       );
-
-      if (response.statusCode == 200) {
-        return Right(response);
-      } else {
-        return Left(Failure('Receive failed: ${response.statusMessage}'));
-      }
+      return Right(response); // Deixa o Usecase decidir se é 200 ou não
     } on ApiException catch (e) {
       return Left(Failure(e.message));
     } catch (e) {

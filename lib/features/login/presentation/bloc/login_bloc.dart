@@ -14,21 +14,26 @@ class LoginBloc extends Bloc<LoginEvent, CommonState> {
 
   _realizeLogin(RealizeLogin event, Emitter<CommonState> emitter) async {
     emitter(LoadingState());
-    await loginUsecase.call(event.username, event.password);
-    final database = getIt<Database>();
-    if (event.saveCredentials) {
-      database.setString("user", event.username);
-      database.setString("password", event.password);
-      database.setBool("saveCredentials", event.saveCredentials);
-    }
+    final result = await loginUsecase.call(event.username, event.password);
+    result.fold(
+      (failure) {
+        emitter(FailureState(failure.message!));
+      },
+      (token) {
+        saveCredentials(event.username, event.password, event.saveCredentials);
+        return emitter(SuccessState(true));
+      },
+    );
+  }
 
-    if (database.getString("store") != null) {
-      database.setString("userToken", event.username);
-      database.setString("passwordToken", event.password);
-      emitter(SuccessState(true));
-      return;
+  void saveCredentials(String username, String password, bool savePassword) {
+    final database = getIt<Database>();
+    database.setString("userToken", username);
+    database.setString("passwordToken", password);
+    if (savePassword) {
+      database.setString("user", username);
+      database.setString("password", password);
+      database.setBool("saveCredentials", savePassword);
     }
-    emitter(SuccessState(false));
-    return;
   }
 }

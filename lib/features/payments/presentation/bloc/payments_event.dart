@@ -27,3 +27,5 @@ class PaymentsEventTransact extends PaymentsEvent {
 
   PaymentsEventTransact({required this.sellModel});
 }
+
+class PaymentsEventTerm extends PaymentsEvent {}

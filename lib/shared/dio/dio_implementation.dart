@@ -82,41 +82,29 @@ class ZeeppayDio {
     String? username,
     String? password,
   }) async {
-    try {
-      final response = await _dio.post(
-        UrlsDefault.urlLogin(posDataStore.settings!.erCardsModel.endpoint),
-        options: Options(
-          headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-        ),
-        data: {
-          'grant_type': 'password',
-          'username': username ?? database.getString("userToken"),
-          'password': password ?? database.getString("passwordToken"),
-        },
-      );
+    final response = await _dio.post(
+      UrlsDefault.urlLogin(posDataStore.settings!.erCardsModel.endpoint),
+      options: Options(
+        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+      ),
+      data: {
+        'grant_type': 'password',
+        'username': username ?? database.getString("userToken"),
+        'password': password ?? database.getString("passwordToken"),
+      },
+    );
 
-      if (isLoginRequest) {
-        return response;
-      }
+    if (isLoginRequest) return response;
 
-      _loginInterceptor.setToken(response.data['access_token']);
+    _loginInterceptor.setToken(response.data['access_token']);
+    if (!_dio.interceptors.contains(_loginInterceptor)) {
       _dio.interceptors.add(_loginInterceptor);
-
-      return await _dio.post(
-        url,
-        data: data,
-        options: Options(headers: {'Content-Type': 'application/json'}),
-      );
-    } on DioException catch (e) {
-      throw ApiException(
-        message:
-            e.response?.data['strMensagem'] ??
-            e.message ??
-            'Erro ao fazer POST',
-        statusCode: e.response?.statusCode,
-      );
-    } catch (e) {
-      throw ApiException(message: 'Erro inesperado: ${e.toString()}');
     }
+
+    return await _dio.post(
+      url,
+      data: data,
+      options: Options(headers: {'Content-Type': 'application/json'}),
+    );
   }
 }

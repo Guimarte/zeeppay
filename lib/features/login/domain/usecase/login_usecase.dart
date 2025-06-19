@@ -1,7 +1,9 @@
+import 'package:dartz/dartz.dart';
 import 'package:zeeppay/features/login/domain/repository/login_repository.dart';
+import 'package:zeeppay/shared/models/failure.dart';
 
 abstract class LoginUsecase {
-  Future<String> call(String username, String password);
+  Future<Either<Failure, String>> call(String username, String password);
 }
 
 class LoginUsecaseImpl implements LoginUsecase {
@@ -10,7 +12,7 @@ class LoginUsecaseImpl implements LoginUsecase {
   LoginUsecaseImpl(this._loginRepository);
 
   @override
-  Future<String> call(String username, String password) async {
-    return await _loginRepository(username, password);
+  Future<Either<Failure, String>> call(String username, String password) async {
+    return await _loginRepository.call(username, password);
   }
 }

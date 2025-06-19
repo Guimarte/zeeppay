@@ -16,4 +16,11 @@ class SuccessTransactModel {
       textContratoSeguro: json['strTextoContratoSeguro'],
     );
   }
+  Map<String, dynamic> toJson() {
+    return {
+      'lngNsuOperacao': nsuOperacao,
+      'strTextoContrato': textoContrato,
+      'strTextoContratoSeguro': textContratoSeguro,
+    };
+  }
 }

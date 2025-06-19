@@ -16,10 +16,32 @@ class PaymentsBloc extends Bloc<PaymentsEvent, PaymentsState> {
     on<PaymentsEventPutValueState>(_setPutValueState);
     on<PaymentsEventPutCardState>(_setPutCardState);
     on<PaymentsEventTransact>(_transact);
+    on<PaymentsEventTerm>(_setPaymentTerm);
   }
 
   final PaymentsUsecase paymentsUsecase;
   final PrinterReceiveUseCase printerReceiveUseCase;
+
+  String _interestType = 'comprador';
+  String get interestType => _interestType;
+  set interestType(String value) {
+    if (value == 'comprador' || value == 'loja') {
+      _interestType = value;
+    } else {
+      throw ArgumentError('Invalid interest type: $value');
+    }
+  }
+
+  int _selectedInstallment = 2;
+  int get selectedInstallment => _selectedInstallment;
+  set selectedInstallment(int value) {
+    if (value >= 2 && value <= 10) {
+      _selectedInstallment = value;
+      add(PaymentsEventTerm());
+    } else {
+      throw ArgumentError('Installments must be between 2 and 10');
+    }
+  }
 
   void _setInitialState(PaymentsEventSetInicialState event, Emitter emitter) {
     emitter(PaymentsStateInitial());
@@ -68,5 +90,12 @@ class PaymentsBloc extends Bloc<PaymentsEvent, PaymentsState> {
     await GertecService.printComprovanteOperacao(receiveModel);
 
     emitter(PaymentsStateSuccess());
+  }
+
+  void _setPaymentTerm(
+    PaymentsEventTerm event,
+    Emitter<PaymentsState> emitter,
+  ) {
+    emitter(PaymentsStateTerm());
   }
 }

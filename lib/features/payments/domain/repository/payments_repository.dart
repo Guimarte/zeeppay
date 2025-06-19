@@ -16,9 +16,7 @@ class PaymentsRepositoryImpl implements PaymentsRepository {
   SettingsPosDataStore get posData => SettingsPosDataStore();
 
   @override
-  Future<Either<Failure, Response<dynamic>>> call(
-    Map<String, dynamic> data,
-  ) async {
+  Future<Either<Failure, Response>> call(Map<String, dynamic> data) async {
     try {
       final response = await zeeppayDio.post(
         url: UrlsPayments.insertPayments(
@@ -27,12 +25,7 @@ class PaymentsRepositoryImpl implements PaymentsRepository {
         data: data,
         isLoginRequest: false,
       );
-
-      if (response.statusCode == 200) {
-        return Right(response);
-      } else {
-        return Left(Failure('Payment failed: ${response.statusMessage}'));
-      }
+      return Right(response); // deixa o Usecase decidir se é sucesso
     } on ApiException catch (e) {
       return Left(Failure(e.message));
     } catch (e) {

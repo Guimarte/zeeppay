@@ -11,12 +11,22 @@ class PrinterReceiveUseCaseImpl implements PrinterReceiveUseCase {
   final PrinterReceiveRepository printerReceiveRepository;
 
   PrinterReceiveUseCaseImpl({required this.printerReceiveRepository});
+
   @override
   Future<Either<Failure, ReceiveModel>> call(String nsu) async {
-    var result = await printerReceiveRepository.call(nsu);
+    final result = await printerReceiveRepository.call(nsu);
+
     return result.fold((failure) => Left(failure), (response) {
-      final receiveModel = ReceiveModel.fromJson(response.data);
-      return Right(receiveModel);
+      if (response.statusCode == 200) {
+        final receiveModel = ReceiveModel.fromJson(response.data);
+        return Right(receiveModel);
+      } else {
+        return Left(
+          Failure(
+            'Erro ao obter comprovante: ${response.statusMessage ?? 'status ${response.statusCode}'}',
+          ),
+        );
+      }
     });
   }
 }

@@ -15,7 +15,7 @@ class Routes {
         path: '/settings',
         builder: (context, state) => ConfigurationPage(),
       ),
-      GoRoute(path: '/home', builder: (contex, state) => const HomePage()),
+      GoRoute(path: '/home', builder: (contex, state) => HomePage()),
       GoRoute(path: '/payments', builder: (contex, state) => PaymentsPage()),
       GoRoute(path: '/profile', builder: (contex, state) => (ProfilePage())),
     ],

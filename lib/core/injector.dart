@@ -1,5 +1,7 @@
 import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:zeeppay/features/home/domain/repository/home_repository.dart';
+import 'package:zeeppay/features/home/domain/usecase/home_usecase.dart';
 import 'package:zeeppay/features/login/domain/repository/login_repository.dart';
 import 'package:zeeppay/features/login/domain/usecase/login_usecase.dart';
 import 'package:zeeppay/features/login/presentation/bloc/login_bloc.dart';
@@ -52,6 +54,8 @@ void setupDependencies(SharedPreferences prefs) async {
 
   getIt.registerLazySingleton<ProfileRepository>(() => ProfileRepositoryImpl());
 
+  getIt.registerLazySingleton<HomeRepository>(() => HomeRepositoryImpl());
+
   // Register Usecases (depende do repositório)
   getIt.registerLazySingleton<SplashUsecase>(
     () => SplashUsecase(
@@ -75,6 +79,10 @@ void setupDependencies(SharedPreferences prefs) async {
     () => PrinterReceiveUseCaseImpl(
       printerReceiveRepository: getIt<PrinterReceiveRepository>(),
     ),
+  );
+
+  getIt.registerLazySingleton<HomeUsecase>(
+    () => HomeUsecaseImpl(getIt<HomeRepository>()),
   );
 
   // Register Blocs (depende do Usecase)

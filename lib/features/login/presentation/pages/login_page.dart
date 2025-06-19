@@ -10,6 +10,8 @@ import 'package:zeeppay/features/login/presentation/widgets/text_input_custom_lo
 import 'package:zeeppay/shared/bloc/common_state.dart';
 import 'package:zeeppay/shared/widgets/dialog_loading.dart';
 import 'package:zeeppay/shared/widgets/primary_button.dart';
+import 'package:zeeppay/shared/widgets/show_dialog_erro_widget.dart';
+import 'package:zeeppay/shared/widgets/show_dialog_loading_widget.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -85,15 +87,7 @@ class _LoginPageState extends State<LoginPage> with LoginPageMixin {
                   bloc: loginBloc,
                   listener: (context, state) {
                     if (state is LoadingState) {
-                      dialogLoading(
-                        context,
-                        theme,
-                        Center(
-                          child: CircularProgressIndicator(
-                            color: theme.colorScheme.primary,
-                          ),
-                        ),
-                      );
+                      showLoadingDialog(context);
                     }
                     if (state is SuccessState) {
                       ScaffoldMessenger.of(context).hideCurrentSnackBar();
@@ -105,10 +99,8 @@ class _LoginPageState extends State<LoginPage> with LoginPageMixin {
                       }
                     }
                     if (state is FailureState) {
-                      ScaffoldMessenger.of(context).hideCurrentSnackBar();
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text('Erro: ${state.message}')),
-                      );
+                      context.pop();
+                      showErrorDialog(context, message: state.message);
                     }
                   },
                   child: PrimaryButton(

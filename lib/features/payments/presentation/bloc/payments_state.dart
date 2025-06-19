@@ -27,3 +27,5 @@ class PaymentsStateSuccess extends PaymentsState {
 
   PaymentsStateSuccess({this.message});
 }
+
+class PaymentsStateTerm extends PaymentsState {}
