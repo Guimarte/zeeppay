@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:zeeppay/features/payments/presentation/bloc/payments_bloc.dart';
+import 'package:zeeppay/features/payments/presentation/widgets/custom_back_button_widget.dart';
 import 'package:zeeppay/shared/widgets/primary_button.dart';
 
 class PaymentsTermWidget extends StatelessWidget {
@@ -8,10 +10,18 @@ class PaymentsTermWidget extends StatelessWidget {
     super.key,
     required this.paymentsBloc,
     required this.functionPrimaryButton,
+    required this.interestType,
+    required this.onInterestTypeChanged,
+    required this.selectedInstallment,
+    required this.onSelectedInstallmentChanged,
   });
 
   final PaymentsBloc paymentsBloc;
   final Function() functionPrimaryButton;
+  final String interestType;
+  final Function(String interestTypeSelected) onInterestTypeChanged;
+  final int selectedInstallment;
+  final Function(int installment) onSelectedInstallmentChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -27,6 +37,12 @@ class PaymentsTermWidget extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                CustomBackButtonWidget(
+                  backButton: () {
+                    context.pop();
+                  },
+                ),
+                SizedBox(height: 16),
                 Text(
                   'Escolha o tipo de juros:',
                   style: theme.textTheme.titleMedium,
@@ -35,20 +51,20 @@ class PaymentsTermWidget extends StatelessWidget {
                 Row(
                   children: [
                     InterestButtonWidget(
-                      isSelected: paymentsBloc.interestType == 'comprador',
+                      isSelected: interestType == 'comprador',
                       value: 'comprador',
                       label: 'Juros comprador',
                       onTap: () {
-                        paymentsBloc.interestType = 'comprador';
+                        onInterestTypeChanged('comprador');
                       },
                     ),
                     const SizedBox(width: 12),
                     InterestButtonWidget(
                       value: 'loja',
                       label: 'Juros loja',
-                      isSelected: paymentsBloc.interestType == 'loja',
+                      isSelected: interestType == 'loja',
                       onTap: () {
-                        paymentsBloc.interestType = 'loja';
+                        onInterestTypeChanged('loja');
                       },
                     ),
                   ],
@@ -64,12 +80,11 @@ class PaymentsTermWidget extends StatelessWidget {
                     itemCount: 9,
                     itemBuilder: (context, index) {
                       final parcela = index + 2;
-                      final isSelected =
-                          paymentsBloc.selectedInstallment == parcela;
+                      final isSelected = selectedInstallment == parcela;
 
                       return GestureDetector(
                         onTap: () {
-                          paymentsBloc.selectedInstallment = parcela;
+                          onSelectedInstallmentChanged(parcela);
                         },
                         child: Card(
                           elevation: isSelected ? 4 : 1,

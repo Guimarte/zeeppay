@@ -19,14 +19,18 @@ class PaymentsUsecaseImpl implements PaymentsUsecase {
 
   @override
   Future<Either<Failure, SuccessTransactModel>> call(SellModel data) async {
-    Database database = GetIt.instance<Database>();
+    final database = GetIt.instance<Database>();
     final result = await paymentsRepository.call(data.toJson());
 
     return result.fold((failure) => Left(failure), (response) {
       if (response.statusCode == 200) {
-        final successModel = SuccessTransactModel.fromJson(response.data);
-        database.setString('lastSale', jsonEncode(successModel.toJson()));
-        return Right(successModel);
+        try {
+          final successModel = SuccessTransactModel.fromJson(response.data);
+          database.setString('lastSale', jsonEncode(successModel.toJson()));
+          return Right(successModel);
+        } catch (e) {
+          return Left(Failure('Erro ao processar resposta: ${e.toString()}'));
+        }
       } else {
         return Left(
           Failure(

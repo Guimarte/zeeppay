@@ -29,3 +29,9 @@ class PaymentsEventTransact extends PaymentsEvent {
 }
 
 class PaymentsEventTerm extends PaymentsEvent {}
+
+class PaymentsEventSetInstallment extends PaymentsEvent {
+  final int installment;
+
+  PaymentsEventSetInstallment({required this.installment});
+}

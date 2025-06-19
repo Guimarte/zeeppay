@@ -72,14 +72,23 @@ class _PaymentsPageState extends State<PaymentsPage> with PaymentsMixin {
                     return PaymentsInsertCardWidget(paymentsBloc: paymentsBloc);
                   case PaymentsStateTerm():
                     return PaymentsTermWidget(
+                      interestType: interestType,
+                      onInterestTypeChanged: (String interestTypeSelected) =>
+                          onInterestTypeChanged(interestTypeSelected),
+                      onSelectedInstallmentChanged: (int installment) =>
+                          onSelectedInstallmentChanged(installment),
+                      selectedInstallment: selectedInstallment,
                       paymentsBloc: paymentsBloc,
-                      functionPrimaryButton: () {},
+                      functionPrimaryButton: () {
+                        paymentsBloc.add(PaymentsEventPutValueState());
+                      },
                     );
                   default:
                     resetDatas();
                     return PaymentsTypePaymentWidget(
                       paymentsBloc: paymentsBloc,
                       onVistaTap: () {
+                        setPrazo(1);
                         setPaymentType('1');
 
                         paymentsBloc.add(PaymentsEventPutValueState());

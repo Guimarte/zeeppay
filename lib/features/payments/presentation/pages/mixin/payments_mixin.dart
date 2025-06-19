@@ -4,6 +4,7 @@ import 'package:zeeppay/core/default_options.dart';
 import 'package:zeeppay/core/injector.dart';
 import 'package:zeeppay/core/pos_data_store.dart';
 import 'package:zeeppay/features/payments/presentation/bloc/payments_bloc.dart';
+import 'package:zeeppay/features/payments/presentation/bloc/payments_event.dart';
 import 'package:zeeppay/features/payments/presentation/pages/payments_page.dart';
 import 'package:zeeppay/flavors/flavor_config.dart';
 import 'package:zeeppay/shared/formatters/formatters.dart';
@@ -20,6 +21,10 @@ mixin PaymentsMixin<T extends StatefulWidget> on State<PaymentsPage> {
     leftSymbol: 'R\$',
     initialValue: 0,
   );
+
+  String interestType = 'comprador';
+  int selectedInstallment = 2;
+
   final PaymentsBloc paymentsBloc = getIt.get<PaymentsBloc>();
   FlavorConfig get flavorConfig => FlavorConfig.instance;
   SettingsPosDataStore get posData => SettingsPosDataStore();
@@ -67,7 +72,7 @@ mixin PaymentsMixin<T extends StatefulWidget> on State<PaymentsPage> {
     sellModel.dataLocal = DateTime.now().toLocal().toString();
   }
 
-  void setPrazo(String prazo) {
+  void setPrazo(int prazo) {
     sellModel.prazo = prazo;
   }
 
@@ -78,7 +83,6 @@ mixin PaymentsMixin<T extends StatefulWidget> on State<PaymentsPage> {
     );
     setNsu("1");
     setDataLocalAndDataCompra();
-    setPrazo("1");
     setCodigoEstabelecimento("003688316000378");
   }
 
@@ -86,5 +90,25 @@ mixin PaymentsMixin<T extends StatefulWidget> on State<PaymentsPage> {
     controllerPasswordCard.clear();
     controllerValue.text = 'R\$ 0,00';
     this.sellModel = SellModel.empty();
+  }
+
+  void onSelectedInstallmentChanged(int installment) {
+    setState(() {
+      selectedInstallment = installment;
+    });
+    setPrazo(selectedInstallment);
+  }
+
+  void onInterestTypeChanged(String interestTypeSelected) {
+    setState(() {
+      interestType = interestTypeSelected;
+    });
+    if (interestTypeSelected == 'comprador') {
+      sellModel.tipoParcelamento = '3'; // Comprador
+      sellModel.plano = ''; // Comprador
+    } else {
+      sellModel.plano = '';
+      sellModel.tipoParcelamento = '2'; // Loja
+    }
   }
 }

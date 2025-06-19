@@ -29,3 +29,5 @@ class PaymentsStateSuccess extends PaymentsState {
 }
 
 class PaymentsStateTerm extends PaymentsState {}
+
+class PaymentsStateInstallment extends PaymentsState {}

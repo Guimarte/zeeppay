@@ -8,26 +8,33 @@ import 'package:zeeppay/shared/exception/api_exception.dart';
 import 'package:zeeppay/shared/models/failure.dart';
 
 abstract class PaymentsRepository {
-  Future<Either<Failure, Response<dynamic>>> call(Map<String, dynamic> data);
+  Future<Either<Failure, Response>> call(Map<String, dynamic> data);
 }
 
 class PaymentsRepositoryImpl implements PaymentsRepository {
-  ZeeppayDio zeeppayDio = ZeeppayDio();
-  SettingsPosDataStore get posData => SettingsPosDataStore();
+  final ZeeppayDio _dio = ZeeppayDio();
+  final SettingsPosDataStore _posData = SettingsPosDataStore();
 
   @override
   Future<Either<Failure, Response>> call(Map<String, dynamic> data) async {
     try {
-      final response = await zeeppayDio.post(
+      final response = await _dio.post(
         url: UrlsPayments.insertPayments(
-          posData.settings!.erCardsModel.endpoint,
+          _posData.settings!.erCardsModel.endpoint,
         ),
         data: data,
         isLoginRequest: false,
       );
-      return Right(response); // deixa o Usecase decidir se é sucesso
-    } on ApiException catch (e) {
-      return Left(Failure(e.message));
+
+      return Right(response);
+    } on DioException catch (e) {
+      final errorMessage =
+          e.response?.data['error_description'] ??
+          e.response?.data['strMensagem'] ??
+          e.response?.data['error_description'] ??
+          e.message ??
+          'Erro de rede ao fazer login';
+      return Left(Failure(errorMessage));
     } catch (e) {
       return Left(Failure('Erro inesperado: ${e.toString()}'));
     }

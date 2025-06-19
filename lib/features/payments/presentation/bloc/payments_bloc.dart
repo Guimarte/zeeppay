@@ -22,27 +22,6 @@ class PaymentsBloc extends Bloc<PaymentsEvent, PaymentsState> {
   final PaymentsUsecase paymentsUsecase;
   final PrinterReceiveUseCase printerReceiveUseCase;
 
-  String _interestType = 'comprador';
-  String get interestType => _interestType;
-  set interestType(String value) {
-    if (value == 'comprador' || value == 'loja') {
-      _interestType = value;
-    } else {
-      throw ArgumentError('Invalid interest type: $value');
-    }
-  }
-
-  int _selectedInstallment = 2;
-  int get selectedInstallment => _selectedInstallment;
-  set selectedInstallment(int value) {
-    if (value >= 2 && value <= 10) {
-      _selectedInstallment = value;
-      add(PaymentsEventTerm());
-    } else {
-      throw ArgumentError('Installments must be between 2 and 10');
-    }
-  }
-
   void _setInitialState(PaymentsEventSetInicialState event, Emitter emitter) {
     emitter(PaymentsStateInitial());
   }
@@ -67,29 +46,26 @@ class PaymentsBloc extends Bloc<PaymentsEvent, PaymentsState> {
 
     final result = await paymentsUsecase.call(event.sellModel);
 
-    if (result.isLeft()) {
-      final failure = result.swap().getOrElse(() => throw Exception());
-      emitter(PaymentsStateError(error: failure.message));
-      return;
-    }
+    result.fold(
+      (failure) {
+        emitter(PaymentsStateError(error: failure.message));
+      },
+      (success) async {
+        final printResult = await printerReceiveUseCase.call(
+          success.nsuOperacao.toString(),
+        );
 
-    final success = result.getOrElse(() => throw Exception());
-
-    final printResult = await printerReceiveUseCase.call(
-      success.nsuOperacao.toString(),
+        printResult.fold(
+          (failure) {
+            emitter(PaymentsStateError(error: failure.message));
+          },
+          (receiveModel) async {
+            await GertecService.printComprovanteOperacao(receiveModel);
+            emitter(PaymentsStateSuccess());
+          },
+        );
+      },
     );
-
-    if (printResult.isLeft()) {
-      final failure = printResult.swap().getOrElse(() => throw Exception());
-      emitter(PaymentsStateError(error: failure.message));
-      return;
-    }
-
-    final receiveModel = printResult.getOrElse(() => throw Exception());
-
-    await GertecService.printComprovanteOperacao(receiveModel);
-
-    emitter(PaymentsStateSuccess());
   }
 
   void _setPaymentTerm(
