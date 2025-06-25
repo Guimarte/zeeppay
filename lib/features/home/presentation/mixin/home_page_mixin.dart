@@ -3,12 +3,10 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
-import 'package:intl/intl.dart';
 import 'package:zeeppay/features/home/domain/repository/home_repository.dart';
 import 'package:zeeppay/features/home/domain/usecase/home_usecase.dart';
 import 'package:zeeppay/shared/database/database.dart';
 import 'package:zeeppay/shared/formatters/formatters.dart';
-import 'package:zeeppay/shared/models/sucess_transact_model.dart';
 
 mixin HomePageMixin {
   void openDrawer(BuildContext context) {

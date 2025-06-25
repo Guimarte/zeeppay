@@ -1,5 +1,4 @@
 import 'package:bloc/bloc.dart';
-import 'package:flutter/material.dart';
 import 'package:zeeppay/features/payments/domain/usecase/payments_usecase.dart';
 import 'package:zeeppay/features/payments/domain/usecase/printer_receive_usecase.dart';
 import 'package:zeeppay/features/payments/presentation/bloc/payments_event.dart';
@@ -17,6 +16,7 @@ class PaymentsBloc extends Bloc<PaymentsEvent, PaymentsState> {
     on<PaymentsEventPutCardState>(_setPutCardState);
     on<PaymentsEventTransact>(_transact);
     on<PaymentsEventTerm>(_setPaymentTerm);
+    on<PaymentsEventErrorCard>(_setPutCardErrorState);
   }
 
   final PaymentsUsecase paymentsUsecase;
@@ -31,13 +31,15 @@ class PaymentsBloc extends Bloc<PaymentsEvent, PaymentsState> {
   }
 
   void _getPassword(PaymentsEventGetPassword event, Emitter emitter) async {
-    emitter(PaymentsStateLoading());
-
-    await Future.delayed(Duration(seconds: 3));
     emitter(PaymentsStatePutPassword());
   }
 
   void _setPutValueState(PaymentsEventPutValueState event, Emitter emitter) {
+    emitter(PaymentsStatePutValue());
+  }
+
+  void _setPutCardErrorState(PaymentsEventErrorCard event, Emitter emitter) {
+    emitter(PaymentsStateError());
     emitter(PaymentsStatePutValue());
   }
 

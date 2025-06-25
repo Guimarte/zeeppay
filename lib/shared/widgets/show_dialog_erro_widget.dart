@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-void showErrorDialog(
+showErrorDialog(
   BuildContext context, {
   required String message,
   String title = 'Erro',

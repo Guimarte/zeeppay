@@ -3,12 +3,16 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lottie/lottie.dart';
 import 'package:zeeppay/features/payments/presentation/bloc/payments_bloc.dart';
-import 'package:zeeppay/features/payments/presentation/bloc/payments_event.dart';
 import 'package:zeeppay/features/payments/presentation/widgets/custom_back_button_widget.dart';
 
 class PaymentsInsertCardWidget extends StatelessWidget {
   final PaymentsBloc paymentsBloc;
-  const PaymentsInsertCardWidget({super.key, required this.paymentsBloc});
+  final Function() function;
+  const PaymentsInsertCardWidget({
+    super.key,
+    required this.paymentsBloc,
+    required this.function,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -51,8 +55,8 @@ class PaymentsInsertCardWidget extends StatelessWidget {
               LottieBuilder.asset('assets/default/transact_animation.json'),
 
               TextButton(
-                onPressed: () {
-                  paymentsBloc.add(PaymentsEventSetInicialState());
+                onPressed: () async {
+                  function();
                 },
                 child: Text('Cancelar'),
               ),

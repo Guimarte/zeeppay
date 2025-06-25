@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:zeeppay/features/payments/presentation/bloc/payments_bloc.dart';
 import 'package:zeeppay/features/payments/presentation/widgets/custom_back_button_widget.dart';
 import 'package:zeeppay/features/payments/presentation/widgets/payments_input_text_form_field_widget.dart';
@@ -14,10 +13,12 @@ class PaymentsInputValueWidget extends StatelessWidget {
     required this.valueController,
     required this.paymentsBloc,
     required this.functionConfirm,
+    required this.function,
   });
   final TextEditingController valueController;
   final PaymentsBloc paymentsBloc;
   final Function functionConfirm;
+  final Function() function;
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +33,7 @@ class PaymentsInputValueWidget extends StatelessWidget {
             children: [
               CustomBackButtonWidget(
                 backButton: () {
-                  context.pop();
+                  function();
                 },
               ),
               const SizedBox(height: 16),

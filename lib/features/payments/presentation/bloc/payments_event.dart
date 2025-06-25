@@ -35,3 +35,7 @@ class PaymentsEventSetInstallment extends PaymentsEvent {
 
   PaymentsEventSetInstallment({required this.installment});
 }
+
+class PaymentsEventErrorCard extends PaymentsEvent {
+  PaymentsEventErrorCard();
+}

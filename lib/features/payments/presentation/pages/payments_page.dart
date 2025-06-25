@@ -10,7 +10,8 @@ import 'package:zeeppay/features/payments/presentation/widgets/payments_insert_c
 import 'package:zeeppay/features/payments/presentation/widgets/payments_passwords_widget.dart';
 import 'package:zeeppay/features/payments/presentation/widgets/payments_term_widget.dart';
 import 'package:zeeppay/features/payments/presentation/widgets/payments_type_payment_widget.dart';
-import 'package:zeeppay/shared/bloc/common_state.dart';
+import 'package:zeeppay/shared/service/gertec_service.dart';
+import 'package:zeeppay/shared/widgets/show_dialog_erro_widget.dart';
 
 class PaymentsPage extends StatefulWidget {
   const PaymentsPage({super.key});
@@ -30,12 +31,19 @@ class _PaymentsPageState extends State<PaymentsPage> with PaymentsMixin {
             bloc: paymentsBloc,
             listener: (context, state) async {
               if (state is PaymentsStatePutCard) {
-                final cardNumber = await readCard();
-                if (!mounted) return;
+                final cardNumber = await GertecService.readCard();
 
+                if (!mounted) return;
                 setCardNumber(cardNumber);
-                paymentsBloc.add(PaymentsEventGetPassword());
+                if (cardNumber.contains("Erro") || cardNumber.isEmpty) {
+                  showErrorDialog(context, message: cardNumber);
+
+                  return paymentsBloc.add(PaymentsEventErrorCard());
+                } else {
+                  paymentsBloc.add(PaymentsEventGetPassword());
+                }
               }
+
               if (state is PaymentsStateSuccess) {
                 resetDatas();
                 paymentsBloc.add(PaymentsEventSetInicialState());
@@ -61,6 +69,9 @@ class _PaymentsPageState extends State<PaymentsPage> with PaymentsMixin {
                     return const Center(child: CircularProgressIndicator());
                   case PaymentsStatePutValue():
                     return PaymentsInputValueWidget(
+                      function: () {
+                        paymentsBloc.add(PaymentsEventSetInicialState());
+                      },
                       functionConfirm: () {
                         setValue(controllerValue.text);
                         paymentsBloc.add(PaymentsEventPutCardState());
@@ -69,7 +80,12 @@ class _PaymentsPageState extends State<PaymentsPage> with PaymentsMixin {
                       valueController: controllerValue,
                     );
                   case PaymentsStatePutCard():
-                    return PaymentsInsertCardWidget(paymentsBloc: paymentsBloc);
+                    return PaymentsInsertCardWidget(
+                      paymentsBloc: paymentsBloc,
+                      function: () async {
+                        GertecService.stopReadCard();
+                      },
+                    );
                   case PaymentsStateTerm():
                     return PaymentsTermWidget(
                       interestType: interestType,

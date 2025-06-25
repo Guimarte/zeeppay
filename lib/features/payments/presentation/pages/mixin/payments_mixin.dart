@@ -4,14 +4,11 @@ import 'package:zeeppay/core/default_options.dart';
 import 'package:zeeppay/core/injector.dart';
 import 'package:zeeppay/core/pos_data_store.dart';
 import 'package:zeeppay/features/payments/presentation/bloc/payments_bloc.dart';
-import 'package:zeeppay/features/payments/presentation/bloc/payments_event.dart';
 import 'package:zeeppay/features/payments/presentation/pages/payments_page.dart';
 import 'package:zeeppay/flavors/flavor_config.dart';
 import 'package:zeeppay/shared/formatters/formatters.dart';
-import 'package:zeeppay/shared/models/pos_settings.dart';
 import 'package:zeeppay/shared/models/sell_model.dart';
 import 'package:zeeppay/shared/service/encript_service.dart';
-import 'package:zeeppay/shared/service/gertec_service.dart';
 
 mixin PaymentsMixin<T extends StatefulWidget> on State<PaymentsPage> {
   final TextEditingController controllerPasswordCard = TextEditingController();
@@ -33,15 +30,6 @@ mixin PaymentsMixin<T extends StatefulWidget> on State<PaymentsPage> {
   void initState() {
     super.initState();
     sellModel = getIt.get<SellModel>();
-  }
-
-  Future<String> readCard() async {
-    try {
-      final result = await GertecService.readCard();
-      return result.split('B').last;
-    } catch (e) {
-      return "Erro ao ler cartão: $e";
-    }
   }
 
   void setValue(String value) {

@@ -4,7 +4,6 @@ import 'package:go_router/go_router.dart';
 import 'package:zeeppay/features/payments/presentation/bloc/payments_bloc.dart';
 import 'package:zeeppay/features/payments/presentation/widgets/custom_back_button_widget.dart';
 import 'package:zeeppay/features/payments/presentation/widgets/input_password_card_widget.dart';
-import 'package:zeeppay/shared/models/sell_model.dart';
 import 'package:zeeppay/shared/widgets/button_digital_widget.dart';
 import 'package:zeeppay/shared/widgets/button_numbers_widget.dart';
 import 'package:zeeppay/shared/widgets/digital_keyboard.dart';

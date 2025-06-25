@@ -4,7 +4,6 @@ import 'package:zeeppay/features/payments/domain/external/urls_payments.dart';
 import 'package:zeeppay/shared/dio/dio_implementation.dart';
 
 import 'package:dartz/dartz.dart';
-import 'package:zeeppay/shared/exception/api_exception.dart';
 import 'package:zeeppay/shared/models/failure.dart';
 
 abstract class PaymentsRepository {

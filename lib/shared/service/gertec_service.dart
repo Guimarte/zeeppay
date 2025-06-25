@@ -93,15 +93,13 @@ Autorização: ${model.autorizacao}
   static Future<String> readCard() async {
     try {
       final result = await _channel.invokeMethod('readCard');
-      return result;
+      return result.split('B').last;
     } catch (e) {
-      return "Erro ao ler cartão: $e";
+      return "Erro ao ler cartão ou operação cancelada pelo usuário.";
     }
   }
 
   static Future<void> stopReadCard() async {
-    try {
-      await _channel.invokeMethod('stopReadCard');
-    } catch (e) {}
+    await _channel.invokeMethod('stopReadCard');
   }
 }

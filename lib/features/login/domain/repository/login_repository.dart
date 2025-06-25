@@ -2,7 +2,6 @@ import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:zeeppay/core/pos_data_store.dart';
 import 'package:zeeppay/shared/dio/dio_implementation.dart';
-import 'package:zeeppay/shared/exception/api_exception.dart';
 import 'package:zeeppay/shared/external/urls.dart';
 import 'package:zeeppay/shared/models/failure.dart';
 

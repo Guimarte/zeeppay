@@ -8,7 +8,6 @@ import 'package:zeeppay/features/login/presentation/mixin/login_page_mixin.dart'
 import 'package:zeeppay/features/login/presentation/widgets/check_box.dart';
 import 'package:zeeppay/features/login/presentation/widgets/text_input_custom_login.dart';
 import 'package:zeeppay/shared/bloc/common_state.dart';
-import 'package:zeeppay/shared/widgets/dialog_loading.dart';
 import 'package:zeeppay/shared/widgets/primary_button.dart';
 import 'package:zeeppay/shared/widgets/show_dialog_erro_widget.dart';
 import 'package:zeeppay/shared/widgets/show_dialog_loading_widget.dart';
