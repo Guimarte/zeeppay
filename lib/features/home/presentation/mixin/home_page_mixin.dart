@@ -29,7 +29,21 @@ mixin HomePageMixin {
           ),
         }.entries,
       );
-      homeUsecase.call(sale);
+      final response = homeUsecase.call(sale);
+      if (response == true) {
+        database.remove('lastSale');
+        ScaffoldMessenger.of(
+          GetIt.instance<GlobalKey<NavigatorState>>().currentContext!,
+        ).showSnackBar(
+          const SnackBar(content: Text('Última venda cancelada com sucesso!')),
+        );
+      }
+    } else {
+      ScaffoldMessenger.of(
+        GetIt.instance<GlobalKey<NavigatorState>>().currentContext!,
+      ).showSnackBar(
+        const SnackBar(content: Text('Nenhuma venda para cancelar!')),
+      );
     }
   }
 
@@ -46,9 +60,9 @@ mixin HomePageMixin {
             child: const Text('Não'),
           ),
           ElevatedButton(
-            onPressed: () {
+            onPressed: () async {
               Navigator.of(context).pop();
-              cancelLastSale();
+              await cancelLastSale();
             },
             child: const Text('Sim, Cancelar'),
           ),

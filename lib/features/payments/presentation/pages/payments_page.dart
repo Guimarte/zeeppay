@@ -46,8 +46,7 @@ class _PaymentsPageState extends State<PaymentsPage> with PaymentsMixin {
 
               if (state is PaymentsStateSuccess) {
                 resetDatas();
-                paymentsBloc.add(PaymentsEventSetInicialState());
-                context.pop();
+                return paymentsBloc.add(PaymentsEventSetInicialState());
               }
             },
             child: BlocBuilder<PaymentsBloc, PaymentsState>(
