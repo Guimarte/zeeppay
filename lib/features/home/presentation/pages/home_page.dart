@@ -39,13 +39,12 @@ class HomePage extends StatelessWidget with HomePageMixin {
                         openDrawer(context);
                       },
                     ),
-                    const SizedBox(height: 16),
 
                     CachedNetworkImage(
                       errorWidget: (context, url, error) =>
                           const Icon(Icons.error),
                       imageUrl: logoUrl,
-                      height: 200,
+                      height: 100,
                       fit: BoxFit.contain,
                     ),
 
@@ -56,34 +55,43 @@ class HomePage extends StatelessWidget with HomePageMixin {
                       ),
                     ),
 
-                    const SizedBox(height: 8),
-
                     Text(
                       'Escolha uma opção abaixo:',
                       style: theme.textTheme.bodyMedium,
                     ),
-
-                    const SizedBox(height: 32),
 
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         Expanded(
                           child: CardWidget(
-                            cardName: "VENDAS",
+                            cardName: "VENDA",
                             icon: Icons.shopping_cart,
                             onTap: () {
                               context.push('/payments');
                             },
                           ),
                         ),
-                        const SizedBox(width: 16),
                         Expanded(
                           child: CardWidget(
                             cardName: "PERFIL",
                             icon: Icons.person,
                             onTap: () {
                               context.push('/profile');
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Expanded(
+                          child: CardWidget(
+                            cardName: "FATURA",
+                            icon: Icons.shopping_cart,
+                            onTap: () {
+                              context.push('/invoice');
                             },
                           ),
                         ),

@@ -42,7 +42,7 @@ class SearchCpfProfileWidget extends StatelessWidget {
             children: [
               const SizedBox(height: 16),
               Text(
-                'Digite seu CPF:',
+                'Digite o CPF:',
                 style: theme.textTheme.headlineSmall?.copyWith(
                   fontWeight: FontWeight.bold,
                 ),

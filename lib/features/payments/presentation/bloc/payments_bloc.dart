@@ -68,7 +68,7 @@ class PaymentsBloc extends Bloc<PaymentsEvent, PaymentsState> {
 
     final receiveModel = printResult.getOrElse(() => throw Exception());
 
-    await GertecService.printComprovanteOperacao(receiveModel);
+    await GertecService.printReceive(receiveModel, false);
 
     emitter(PaymentsStateSuccess());
   }

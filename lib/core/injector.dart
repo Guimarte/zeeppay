@@ -18,6 +18,8 @@ import 'package:zeeppay/features/splash/domain/repository/splash_store_repositor
 import 'package:zeeppay/features/splash/domain/repository/splash_theme_repository.dart';
 import 'package:zeeppay/features/splash/domain/usecase/splash_usecase.dart';
 import 'package:zeeppay/features/splash/presentation/bloc/splash_bloc.dart';
+import 'package:zeeppay/features/invoice/domain/usecase/invoice_usecase.dart';
+import 'package:zeeppay/features/invoice/presentation/bloc/invoice_bloc.dart';
 import 'package:zeeppay/shared/database/database.dart';
 import 'package:zeeppay/shared/models/sell_model.dart';
 import 'package:zeeppay/theme/colors_app.dart';
@@ -56,6 +58,7 @@ void setupDependencies(SharedPreferences prefs) async {
 
   getIt.registerLazySingleton<HomeRepository>(() => HomeRepositoryImpl());
 
+
   // Register Usecases (depende do repositório)
   getIt.registerLazySingleton<SplashUsecase>(
     () => SplashUsecase(
@@ -85,6 +88,10 @@ void setupDependencies(SharedPreferences prefs) async {
     () => HomeUsecaseImpl(getIt<HomeRepository>()),
   );
 
+  getIt.registerLazySingleton<InvoiceUsecase>(
+    () => InvoiceUsecaseImpl(),
+  );
+
   // Register Blocs (depende do Usecase)
   getIt.registerFactory<SplashBloc>(
     () => SplashBloc(splashUsecase: getIt<SplashUsecase>()),
@@ -103,5 +110,9 @@ void setupDependencies(SharedPreferences prefs) async {
 
   getIt.registerFactory<ProfileBloc>(
     () => ProfileBloc(profileUsecase: getIt<ProfileUsecase>()),
+  );
+
+  getIt.registerFactory<InvoiceBloc>(
+    () => InvoiceBloc(usecase: getIt<InvoiceUsecase>()),
   );
 }

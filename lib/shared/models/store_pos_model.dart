@@ -1,7 +1,7 @@
 class StorePosModel {
   final String id;
   final String name;
-  final String? attendanceArea;
+  final int? attendanceArea;
   final bool public;
   final String? addressId;
   final String? tenantId;
@@ -25,7 +25,7 @@ class StorePosModel {
     return StorePosModel(
       id: json['id'] as String,
       name: json['name'] as String,
-      attendanceArea: json['attendance_area'] as String?,
+      attendanceArea: json['attendance_area'] as int?,
       public: json['public'] as bool,
       addressId: json['address_id'] as String?,
       tenantId: json['tenant_id'] as String?,

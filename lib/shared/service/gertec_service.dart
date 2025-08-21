@@ -1,18 +1,11 @@
 import 'package:flutter/services.dart';
 import 'package:zeeppay/features/payments/domain/model/receive_model.dart';
 import 'package:zeeppay/features/profile/domain/models/cliente_model.dart';
+import 'package:zeeppay/flavors/flavor_config.dart';
 import 'package:zeeppay/shared/formatters/formatters.dart';
 
 class GertecService {
   static const _channel = MethodChannel('com.example.zeeppay/printer');
-
-  static Future<void> printReceive() async {
-    try {
-      await _channel.invokeMethod('printReceive');
-    } on PlatformException catch (e) {
-      print("Erro na impressão: ${e.message}");
-    }
-  }
 
   static Future<void> printClientProfile(ClienteModel client) async {
     final content =
@@ -49,45 +42,52 @@ Próxima Fatura: ${Formatters.formatDateTime(client.dataProximaFatura, 'dd/MM/yy
     await _channel.invokeMethod('printProfile', {"content": content});
   }
 
-  static Future<void> printComprovanteOperacao(ReceiveModel model) async {
-    final content =
+  static Future<void> printReceive(ReceiveModel model, bool isBuyer) async {
+    final ByteData imageData = await rootBundle.load(
+      'assets/flavors/tridicopay/tridicopay.png',
+    );
+    final Uint8List imageBytes = imageData.buffer.asUint8List();
+
+    final logo = imageBytes;
+
+    final header =
         '''
-========= COMPROVANTE =========
-
-Lojista: ${model.lojista}
-CNPJ: ${model.cnpj}
-Fone: ${model.fone}
-Endereço: ${model.endereco}
-
--------------------------------
-
-Cliente: ${model.cliente}
-Telefone Cliente: ${model.foneCliente}
-Cartão: ${model.cartao}
-
--------------------------------
-
-Tipo de Operação: ${model.tipoOperacao}
-Parcelamento: ${model.tipoParcelamento == 1 ? "À Vista" : "Parcelado"}
-Prazo: ${model.prazo}x
-Valor Total: R\$ ${model.valor}
-Prestação: R\$ ${model.prestacao}
-CET Anual: ${model.cetAno}%
-
--------------------------------
-
-Data: ${model.data}
-Hora: ${model.hora}
-NSU Terminal: ${model.nsuTerminal}
-NSU Processadora: ${model.nsuProcessadora}
-Autorização: ${model.autorizacao}
-
-===============================
-
-      *** Obrigado! ***
+${isBuyer ? 'VIA - CLIENTE' : 'VIA - ESTABELECIMENTO'}
 ''';
 
-    await _channel.invokeMethod('printProfile', {"content": content});
+    final storeInfo =
+        '''
+${model.cnpj}
+${model.lojista}
+${model.endereco}
+''';
+
+    final middle =
+        '''
+${model.data} ${model.hora}
+NSU: ${model.nsuProcessadora} Aut: ${model.autorizacao}
+Cartão: ${model.cartao}
+${model.tipoOperacao}
+Total: R\$ ${model.valor}
+${model.tipoParcelamento == 1 ? '' : 'Parcelas: ${model.prazo}x de R\$${model.prestacao} '}
+
+''';
+    final footer =
+        '''
+TRANSACAO AUTORIZADA COM SENHA
+${model.cliente}
+${model.foneCliente}
+
+
+''';
+
+    await _channel.invokeMethod('printReceive', {
+      "header": header,
+      "middle": middle,
+      "footer": footer,
+      "storeInfo": storeInfo,
+      "logo": logo,
+    });
   }
 
   static Future<String> readCard() async {

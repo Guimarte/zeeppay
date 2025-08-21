@@ -12,4 +12,12 @@ mixin ConfigurationPageMixin {
   void setData({required StorePosModel store}) {
     database.setString("store", json.encode(store.toJson()));
   }
+
+  void setToken(String token) {
+    database.setString("pos_token", token);
+  }
+
+  String? getToken() {
+    return database.getString("pos_token");
+  }
 }

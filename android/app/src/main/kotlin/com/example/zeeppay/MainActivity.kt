@@ -1,12 +1,15 @@
 package com.example.zeeppay
 
+import android.graphics.BitmapFactory
 import android.graphics.Paint
 import android.os.Bundle
 import android.view.View
 import br.com.gertec.gedi.GEDI
+import br.com.gertec.gedi.enums.GEDI_PRNTR_e_Alignment
 import br.com.gertec.gedi.exceptions.GediException
 import br.com.gertec.gedi.interfaces.IGEDI
 import br.com.gertec.gedi.interfaces.IPRNTR
+import br.com.gertec.gedi.structs.GEDI_PRNTR_st_PictureConfig
 import br.com.gertec.gedi.structs.GEDI_PRNTR_st_StringConfig
 import br.com.gertec.gpos780.ppcomp.PPComp
 import br.com.gertec.gpos780.ppcomp.exceptions.PPCompNotifyException
@@ -38,9 +41,17 @@ class MainActivity : FlutterActivity() {
         ).setMethodCallHandler { call, result ->
             when (call.method) {
                 "printReceive" -> {
-                    val success = printReceive()
-                    if (success) {
-                        result.success(null)
+                    val header = call.argument<String>("header")
+                    val middle = call.argument<String>("middle")
+                    val footer = call.argument<String>("footer")
+                    val storeInfo = call.argument<String>("storeInfo")
+                    val logo = call.argument<ByteArray>("logo")
+
+
+
+                    if (header != null && middle != null && footer != null && storeInfo != null && logo != null) {
+                        val success = printReceive(header, middle, footer, storeInfo, logo)
+                        result.success(success)
                     } else {
                         result.error("PRINT_ERROR", "Erro ao imprimir", null)
                     }
@@ -48,11 +59,12 @@ class MainActivity : FlutterActivity() {
 
                 "printProfile" -> {
                     val content = call.argument<String>("content")
+
                     if (content != null) {
-                        val success = printReceive(content)
+                        val success = printProfile(content)
                         result.success(success)
                     } else {
-                        result.error("INVALID", "Content is null", null)
+                        result.error("INVALID_ARGUMENTS", "One or more parameters are null", null)
                     }
                 }
 
@@ -90,7 +102,6 @@ class MainActivity : FlutterActivity() {
         }
     }
 
-    // Essas funções estavam dentro do configureFlutterEngine — agora estão corretamente fora
 
     private fun transactCard(onResult: (String?) -> Unit) {
         Thread {
@@ -161,20 +172,63 @@ class MainActivity : FlutterActivity() {
         return sPanFromLastTrack
     }
 
-    private fun printReceive(): Boolean {
+    private fun printReceive(
+        header: String,
+        middle: String,
+        footer: String,
+        storeInfo: String,
+        logo: ByteArray
+    ): Boolean {
         return try {
             val mCL = iGedi!!.cl
             mCL.PowerOff()
             iprntr = iGedi!!.prntr
             iprntr?.let { printer ->
-                printer.Init()
-                val strconfig = GEDI_PRNTR_st_StringConfig(Paint())
-                strconfig.paint.textAlign = Paint.Align.CENTER
-                strconfig.paint.textSize = 48.0F
-                strconfig.paint.isFakeBoldText = true
-                strconfig.offset = 0
-                strconfig.lineSpace = 0
-                printer.DrawStringExt(strconfig, "Teste de impressão via Flutter")
+
+
+                val logoConfig = GEDI_PRNTR_st_PictureConfig()
+                logoConfig.alignment = GEDI_PRNTR_e_Alignment.CENTER
+                logoConfig.height = 60
+                logoConfig.width = 150
+                val bitmap = BitmapFactory.decodeByteArray(logo, 0, logo.size)
+                printer.DrawPictureExt(logoConfig, bitmap)
+                printer.DrawBlankLine(2) // Espaço antes do header
+
+
+                // Config para header (negrito)
+                val headerConfig = GEDI_PRNTR_st_StringConfig(Paint())
+                headerConfig.paint.textAlign = Paint.Align.CENTER
+                headerConfig.paint.textSize = 10.0F
+                headerConfig.paint.isFakeBoldText = true // negrito
+                headerConfig.lineSpace = 4
+
+                val storeInfoConfig = GEDI_PRNTR_st_StringConfig(Paint())
+                storeInfoConfig.paint.textAlign = Paint.Align.LEFT
+                storeInfoConfig.paint.textSize = 14.0F
+                storeInfoConfig.paint.isFakeBoldText = true
+                storeInfoConfig.lineSpace = 6
+
+                // Config para body (normal)
+                val bodyConfig = GEDI_PRNTR_st_StringConfig(Paint())
+                bodyConfig.paint.textAlign = Paint.Align.LEFT
+                bodyConfig.paint.textSize = 14.0F
+                bodyConfig.paint.isFakeBoldText = false // normal
+                bodyConfig.lineSpace = 4
+
+                val footerConfig = GEDI_PRNTR_st_StringConfig(Paint())
+                footerConfig.paint.textAlign = Paint.Align.CENTER
+                footerConfig.paint.textSize = 14.0F
+                footerConfig.paint.isFakeBoldText = false // normal
+                footerConfig.lineSpace = 2
+
+                val printBlock: (GEDI_PRNTR_st_StringConfig, String) -> Unit = { config, block ->
+                    printer.DrawStringExt(config, block.trim())
+                }
+
+                printBlock(headerConfig, header)
+                printBlock(storeInfoConfig, storeInfo) // header negrito
+                printBlock(bodyConfig, middle)   // middle normal
+                printBlock(footerConfig, footer)
                 printer.DrawBlankLine(20)
                 printer.Output()
             }
@@ -185,7 +239,7 @@ class MainActivity : FlutterActivity() {
         }
     }
 
-    private fun printReceive(content: String): Boolean {
+    private fun printProfile(content: String): Boolean {
         return try {
             val mCL = iGedi!!.cl
             mCL.PowerOff()
@@ -211,4 +265,5 @@ class MainActivity : FlutterActivity() {
             false
         }
     }
+
 }

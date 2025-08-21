@@ -8,4 +8,5 @@ class UrlsLogin {
   static String get ercards => '$urlDefault/settings/ercards';
   static String get theme => '$urlDefault/settings/theme';
   static String get store => '$urlDefault/stores';
+  static String get devices => '$urlDefault/point-of-sales/devices';
 }
