@@ -1,7 +1,6 @@
 import 'package:flutter/services.dart';
 import 'package:zeeppay/features/payments/domain/model/receive_model.dart';
 import 'package:zeeppay/features/profile/domain/models/cliente_model.dart';
-import 'package:zeeppay/flavors/flavor_config.dart';
 import 'package:zeeppay/shared/formatters/formatters.dart';
 
 class GertecService {

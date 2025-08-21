@@ -25,7 +25,7 @@ class PrinterReceiveRepositoryImpl implements PrinterReceiveRepository {
         ),
         isLoginRequest: false,
       );
-      return Right(response); // Deixa o Usecase decidir se é 200 ou não
+      return Right(response);
     } on ApiException catch (e) {
       return Left(Failure(e.message));
     } catch (e) {

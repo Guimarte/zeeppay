@@ -2,6 +2,8 @@ import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:zeeppay/features/home/domain/repository/home_repository.dart';
 import 'package:zeeppay/features/home/domain/usecase/home_usecase.dart';
+import 'package:zeeppay/features/invoice/domain/repository/invoice_repository.dart';
+import 'package:zeeppay/features/invoice/domain/usecase/invoice_usecase.dart';
 import 'package:zeeppay/features/login/domain/repository/login_repository.dart';
 import 'package:zeeppay/features/login/domain/usecase/login_usecase.dart';
 import 'package:zeeppay/features/login/presentation/bloc/login_bloc.dart';
@@ -13,12 +15,12 @@ import 'package:zeeppay/features/payments/presentation/bloc/payments_bloc.dart';
 import 'package:zeeppay/features/profile/domain/repository/profile_repository.dart';
 import 'package:zeeppay/features/profile/domain/usecase/profile_usecase.dart';
 import 'package:zeeppay/features/profile/presentation/bloc/profile_bloc.dart';
+import 'package:zeeppay/features/splash/domain/repository/splash_devices_repository.dart';
 import 'package:zeeppay/features/splash/domain/repository/splash_ercards_repository.dart';
 import 'package:zeeppay/features/splash/domain/repository/splash_store_repository.dart';
 import 'package:zeeppay/features/splash/domain/repository/splash_theme_repository.dart';
 import 'package:zeeppay/features/splash/domain/usecase/splash_usecase.dart';
 import 'package:zeeppay/features/splash/presentation/bloc/splash_bloc.dart';
-import 'package:zeeppay/features/invoice/domain/usecase/invoice_usecase.dart';
 import 'package:zeeppay/features/invoice/presentation/bloc/invoice_bloc.dart';
 import 'package:zeeppay/shared/database/database.dart';
 import 'package:zeeppay/shared/models/sell_model.dart';
@@ -43,6 +45,9 @@ void setupDependencies(SharedPreferences prefs) async {
   getIt.registerLazySingleton<SplashThemeRepository>(
     () => SplashThemeRepositoryImpl(),
   );
+  getIt.registerLazySingleton<SplashDevicesRepository>(
+    () => SplashDevicesRepositoryImpl(),
+  );
 
   getIt.registerLazySingleton<PaymentsRepository>(
     () => PaymentsRepositoryImpl(),
@@ -58,6 +63,7 @@ void setupDependencies(SharedPreferences prefs) async {
 
   getIt.registerLazySingleton<HomeRepository>(() => HomeRepositoryImpl());
 
+  getIt.registerLazySingleton<InvoiceRepository>(() => InvoiceRepositoryImpl());
 
   // Register Usecases (depende do repositório)
   getIt.registerLazySingleton<SplashUsecase>(
@@ -65,6 +71,7 @@ void setupDependencies(SharedPreferences prefs) async {
       getIt<SplashStoreRepository>(),
       getIt<SplashERCardsRepository>(),
       getIt<SplashThemeRepository>(),
+      getIt<SplashDevicesRepository>(),
     ),
   );
   getIt.registerLazySingleton<LoginUsecase>(
@@ -89,7 +96,7 @@ void setupDependencies(SharedPreferences prefs) async {
   );
 
   getIt.registerLazySingleton<InvoiceUsecase>(
-    () => InvoiceUsecaseImpl(),
+    () => InvoiceUsecaseImpl(getIt<InvoiceRepository>()),
   );
 
   // Register Blocs (depende do Usecase)
@@ -113,6 +120,6 @@ void setupDependencies(SharedPreferences prefs) async {
   );
 
   getIt.registerFactory<InvoiceBloc>(
-    () => InvoiceBloc(usecase: getIt<InvoiceUsecase>()),
+    () => InvoiceBloc(invoiceUsecase: getIt<InvoiceUsecase>()),
   );
 }

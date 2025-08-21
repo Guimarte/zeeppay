@@ -1,50 +1,28 @@
 import 'package:zeeppay/features/profile/domain/models/cliente_model.dart';
-import '../../domain/models/card_data.dart';
-import '../../domain/models/invoice_response_model.dart';
-import '../../domain/models/invoice_type.dart';
+import 'package:zeeppay/features/profile/domain/models/fatura_model.dart';
 
 abstract class InvoiceState {}
 
 class InvoiceInitial extends InvoiceState {}
 
-class InvoiceTypeSelected extends InvoiceState {
-  final InvoiceType selectedType;
-  
-  InvoiceTypeSelected({required this.selectedType});
-}
-
-class CardReadingInProgress extends InvoiceState {}
-
-class CardReadingSuccess extends InvoiceState {
-  final CardData cardData;
-  
-  CardReadingSuccess({required this.cardData});
-}
-
-class CardReadingCancelled extends InvoiceState {}
-
-class ConsultandoCliente extends InvoiceState {}
-
 class ClienteConsultado extends InvoiceState {
   final List<ClienteModel> cliente;
-  final CardData cardData;
-  
-  ClienteConsultado({
-    required this.cliente,
-    required this.cardData,
-  });
+  final String cpf;
+
+  ClienteConsultado({required this.cliente, required this.cpf});
 }
 
-class ConsultandoFaturas extends InvoiceState {}
+class InvoiceDisplayState extends InvoiceState {
+  final FaturaModel fatura;
+  final ClienteModel cliente;
 
-class FaturasConsultadas extends InvoiceState {
-  final InvoiceResponseModel invoiceResponse;
-  
-  FaturasConsultadas({required this.invoiceResponse});
+  InvoiceDisplayState({required this.fatura, required this.cliente});
 }
+
+class InvoiceLoadingState extends InvoiceState {}
 
 class InvoiceError extends InvoiceState {
   final String message;
-  
+
   InvoiceError({required this.message});
 }

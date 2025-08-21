@@ -8,11 +8,11 @@ import 'package:zeeppay/shared/dio/dio_implementation.dart';
 import 'package:zeeppay/shared/exception/api_exception.dart';
 import 'package:zeeppay/shared/models/failure.dart';
 
-abstract class InvoiceRepository {
+abstract class InvoicePaymentRepository {
   Future<Either<Failure, Response<dynamic>>> call(String cpf);
 }
 
-class InvoiceRepositoryImpl implements InvoiceRepository {
+class InvoicePaymentRepositoryImpl implements InvoicePaymentRepository {
   ZeeppayDio zeeppayDio = ZeeppayDio();
   SettingsPosDataStore get posData => SettingsPosDataStore();
   final database = getIt<Database>();

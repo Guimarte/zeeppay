@@ -1,7 +1,7 @@
 import 'package:go_router/go_router.dart';
 import 'package:zeeppay/features/configuration/presentation/page/configuration_page.dart';
 import 'package:zeeppay/features/home/presentation/pages/home_page.dart';
-import 'package:zeeppay/features/invoice/presentation/pages/invoice_wrapper_page.dart';
+import 'package:zeeppay/features/invoice/presentation/pages/invoice_page.dart';
 import 'package:zeeppay/features/login/presentation/pages/login_page.dart';
 import 'package:zeeppay/features/payments/presentation/pages/payments_page.dart';
 import 'package:zeeppay/features/profile/presentation/pages/profile_page.dart';
@@ -19,7 +19,7 @@ class Routes {
       GoRoute(path: '/home', builder: (contex, state) => HomePage()),
       GoRoute(path: '/payments', builder: (contex, state) => PaymentsPage()),
       GoRoute(path: '/profile', builder: (contex, state) => (ProfilePage())),
-      GoRoute(path: '/invoice', builder: (contex, state) => (InvoiceWrapperPage())),
+      GoRoute(path: '/invoice', builder: (contex, state) => (InvoicePage())),
     ],
   );
 }
