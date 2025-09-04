@@ -6,7 +6,10 @@
       "Bash(rm:*)",
       "Bash(flutter run:*)",
       "Bash(git add:*)",
-      "Bash(git rm:*)"
+      "Bash(git rm:*)",
+      "Bash(flutter clean:*)",
+      "Bash(flutter pub:*)",
+      "WebFetch(domain:documenter.getpostman.com)"
     ],
     "deny": []
   }

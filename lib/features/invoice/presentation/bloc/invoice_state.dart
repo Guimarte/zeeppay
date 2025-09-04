@@ -26,3 +26,33 @@ class InvoiceError extends InvoiceState {
 
   InvoiceError({required this.message});
 }
+
+class InvoiceReadingCardState extends InvoiceState {}
+
+class InvoiceCardReadState extends InvoiceState {
+  final String cardNumber;
+  final FaturaModel? fatura;
+  final ClienteModel? cliente;
+
+  InvoiceCardReadState({
+    required this.cardNumber,
+    this.fatura,
+    this.cliente,
+  });
+}
+
+class InvoicePaymentProcessingState extends InvoiceState {}
+
+class InvoicePaymentSuccessState extends InvoiceState {
+  final String message;
+
+  InvoicePaymentSuccessState({required this.message});
+}
+
+class InvoiceRegisterTransactionProcessingState extends InvoiceState {}
+
+class InvoiceRegisterTransactionSuccessState extends InvoiceState {
+  final Map<String, dynamic> transactionResult;
+
+  InvoiceRegisterTransactionSuccessState({required this.transactionResult});
+}

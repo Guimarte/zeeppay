@@ -7,9 +7,11 @@ class DrawerHomeWidget extends StatelessWidget {
     super.key,
     required this.cancelButtonFunction,
     required this.settingsButtonFunction,
+    required this.closeCashier,
   });
   Function() cancelButtonFunction;
   Function() settingsButtonFunction;
+  Function() closeCashier;
 
   final appColor = GetIt.instance.get<ColorsApp>();
 
@@ -35,6 +37,13 @@ class DrawerHomeWidget extends StatelessWidget {
             title: Text('Configurações'),
             onTap: () {
               settingsButtonFunction();
+            },
+          ),
+          ListTile(
+            leading: Icon(Icons.money_off),
+            title: Text('Fechar Caixa'),
+            onTap: () {
+              closeCashier();
             },
           ),
         ],

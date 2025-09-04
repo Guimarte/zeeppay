@@ -1,4 +1,8 @@
+import 'package:zeeppay/flavors/flavor_config.dart';
+
 class UrlsInvoice {
+  static FlavorConfig get _flavorConfig => FlavorConfig.instance;
+
   static String consultarUltimasFaturas(String urlBase) {
     return '$urlBase/Fatura/ConsultarUltimasFaturas';
   }
@@ -13,5 +17,9 @@ class UrlsInvoice {
     String cashierSessionId,
   ) {
     return '$urlBase/point-of-sales/devices/$deviceId/cashier/$cashierSessionId/register-payment';
+  }
+
+  static String openCash(String urlBase, String deviceId) {
+    return '$urlBase/point-of-sales/devices/$deviceId/cashier/open';
   }
 }

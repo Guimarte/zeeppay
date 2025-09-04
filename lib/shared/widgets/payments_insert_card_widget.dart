@@ -1,23 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:zeeppay/features/payments/presentation/bloc/payments_bloc.dart';
 import 'package:zeeppay/features/payments/presentation/widgets/custom_back_button_widget.dart';
 
-class PaymentsInsertCardWidget extends StatefulWidget {
-  final PaymentsBloc paymentsBloc;
+class InsertCardWidget extends StatefulWidget {
+  final Bloc bloc;
   final Function() function;
-  const PaymentsInsertCardWidget({
+  const InsertCardWidget({
     super.key,
-    required this.paymentsBloc,
+    required this.bloc,
     required this.function,
   });
 
   @override
-  State<PaymentsInsertCardWidget> createState() => _PaymentsInsertCardWidgetState();
+  State<InsertCardWidget> createState() => InsertCardWidgetState();
 }
 
-class _PaymentsInsertCardWidgetState extends State<PaymentsInsertCardWidget>
+class InsertCardWidgetState extends State<InsertCardWidget>
     with TickerProviderStateMixin {
   late AnimationController _pulseController;
   late Animation<double> _pulseAnimation;
@@ -29,13 +28,9 @@ class _PaymentsInsertCardWidgetState extends State<PaymentsInsertCardWidget>
       duration: const Duration(seconds: 1),
       vsync: this,
     );
-    _pulseAnimation = Tween<double>(
-      begin: 0.8,
-      end: 1.2,
-    ).animate(CurvedAnimation(
-      parent: _pulseController,
-      curve: Curves.easeInOut,
-    ));
+    _pulseAnimation = Tween<double>(begin: 0.8, end: 1.2).animate(
+      CurvedAnimation(parent: _pulseController, curve: Curves.easeInOut),
+    );
     _pulseController.repeat(reverse: true);
   }
 
@@ -59,7 +54,7 @@ class _PaymentsInsertCardWidgetState extends State<PaymentsInsertCardWidget>
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   BlocBuilder(
-                    bloc: widget.paymentsBloc,
+                    bloc: widget.bloc,
                     builder: (context, state) {
                       return CustomBackButtonWidget(
                         backButton: () {

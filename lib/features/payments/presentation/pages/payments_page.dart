@@ -5,7 +5,7 @@ import 'package:zeeppay/features/payments/presentation/bloc/payments_event.dart'
 import 'package:zeeppay/features/payments/presentation/bloc/payments_state.dart';
 import 'package:zeeppay/features/payments/presentation/pages/mixin/payments_mixin.dart';
 import 'package:zeeppay/features/payments/presentation/widgets/payments_input_value_widget.dart';
-import 'package:zeeppay/features/payments/presentation/widgets/payments_insert_card_widget.dart';
+import 'package:zeeppay/shared/widgets/payments_insert_card_widget.dart';
 import 'package:zeeppay/features/payments/presentation/widgets/payments_passwords_widget.dart';
 import 'package:zeeppay/features/payments/presentation/widgets/payments_term_widget.dart';
 import 'package:zeeppay/features/payments/presentation/widgets/payments_type_payment_widget.dart';
@@ -78,8 +78,8 @@ class _PaymentsPageState extends State<PaymentsPage> with PaymentsMixin {
                       valueController: controllerValue,
                     );
                   case PaymentsStatePutCard():
-                    return PaymentsInsertCardWidget(
-                      paymentsBloc: paymentsBloc,
+                    return InsertCardWidget(
+                      bloc: paymentsBloc,
                       function: () async {
                         GertecService.stopReadCard();
                       },

@@ -1,21 +1,54 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:zeeppay/features/profile/domain/models/cliente_model.dart';
 import 'package:zeeppay/features/profile/domain/models/fatura_model.dart';
-import 'package:intl/intl.dart';
+import 'package:zeeppay/features/invoice/presentation/bloc/invoice_bloc.dart';
+import 'package:zeeppay/features/invoice/presentation/bloc/invoice_event.dart';
+import 'package:zeeppay/features/invoice/presentation/bloc/invoice_state.dart';
 import 'package:zeeppay/shared/formatters/formatters.dart';
 import 'package:zeeppay/shared/widgets/primary_button.dart';
 
-class InvoiceDisplayWidget extends StatelessWidget {
+class InvoiceDisplayWidget extends StatefulWidget {
   final FaturaModel fatura;
   final ClienteModel cliente;
   final VoidCallback onPayInvoice;
+  final InvoiceBloc invoiceBloc;
 
   const InvoiceDisplayWidget({
     super.key,
     required this.fatura,
     required this.cliente,
     required this.onPayInvoice,
+    required this.invoiceBloc,
   });
+
+  @override
+  State<InvoiceDisplayWidget> createState() => _InvoiceDisplayWidgetState();
+}
+
+class _InvoiceDisplayWidgetState extends State<InvoiceDisplayWidget>
+    with TickerProviderStateMixin {
+  late AnimationController _pulseController;
+  late Animation<double> _pulseAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+    _pulseController = AnimationController(
+      duration: const Duration(seconds: 1),
+      vsync: this,
+    );
+    _pulseAnimation = Tween<double>(begin: 0.8, end: 1.2).animate(
+      CurvedAnimation(parent: _pulseController, curve: Curves.easeInOut),
+    );
+    _pulseController.repeat(reverse: true);
+  }
+
+  @override
+  void dispose() {
+    _pulseController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -37,8 +70,8 @@ class InvoiceDisplayWidget extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 12),
-                  _buildInfoRow('Nome:', cliente.nome),
-                  _buildInfoRow('CPF:', cliente.cpf),
+                  _buildInfoRow('Nome:', widget.cliente.nome),
+                  _buildInfoRow('CPF:', widget.cliente.cpf),
                 ],
               ),
             ),
@@ -51,7 +84,7 @@ class InvoiceDisplayWidget extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Fatura ${fatura.numeroFatura}',
+                    'Fatura ${widget.fatura.numeroFatura}',
                     style: Theme.of(context).textTheme.titleLarge?.copyWith(
                       fontWeight: FontWeight.bold,
                     ),
@@ -59,28 +92,28 @@ class InvoiceDisplayWidget extends StatelessWidget {
                   _buildInfoRow(
                     'Vencimento:',
                     Formatters.formatDateTime(
-                      fatura.dataVencimento,
+                      widget.fatura.dataVencimento,
                       'dd/MM/yyyy',
                     ),
                   ),
-                  _buildInfoRow('Situação:', fatura.descricaoSituacao),
+                  _buildInfoRow('Situação:', widget.fatura.descricaoSituacao),
                   const Divider(),
                   _buildInfoRow(
                     'Valor Total:',
-                    Formatters.formatCurrency(fatura.valor),
+                    Formatters.formatCurrency(widget.fatura.valor),
                     isHighlight: true,
                   ),
                   _buildInfoRow(
                     'Valor Pago:',
-                    Formatters.formatCurrency(fatura.valorPago),
+                    Formatters.formatCurrency(widget.fatura.valorPago),
                   ),
                   _buildInfoRow(
                     'Saldo Devedor:',
-                    Formatters.formatCurrency(fatura.saldoDevedor),
+                    Formatters.formatCurrency(widget.fatura.saldoDevedor),
                   ),
                   _buildInfoRow(
                     'Valor Mínimo:',
-                    Formatters.formatCurrency(fatura.valorMinimo),
+                    Formatters.formatCurrency(widget.fatura.valorMinimo),
                   ),
                 ],
               ),
@@ -89,7 +122,7 @@ class InvoiceDisplayWidget extends StatelessWidget {
           SizedBox(height: 4),
           PrimaryButton(
             buttonName: "Pagar Fatura",
-            functionPrimaryButton: () {},
+            functionPrimaryButton: widget.onPayInvoice,
           ),
         ],
       ),

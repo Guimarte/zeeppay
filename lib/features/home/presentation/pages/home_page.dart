@@ -24,6 +24,9 @@ class HomePage extends StatelessWidget with HomePageMixin {
           settingsButtonFunction: () {
             context.push('/settings');
           },
+          closeCashier: () {
+            showCloseCashierDialog(context);
+          },
         ),
         backgroundColor: Colors.grey[100],
         body: Center(

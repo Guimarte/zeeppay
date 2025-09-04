@@ -6,11 +6,13 @@ import 'package:zeeppay/features/login/presentation/pages/login_page.dart';
 import 'package:zeeppay/features/payments/presentation/pages/payments_page.dart';
 import 'package:zeeppay/features/profile/presentation/pages/profile_page.dart';
 import 'package:zeeppay/features/splash/presentation/page/splash_page.dart';
+import 'package:zeeppay/features/token_setup/presentation/pages/token_setup_page.dart';
 
 class Routes {
   final GoRouter goRouter = GoRouter(
     routes: <RouteBase>[
       GoRoute(path: '/', builder: (context, state) => SplashPage()),
+      GoRoute(path: '/token-setup', builder: (context, state) => const TokenSetupPage()),
       GoRoute(path: '/login', builder: (context, state) => LoginPage()),
       GoRoute(
         path: '/settings',
