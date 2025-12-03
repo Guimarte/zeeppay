@@ -1,10 +1,9 @@
+// ignore_for_file: unused_field
+
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:zeeppay/features/profile/domain/models/cliente_model.dart';
 import 'package:zeeppay/features/profile/domain/models/fatura_model.dart';
 import 'package:zeeppay/features/invoice/presentation/bloc/invoice_bloc.dart';
-import 'package:zeeppay/features/invoice/presentation/bloc/invoice_event.dart';
-import 'package:zeeppay/features/invoice/presentation/bloc/invoice_state.dart';
 import 'package:zeeppay/shared/formatters/formatters.dart';
 import 'package:zeeppay/shared/widgets/primary_button.dart';
 

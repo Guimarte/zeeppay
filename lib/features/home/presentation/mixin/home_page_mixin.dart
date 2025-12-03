@@ -4,6 +4,7 @@ import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
+import 'package:zeeppay/features/cashier/domain/usecases/cashier_usecase.dart';
 import 'package:zeeppay/features/home/domain/repository/home_repository.dart';
 import 'package:zeeppay/features/home/domain/usecase/home_usecase.dart';
 import 'package:zeeppay/shared/database/database.dart';
@@ -15,6 +16,7 @@ import 'package:zeeppay/core/pos_data_store.dart';
 
 mixin HomePageMixin {
   final HomeUsecase homeUsecase = GetIt.instance<HomeUsecase>();
+  final CashierUsecase cashierUsecase = GetIt.instance<CashierUsecase>();
   final Database database = GetIt.instance<Database>();
   final HomeRepository homeRepository = GetIt.instance<HomeRepository>();
   SettingsPosDataStore get posData => SettingsPosDataStore();
@@ -105,8 +107,7 @@ mixin HomePageMixin {
     Navigator.of(context).pop();
 
     result.fold(
-      (failure) =>
-          showErrorDialog(context, message: 'Caixa Encerrado com sucesso'),
+      (failure) => showErrorDialog(context, message: 'Erro ao fechar o caixa'),
       (_) {
         database.remove('cashierSessionId');
         showDialogConfirm(context, message: 'Caixa Encerrado com sucesso!');
@@ -140,17 +141,36 @@ mixin HomePageMixin {
     }
   }
 
-  Future<Either<Exception, Unit>> _closeCashier() async {
+  Future<Either<Exception, String>> _closeCashier() async {
     try {
       final deviceId = posData.settings?.devices!.first.id ?? '';
-      final cashierSessionId = await homeRepository.currentSession(deviceId);
 
-      final response = await homeUsecase.closeCashier(deviceId, "");
-      return response.isRight()
-          ? const Right(unit)
-          : Left(Exception('Erro ao cancelar a venda'));
+      final currentSessionResult = await cashierUsecase.getCurrentSession(
+        deviceId,
+      );
+      return await currentSessionResult.fold(
+        (failure) async => Left(Exception(failure.message)),
+        (cashier) async {
+          if (cashier == null) {
+            return Left(Exception('Nenhuma sessão de caixa ativa encontrada'));
+          }
+
+          try {
+            final closeResult = await cashierUsecase.closeCashier(
+              deviceId,
+              cashier.id!,
+            );
+            return closeResult.fold(
+              (failure) => Left(Exception(failure.message)),
+              (success) => const Right(''),
+            );
+          } catch (e) {
+            return Left(Exception('Erro ao fechar o caixa: ${e.toString()}'));
+          }
+        },
+      );
     } catch (e) {
-      return Left(Exception('Erro inesperado ao cancelar a venda'));
+      return Left(Exception('Erro inesperado ao fechar o caixa'));
     }
   }
 }

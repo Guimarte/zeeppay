@@ -77,7 +77,7 @@ mixin PaymentsMixin<T extends StatefulWidget> on State<PaymentsPage> {
   void resetDatas() {
     controllerPasswordCard.clear();
     controllerValue.text = 'R\$ 0,00';
-    this.sellModel = SellModel.empty();
+    sellModel = SellModel.empty();
   }
 
   void onSelectedInstallmentChanged(int installment) {

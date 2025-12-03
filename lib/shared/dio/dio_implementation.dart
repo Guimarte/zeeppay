@@ -4,7 +4,7 @@ import 'package:zeeppay/core/default_options.dart';
 import 'package:zeeppay/core/pos_data_store.dart';
 import 'package:zeeppay/features/splash/domain/external/urls_splash.dart';
 import 'package:zeeppay/shared/database/database.dart';
-import 'package:zeeppay/shared/dio/auth_inteceptor.dart';
+import 'package:zeeppay/shared/dio/auth_interceptor.dart';
 import 'package:zeeppay/shared/dio/login_interceptor.dart';
 import 'package:zeeppay/shared/exception/api_exception.dart';
 import 'package:zeeppay/shared/external/urls.dart';

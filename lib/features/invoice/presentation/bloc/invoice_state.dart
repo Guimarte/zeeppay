@@ -41,6 +41,20 @@ class InvoiceCardReadState extends InvoiceState {
   });
 }
 
+class InvoicePaymentMethodSelectionState extends InvoiceState {
+  final String? selectedPaymentMethod;
+  final FaturaModel? fatura;
+  final ClienteModel? cliente;
+  final String? cardNumber;
+
+  InvoicePaymentMethodSelectionState({
+    this.selectedPaymentMethod,
+    this.fatura,
+    this.cliente,
+    this.cardNumber,
+  });
+}
+
 class InvoicePaymentProcessingState extends InvoiceState {}
 
 class InvoicePaymentSuccessState extends InvoiceState {

@@ -24,11 +24,9 @@ class _ConfigurationPageState extends State<ConfigurationPage>
   void _loadSelectedDevice() {
     final savedDeviceId = getSelectedDevice();
     if (savedDeviceId != null && posDataStore.settings?.devices != null) {
-      try {
-        selectedDevice = posDataStore.settings!.devices!.firstWhere(
-          (device) => device.id == savedDeviceId,
-        );
-      } catch (e) {}
+      selectedDevice = posDataStore.settings!.devices!.firstWhere(
+        (device) => device.id == savedDeviceId,
+      );
     }
   }
 
@@ -72,6 +70,22 @@ class _ConfigurationPageState extends State<ConfigurationPage>
                 },
                 child: const Text("Salvar"),
               ),
+              const SizedBox(height: 30),
+              const Divider(),
+              const SizedBox(height: 20),
+              const Text("Ferramentas de Diagnóstico"),
+              const SizedBox(height: 10),
+              ElevatedButton.icon(
+                onPressed: () {
+                  context.push('/logs');
+                },
+                icon: const Icon(Icons.bug_report),
+                label: const Text("Ver Logs do Sistema"),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.orange,
+                  foregroundColor: Colors.white,
+                ),
+              ),
             ],
           ),
         ),
@@ -101,7 +115,7 @@ class _ConfigurationPageState extends State<ConfigurationPage>
         border: OutlineInputBorder(),
         contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       ),
-      value: selectedDevice,
+      initialValue: selectedDevice,
       hint: const Text("Selecione um POS"),
       items: devices.map((device) {
         return DropdownMenuItem<DeviceModel>(

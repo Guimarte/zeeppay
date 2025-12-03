@@ -23,7 +23,7 @@ class InvoicePaymentRepositoryImpl implements InvoicePaymentRepository {
       final response = await zeeppayDio.get(
         url: UrlsInvoice.getConsultarPerfil(
           posData.settings!.erCardsModel.endpoint,
-          "31871423899",
+          cpf,
         ),
 
         password: database.getString("password") ?? '',
@@ -31,9 +31,9 @@ class InvoicePaymentRepositoryImpl implements InvoicePaymentRepository {
       );
       return Right(response);
     } on ApiException catch (e) {
-      return Left(Failure(e.message));
+      return Left(Failure.fromMessage(e.message ?? 'Erro na API'));
     } catch (e) {
-      return Left(Failure('Erro inesperado: ${e.toString()}'));
+      return Left(Failure.fromMessage('Erro inesperado: ${e.toString()}'));
     }
   }
 }

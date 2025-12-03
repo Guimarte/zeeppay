@@ -9,7 +9,13 @@
       "Bash(git rm:*)",
       "Bash(flutter clean:*)",
       "Bash(flutter pub:*)",
-      "WebFetch(domain:documenter.getpostman.com)"
+      "WebFetch(domain:documenter.getpostman.com)",
+      "Bash(mkdir:*)",
+      "Bash(cat:*)",
+      "mcp__ide__getDiagnostics",
+      "Bash(find:*)",
+      "Bash(dir \"C:\\projetos\\zeeppay\\lib\\shared\\dio\")",
+      "Bash(chmod:*)"
     ],
     "deny": []
   }

@@ -3,9 +3,10 @@ import 'package:zeeppay/features/profile/presentation/widgets/cpf_form_field_wid
 import 'package:zeeppay/shared/widgets/button_digital_widget.dart';
 import 'package:zeeppay/shared/widgets/button_numbers_widget.dart';
 import 'package:zeeppay/shared/widgets/digital_keyboard.dart';
+import 'package:zeeppay/shared/validators/cpf_validator.dart';
 
-class SearchCpfInvoiceWidget extends StatelessWidget {
-  SearchCpfInvoiceWidget({
+class SearchCpfInvoiceWidget extends StatefulWidget {
+  const SearchCpfInvoiceWidget({
     super.key,
     required this.cpfController,
     required this.onConfirm,
@@ -14,6 +15,11 @@ class SearchCpfInvoiceWidget extends StatelessWidget {
   final TextEditingController cpfController;
   final Function() onConfirm;
 
+  @override
+  State<SearchCpfInvoiceWidget> createState() => _SearchCpfInvoiceWidgetState();
+}
+
+class _SearchCpfInvoiceWidgetState extends State<SearchCpfInvoiceWidget> {
   final List<String> numbers = [
     '1',
     '2',
@@ -28,6 +34,8 @@ class SearchCpfInvoiceWidget extends StatelessWidget {
     '0',
     'confirm',
   ];
+
+  bool get isValidCpf => CpfValidator.isValid(widget.cpfController.text);
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +56,7 @@ class SearchCpfInvoiceWidget extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 16),
-              CpfFormFieldWidget(cpfController: cpfController),
+              CpfFormFieldWidget(cpfController: widget.cpfController),
               const Spacer(),
               DigitalKeyboard(
                 numbers: numbers,
@@ -56,26 +64,32 @@ class SearchCpfInvoiceWidget extends StatelessWidget {
                   icon: Icons.check_circle,
                   cardText: '',
                   isConfirmButton: true,
-                  function: onConfirm,
+                  function: () {
+                    if (isValidCpf) {
+                      widget.onConfirm();
+                    }
+                  },
                 ),
                 eraseButton: ButtonDigitalWidget(
                   icon: Icons.backspace,
                   cardText: '',
                   isConfirmButton: false,
                   function: () {
-                    if (cpfController.text.isNotEmpty) {
-                      cpfController.text = cpfController.text.substring(
-                        0,
-                        cpfController.text.length - 1,
-                      );
+                    if (widget.cpfController.text.isNotEmpty) {
+                      setState(() {
+                        widget.cpfController.text = widget.cpfController.text
+                            .substring(0, widget.cpfController.text.length - 1);
+                      });
                     }
                   },
                 ),
                 numberButton: (String number) => ButtonNumbersWidget(
                   number: number,
                   function: (string) {
-                    if (cpfController.text.length >= 14) return;
-                    cpfController.text += string;
+                    if (widget.cpfController.text.length >= 14) return;
+                    setState(() {
+                      widget.cpfController.text += string;
+                    });
                   },
                 ),
               ),

@@ -35,11 +35,32 @@ class _PaymentsPageState extends State<PaymentsPage> with PaymentsMixin {
                 if (!mounted) return;
                 setCardNumber(cardNumber);
                 if (cardNumber.contains("Erro") || cardNumber.isEmpty) {
-                  showErrorDialog(context, message: cardNumber);
-
+                  if (mounted) {
+                    showErrorDialog(context, message: cardNumber);
+                  }
                   return paymentsBloc.add(PaymentsEventErrorCard());
                 } else {
                   paymentsBloc.add(PaymentsEventGetPassword());
+                }
+              }
+
+              if (state is PaymentsStateError) {
+                if (mounted) {
+                  showPaymentErrorDialog(
+                    context,
+                    message: state.error ?? 'Erro na transação',
+                    onRetry: () {
+                      // Limpa a senha se for erro relacionado à senha
+                      if (state.error?.toLowerCase().contains('senha') == true ||
+                          state.error?.toLowerCase().contains('password') == true ||
+                          state.error?.toLowerCase().contains('pin') == true) {
+                        controllerPasswordCard.clear();
+                        paymentsBloc.add(PaymentsEventGetPassword());
+                      } else {
+                        paymentsBloc.add(PaymentsEventSetInicialState());
+                      }
+                    },
+                  );
                 }
               }
 

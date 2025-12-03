@@ -75,7 +75,7 @@ class SellModel {
       "strPlastico": plastico,
       "intTipoParcelamento": tipoParcelamento,
       "strTipoOperacao": tipoOperacao,
-      "dblValorCompra": valorCompra!.toStringAsFixed(2),
+      "dblValorCompra": (valorCompra ?? 0.0).toStringAsFixed(2),
       "blnCalculaPrestacao": calculaPrestacao,
       "strNsuCaptura": nsuCaptura,
       "strCodigoEstabelecimento": codigoEstabelecimento,

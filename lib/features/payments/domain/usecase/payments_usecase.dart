@@ -29,11 +29,11 @@ class PaymentsUsecaseImpl implements PaymentsUsecase {
           database.setString('lastSale', jsonEncode(successModel.toJson()));
           return Right(successModel);
         } catch (e) {
-          return Left(Failure('Erro ao processar resposta: ${e.toString()}'));
+          return Left(Failure.fromMessage('Erro ao processar resposta: ${e.toString()}'));
         }
       } else {
         return Left(
-          Failure(
+          Failure.fromMessage(
             'Erro na transação: ${response.statusMessage ?? 'status ${response.statusCode}'}',
           ),
         );

@@ -8,6 +8,7 @@ import 'package:zeeppay/features/profile/presentation/widgets/initial_profile_wi
 import 'package:zeeppay/features/profile/presentation/widgets/loaded_profile_widget.dart';
 import 'package:zeeppay/features/profile/presentation/widgets/search_cpf_profile_widget.dart';
 
+// ignore: must_be_immutable
 class ProfilePage extends StatelessWidget with ProfilePageMixin {
   ProfilePage({super.key});
 

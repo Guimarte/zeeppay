@@ -22,6 +22,10 @@ import 'package:zeeppay/features/splash/domain/repository/splash_theme_repositor
 import 'package:zeeppay/features/splash/domain/usecase/splash_usecase.dart';
 import 'package:zeeppay/features/splash/presentation/bloc/splash_bloc.dart';
 import 'package:zeeppay/features/invoice/presentation/bloc/invoice_bloc.dart';
+import 'package:zeeppay/features/cashier/data/repositories/cashier_repository_impl.dart';
+import 'package:zeeppay/features/cashier/domain/repositories/cashier_repository.dart';
+import 'package:zeeppay/features/cashier/domain/usecases/cashier_usecase.dart';
+import 'package:zeeppay/features/cashier/presentation/bloc/cashier_bloc.dart';
 import 'package:zeeppay/shared/database/database.dart';
 import 'package:zeeppay/shared/models/sell_model.dart';
 import 'package:zeeppay/theme/colors_app.dart';
@@ -65,6 +69,8 @@ void setupDependencies(SharedPreferences prefs) async {
 
   getIt.registerLazySingleton<InvoiceRepository>(() => InvoiceRepositoryImpl());
 
+  getIt.registerLazySingleton<CashierRepository>(() => CashierRepositoryImpl());
+
   // Register Usecases (depende do repositório)
   getIt.registerLazySingleton<SplashUsecase>(
     () => SplashUsecase(
@@ -99,6 +105,10 @@ void setupDependencies(SharedPreferences prefs) async {
     () => InvoiceUsecaseImpl(getIt<InvoiceRepository>()),
   );
 
+  getIt.registerLazySingleton<CashierUsecase>(
+    () => CashierUsecaseImpl(getIt<CashierRepository>()),
+  );
+
   // Register Blocs (depende do Usecase)
   getIt.registerFactory<SplashBloc>(
     () => SplashBloc(splashUsecase: getIt<SplashUsecase>()),
@@ -121,5 +131,9 @@ void setupDependencies(SharedPreferences prefs) async {
 
   getIt.registerFactory<InvoiceBloc>(
     () => InvoiceBloc(invoiceUsecase: getIt<InvoiceUsecase>()),
+  );
+
+  getIt.registerFactory<CashierBloc>(
+    () => CashierBloc(cashierUsecase: getIt<CashierUsecase>()),
   );
 }

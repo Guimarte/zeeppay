@@ -12,6 +12,7 @@ class InvoiceBloc extends Bloc<InvoiceEvent, InvoiceState> {
     on<InvoiceConsutaClienteEvent>(_getCliente);
     on<ResetInvoice>(_resetInvoice);
     on<InvoiceReadCardEvent>(_readCard);
+    on<InvoiceSelectPaymentMethodEvent>(_selectPaymentMethod);
     on<InvoicePayEvent>(_payInvoice);
     on<InvoiceRegisterTransactionEvent>(_registerTransaction);
   }
@@ -62,8 +63,9 @@ class InvoiceBloc extends Bloc<InvoiceEvent, InvoiceState> {
       if (cardNumber.contains('Erro') || cardNumber.contains('cancelada')) {
         emit(InvoiceError(message: cardNumber));
       } else {
+        // Após ler o cartão, vai para seleção de forma de pagamento
         emit(
-          InvoiceCardReadState(
+          InvoicePaymentMethodSelectionState(
             cardNumber: cardNumber,
             fatura: _currentFatura,
             cliente: _currentCliente,
@@ -72,6 +74,23 @@ class InvoiceBloc extends Bloc<InvoiceEvent, InvoiceState> {
       }
     } catch (e) {
       emit(InvoiceError(message: 'Erro ao ler cartão: ${e.toString()}'));
+    }
+  }
+
+  void _selectPaymentMethod(
+    InvoiceSelectPaymentMethodEvent event,
+    Emitter<InvoiceState> emit,
+  ) {
+    final currentState = state;
+    if (currentState is InvoicePaymentMethodSelectionState) {
+      emit(
+        InvoicePaymentMethodSelectionState(
+          selectedPaymentMethod: event.paymentMethod,
+          cardNumber: currentState.cardNumber,
+          fatura: currentState.fatura,
+          cliente: currentState.cliente,
+        ),
+      );
     }
   }
 
@@ -103,8 +122,6 @@ class InvoiceBloc extends Bloc<InvoiceEvent, InvoiceState> {
         amount: event.amount,
         paymentMethod: event.paymentMethod,
         cardNumber: event.cardNumber,
-        customerCpf: event.customerCpf,
-        invoiceId: event.invoiceId,
       );
 
       final result = await invoiceUsecase.registerTransaction(transaction);

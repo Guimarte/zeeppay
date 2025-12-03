@@ -6,8 +6,9 @@ import 'package:zeeppay/features/invoice/presentation/bloc/invoice_state.dart';
 import 'package:zeeppay/features/invoice/presentation/pages/mixin/invoice_page_mixin.dart';
 import 'package:zeeppay/features/invoice/presentation/widgets/search_cpf_invoice_widget.dart';
 import 'package:zeeppay/features/invoice/presentation/widgets/invoice_display_widget.dart';
+import 'package:zeeppay/features/invoice/presentation/widgets/payment_method_selection_widget.dart';
 import 'package:zeeppay/shared/widgets/payments_insert_card_widget.dart';
-import 'package:zeeppay/shared/models/payment_method.dart';
+import 'package:zeeppay/shared/validators/cpf_validator.dart';
 
 class InvoicePage extends StatelessWidget with InvoicePageMixin {
   InvoicePage({super.key});
@@ -23,8 +24,19 @@ class InvoicePage extends StatelessWidget with InvoicePageMixin {
             return SearchCpfInvoiceWidget(
               cpfController: cpfController,
               onConfirm: () {
+                if (!CpfValidator.isValid(cpfController.text)) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Por favor, digite um CPF válido'),
+                      backgroundColor: Colors.red,
+                    ),
+                  );
+                  return;
+                }
+                
+                final cleanCpf = CpfValidator.cleanCpf(cpfController.text);
                 invoiceBloc.add(
-                  InvoiceConsutaClienteEvent(cpf: cpfController.text),
+                  InvoiceConsutaClienteEvent(cpf: cleanCpf),
                 );
               },
             );
@@ -41,27 +53,10 @@ class InvoicePage extends StatelessWidget with InvoicePageMixin {
             );
           } else if (state is InvoiceReadingCardState) {
             return InsertCardWidget(bloc: invoiceBloc, function: () {});
-          } else if (state is InvoiceCardReadState) {
-            WidgetsBinding.instance.addPostFrameCallback((_) {
-              invoiceBloc.add(
-                InvoiceRegisterTransactionEvent(
-                  cardNumber: state.cardNumber,
-                  amount: state.fatura?.saldoDevedor?.toDouble() ?? 0.0,
-                  paymentMethod: PaymentMethod.credit,
-                  customerCpf: state.cliente?.cpf,
-                  invoiceId: state.fatura?.numeroFatura?.toString(),
-                ),
-              );
-            });
-            return const Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  CircularProgressIndicator(),
-                  SizedBox(height: 16),
-                  Text('Cartão lido com sucesso!\nRegistrando transação...'),
-                ],
-              ),
+          } else if (state is InvoicePaymentMethodSelectionState) {
+            return PaymentMethodSelectionWidget(
+              selectedPaymentMethod: state.selectedPaymentMethod,
+              invoiceBloc: invoiceBloc,
             );
           } else if (state is InvoiceRegisterTransactionProcessingState) {
             return const Center(

@@ -24,6 +24,12 @@ class InvoicePayEvent extends InvoiceEvent {
   });
 }
 
+class InvoiceSelectPaymentMethodEvent extends InvoiceEvent {
+  final String paymentMethod;
+  
+  InvoiceSelectPaymentMethodEvent({required this.paymentMethod});
+}
+
 class InvoiceRegisterTransactionEvent extends InvoiceEvent {
   final String cardNumber;
   final double amount;

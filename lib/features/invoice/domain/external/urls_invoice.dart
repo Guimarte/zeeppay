@@ -11,12 +11,11 @@ class UrlsInvoice {
     return '$urlBase/Cliente/ConsultarPerfil?strCliente=$cpf';
   }
 
-  static String getPaymentInvoice(
-    String urlBase,
-    String deviceId,
-    String cashierSessionId,
-  ) {
-    return '$urlBase/point-of-sales/devices/$deviceId/cashier/$cashierSessionId/register-payment';
+  static String get urlDefault =>
+      'https://${_flavorConfig.subdomain}.zeeppay.com.br/api';
+
+  static String getPaymentInvoice(String deviceId, String cashierSessionId) {
+    return '$urlDefault/point-of-sales/devices/$deviceId/cashier/$cashierSessionId/register-payment';
   }
 
   static String openCash(String urlBase, String deviceId) {

@@ -24,8 +24,6 @@ class _LoginPageState extends State<LoginPage> with LoginPageMixin {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
     return SafeArea(
       child: Scaffold(
         body: Center(
@@ -99,7 +97,18 @@ class _LoginPageState extends State<LoginPage> with LoginPageMixin {
                     }
                     if (state is FailureState) {
                       context.pop();
-                      showErrorDialog(context, message: state.message);
+                      // Usa o dialog específico para erros de login
+                      showLoginErrorDialog(
+                        context, 
+                        message: state.message,
+                        onRetry: () {
+                          // Limpa os campos se for erro de credenciais
+                          if (state.message.toLowerCase().contains('senha') || 
+                              state.message.toLowerCase().contains('credenciais')) {
+                            controllerPassword.clear();
+                          }
+                        },
+                      );
                     }
                   },
                   child: PrimaryButton(
