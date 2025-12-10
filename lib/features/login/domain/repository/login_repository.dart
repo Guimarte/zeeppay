@@ -23,19 +23,25 @@ class LoginRepositoryImpl implements LoginRepository {
         password: password,
       );
 
+      print(response);
+
       final token = response.data['access_token'];
 
       if (token == null || token is! String) {
-        return Left(Failure.fromMessage('Token de acesso não encontrado ou inválido'));
+        return Left(
+          Failure.fromMessage('Token de acesso não encontrado ou inválido'),
+        );
       }
 
       return Right(token);
     } on DioException catch (e) {
-      return Left(Failure.fromApiResponse(
-        e.response?.data,
-        statusCode: e.response?.statusCode,
-        fallbackMessage: e.message ?? 'Erro de rede ao fazer login',
-      ));
+      return Left(
+        Failure.fromApiResponse(
+          e.response?.data,
+          statusCode: e.response?.statusCode,
+          fallbackMessage: e.message ?? 'Erro de rede ao fazer login',
+        ),
+      );
     } catch (e) {
       return Left(Failure.fromMessage('Erro inesperado: ${e.toString()}'));
     }

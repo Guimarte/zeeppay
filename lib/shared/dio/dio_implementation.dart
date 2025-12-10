@@ -40,6 +40,7 @@ class ZeeppayDio {
           UrlsLogin.loginTenant,
           options: Options(headers: {'Authorization': 'Bearer $token'}),
         );
+        print(response);
         if (response.data == null || response.statusCode != 200) {
           throw ApiException(message: 'Falha ao fazer login store');
         }

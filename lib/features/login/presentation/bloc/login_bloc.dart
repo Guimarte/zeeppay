@@ -33,7 +33,7 @@ class LoginBloc extends Bloc<LoginEvent, CommonState> {
     // Registra erro detalhado no log
     final originalError = ErrorHandler.getOriginalError(failure);
     final statusCode = ErrorHandler.getStatusCode(failure);
-    
+
     // Log do erro original para debug
     LogService.instance.logError(
       'LoginBloc',
@@ -44,12 +44,12 @@ class LoginBloc extends Bloc<LoginEvent, CommonState> {
         'failureMessage': failure.message,
       },
     );
-    
+
     // Retorna mensagens user-friendly baseadas no tipo de erro
     if (originalError is Map<String, dynamic>) {
       final errorType = originalError['error'];
       final errorDescription = originalError['error_description'];
-      
+
       // Log detalhado do erro da API
       LogService.instance.logError(
         'LoginBloc',
@@ -60,7 +60,7 @@ class LoginBloc extends Bloc<LoginEvent, CommonState> {
           'fullResponse': originalError,
         },
       );
-      
+
       // Trata erros específicos com mensagens amigáveis
       switch (errorType) {
         case 'invalid_grant':
@@ -81,18 +81,15 @@ class LoginBloc extends Bloc<LoginEvent, CommonState> {
           return 'Erro no login. Verifique suas credenciais e tente novamente.';
       }
     }
-    
+
     // Trata por status code com mensagens amigáveis
     if (statusCode != null) {
       LogService.instance.logError(
         'LoginBloc',
         'Erro HTTP no login',
-        details: {
-          'statusCode': statusCode,
-          'originalMessage': failure.message,
-        },
+        details: {'statusCode': statusCode, 'originalMessage': failure.message},
       );
-      
+
       switch (statusCode) {
         case 400:
           return 'Dados de login inválidos. Verifique usuário e senha.';
@@ -112,8 +109,7 @@ class LoginBloc extends Bloc<LoginEvent, CommonState> {
           return 'Erro na comunicação. Tente novamente.';
       }
     }
-    
-    // Fallback para erro genérico
+
     LogService.instance.logError(
       'LoginBloc',
       'Erro de login sem código específico',
@@ -122,7 +118,7 @@ class LoginBloc extends Bloc<LoginEvent, CommonState> {
         'failureType': failure.runtimeType.toString(),
       },
     );
-    
+
     return 'Erro inesperado no login. Tente novamente.';
   }
 
