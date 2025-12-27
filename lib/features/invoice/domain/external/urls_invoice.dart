@@ -8,7 +8,7 @@ class UrlsInvoice {
   }
 
   static String getConsultarPerfil(String urlBase, String cpf) {
-    return '$urlBase/Cliente/ConsultarPerfil?strCliente=$cpf';
+    return '$urlBase/webapi/Cliente/ConsultarPerfil?strCliente=$cpf';
   }
 
   static String get urlDefault =>

@@ -16,11 +16,7 @@ class SplashBloc extends Bloc<SplashEvent, CommonState> {
       emitter(SuccessState('Splash concluída'));
       return;
     } catch (e) {
-      emitter(
-        FailureState(
-          'Erro ao iniciar splash: Por favor, verifique sua conexão com a internet e reinicie o aplicativo.',
-        ),
-      );
+      emitter(FailureState(e.toString()));
       return;
     }
   }

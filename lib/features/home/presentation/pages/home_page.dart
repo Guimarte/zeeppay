@@ -27,6 +27,10 @@ class HomePage extends StatelessWidget with HomePageMixin {
           closeCashier: () {
             showCloseCashierDialog(context);
           },
+          testPrintFunction: () {
+            Navigator.pop(context);
+            testPrint(context);
+          },
         ),
         backgroundColor: Colors.grey[100],
         body: Center(

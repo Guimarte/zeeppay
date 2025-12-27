@@ -8,6 +8,7 @@ class StorePosModel {
   final String? createdAt;
   final String? updatedAt;
   final String? deletedAt;
+  final String? cnpj;
 
   StorePosModel({
     required this.id,
@@ -19,6 +20,7 @@ class StorePosModel {
     this.createdAt,
     this.updatedAt,
     this.deletedAt,
+    this.cnpj,
   });
 
   factory StorePosModel.fromJson(Map<String, dynamic> json) {
@@ -32,6 +34,7 @@ class StorePosModel {
       createdAt: json['created_at'] as String?,
       updatedAt: json['updated_at'] as String?,
       deletedAt: json['deleted_at'] as String?,
+      cnpj: json['cnpj'] as String?,
     );
   }
 
@@ -52,6 +55,7 @@ class StorePosModel {
       'created_at': createdAt,
       'updated_at': updatedAt,
       'deleted_at': deletedAt,
+      'cnpj': cnpj,
     };
   }
 }

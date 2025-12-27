@@ -141,12 +141,17 @@ class _InvoiceDisplayWidgetState extends State<InvoiceDisplayWidget>
               fontSize: isHighlight ? 16 : 14,
             ),
           ),
-          Text(
-            value,
-            style: TextStyle(
-              fontWeight: isHighlight ? FontWeight.bold : FontWeight.normal,
-              fontSize: isHighlight ? 16 : 14,
-              color: isHighlight ? Colors.green[700] : null,
+          Flexible(
+            child: Text(
+              value,
+              style: TextStyle(
+                fontWeight: isHighlight ? FontWeight.bold : FontWeight.normal,
+                fontSize: isHighlight ? 16 : 14,
+                color: isHighlight ? Colors.green[700] : null,
+              ),
+              overflow: TextOverflow.ellipsis,
+              maxLines: 1,
+              textAlign: TextAlign.end,
             ),
           ),
         ],

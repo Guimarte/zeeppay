@@ -39,3 +39,13 @@ class PaymentsEventSetInstallment extends PaymentsEvent {
 class PaymentsEventErrorCard extends PaymentsEvent {
   PaymentsEventErrorCard();
 }
+
+class PaymentsEventPrintClientReceipt extends PaymentsEvent {
+  final dynamic receiveModel;
+  final bool printClient;
+
+  PaymentsEventPrintClientReceipt({
+    required this.receiveModel,
+    required this.printClient,
+  });
+}

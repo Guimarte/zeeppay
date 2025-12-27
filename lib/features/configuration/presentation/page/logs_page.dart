@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:go_router/go_router.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:zeeppay/shared/service/log_service.dart';
 
@@ -47,9 +46,9 @@ class _LogsPageState extends State<LogsPage> {
     } catch (e) {
       setState(() => isLoading = false);
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Erro ao carregar logs: $e')),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Erro ao carregar logs: $e')));
       }
     }
   }
@@ -67,15 +66,17 @@ class _LogsPageState extends State<LogsPage> {
       } else {
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Nenhum log encontrado para exportar')),
+            const SnackBar(
+              content: Text('Nenhum log encontrado para exportar'),
+            ),
           );
         }
       }
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Erro ao exportar logs: $e')),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Erro ao exportar logs: $e')));
       }
     }
   }
@@ -85,7 +86,9 @@ class _LogsPageState extends State<LogsPage> {
       context: context,
       builder: (context) => AlertDialog(
         title: const Text('Limpar Logs'),
-        content: const Text('Tem certeza que deseja limpar todos os logs? Esta ação não pode ser desfeita.'),
+        content: const Text(
+          'Tem certeza que deseja limpar todos os logs? Esta ação não pode ser desfeita.',
+        ),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(false),
@@ -137,10 +140,7 @@ class _LogsPageState extends State<LogsPage> {
               ),
               child: SelectableText(
                 logPath.isNotEmpty ? logPath : 'Carregando caminho...',
-                style: const TextStyle(
-                  fontFamily: 'monospace',
-                  fontSize: 12,
-                ),
+                style: const TextStyle(fontFamily: 'monospace', fontSize: 12),
               ),
             ),
             const SizedBox(height: 12),
@@ -155,7 +155,9 @@ class _LogsPageState extends State<LogsPage> {
             onPressed: () {
               Clipboard.setData(ClipboardData(text: logPath));
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Caminho copiado para área de transferência')),
+                const SnackBar(
+                  content: Text('Caminho copiado para área de transferência'),
+                ),
               );
             },
             child: const Text('Copiar Caminho'),
@@ -205,14 +207,19 @@ class _LogsPageState extends State<LogsPage> {
       builder: (context) => AlertDialog(
         title: Row(
           children: [
-            Icon(_getLogLevelIcon(log.level), color: _getLogLevelColor(log.level)),
+            Icon(
+              _getLogLevelIcon(log.level),
+              color: _getLogLevelColor(log.level),
+            ),
             const SizedBox(width: 8),
             Expanded(child: Text(log.level)),
           ],
         ),
         content: SizedBox(
           width: double.maxFinite,
-          height: MediaQuery.of(context).size.height * 0.6, // Limita altura a 60% da tela
+          height:
+              MediaQuery.of(context).size.height *
+              0.6, // Limita altura a 60% da tela
           child: SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -241,7 +248,7 @@ class _LogsPageState extends State<LogsPage> {
                     child: SelectableText(
                       log.details.toString(),
                       style: const TextStyle(
-                        fontFamily: 'monospace', 
+                        fontFamily: 'monospace',
                         fontSize: 12,
                       ),
                     ),
@@ -254,11 +261,16 @@ class _LogsPageState extends State<LogsPage> {
         actions: [
           TextButton(
             onPressed: () {
-              Clipboard.setData(ClipboardData(
-                text: '${log.formattedTimestamp} [${log.level}] ${log.module}: ${log.message}\n${log.details ?? ''}',
-              ));
+              Clipboard.setData(
+                ClipboardData(
+                  text:
+                      '${log.formattedTimestamp} [${log.level}] ${log.module}: ${log.message}\n${log.details ?? ''}',
+                ),
+              );
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Log copiado para a área de transferência')),
+                const SnackBar(
+                  content: Text('Log copiado para a área de transferência'),
+                ),
               );
             },
             child: const Text('Copiar'),
@@ -276,15 +288,9 @@ class _LogsPageState extends State<LogsPage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          '$label:',
-          style: const TextStyle(fontWeight: FontWeight.bold),
-        ),
+        Text('$label:', style: const TextStyle(fontWeight: FontWeight.bold)),
         const SizedBox(height: 4),
-        SelectableText(
-          value,
-          style: const TextStyle(fontSize: 14),
-        ),
+        SelectableText(value, style: const TextStyle(fontSize: 14)),
       ],
     );
   }
@@ -371,10 +377,7 @@ class _LogsPageState extends State<LogsPage> {
                     value: selectedLevel,
                     isExpanded: true,
                     items: logLevels.map((level) {
-                      return DropdownMenuItem(
-                        value: level,
-                        child: Text(level),
-                      );
+                      return DropdownMenuItem(value: level, child: Text(level));
                     }).toList(),
                     onChanged: (value) {
                       setState(() {
@@ -391,38 +394,38 @@ class _LogsPageState extends State<LogsPage> {
             child: isLoading
                 ? const Center(child: CircularProgressIndicator())
                 : filteredLogs.isEmpty
-                    ? const Center(
-                        child: Text(
-                          'Nenhum log encontrado',
-                          style: TextStyle(fontSize: 16, color: Colors.grey),
+                ? const Center(
+                    child: Text(
+                      'Nenhum log encontrado',
+                      style: TextStyle(fontSize: 16, color: Colors.grey),
+                    ),
+                  )
+                : ListView.builder(
+                    itemCount: filteredLogs.length,
+                    itemBuilder: (context, index) {
+                      final log = filteredLogs[index];
+                      return Card(
+                        margin: const EdgeInsets.symmetric(
+                          horizontal: 8,
+                          vertical: 4,
                         ),
-                      )
-                    : ListView.builder(
-                        itemCount: filteredLogs.length,
-                        itemBuilder: (context, index) {
-                          final log = filteredLogs[index];
-                          return Card(
-                            margin: const EdgeInsets.symmetric(
-                              horizontal: 8,
-                              vertical: 4,
-                            ),
-                            child: ListTile(
-                              leading: Icon(
-                                _getLogLevelIcon(log.level),
-                                color: _getLogLevelColor(log.level),
-                              ),
-                              title: Text(
-                                log.displayText,
-                                maxLines: 2,
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                              subtitle: Text(log.formattedTimestamp),
-                              onTap: () => _showLogDetails(log),
-                              trailing: const Icon(Icons.chevron_right),
-                            ),
-                          );
-                        },
-                      ),
+                        child: ListTile(
+                          leading: Icon(
+                            _getLogLevelIcon(log.level),
+                            color: _getLogLevelColor(log.level),
+                          ),
+                          title: Text(
+                            log.displayText,
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          subtitle: Text(log.formattedTimestamp),
+                          onTap: () => _showLogDetails(log),
+                          trailing: const Icon(Icons.chevron_right),
+                        ),
+                      );
+                    },
+                  ),
           ),
         ],
       ),

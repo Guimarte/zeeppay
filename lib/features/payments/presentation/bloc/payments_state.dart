@@ -28,6 +28,12 @@ class PaymentsStateSuccess extends PaymentsState {
   PaymentsStateSuccess({this.message});
 }
 
+class PaymentsStateAskClientReceipt extends PaymentsState {
+  final dynamic receiveModel;
+
+  PaymentsStateAskClientReceipt({required this.receiveModel});
+}
+
 class PaymentsStateTerm extends PaymentsState {}
 
 class PaymentsStateInstallment extends PaymentsState {}

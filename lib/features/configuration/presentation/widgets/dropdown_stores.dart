@@ -4,11 +4,13 @@ import 'package:zeeppay/shared/models/store_pos_model.dart';
 class DropDownStores extends StatefulWidget {
   final List<StorePosModel> stores;
   final Function(StorePosModel) onChanged;
+  final StorePosModel? initialValue;
 
   const DropDownStores({
     super.key,
     required this.stores,
     required this.onChanged,
+    this.initialValue,
   });
 
   @override
@@ -21,10 +23,9 @@ class _StoreDropdownState extends State<DropDownStores> {
   @override
   void initState() {
     super.initState();
-    if (widget.stores.isNotEmpty) {
-      selectedStore = widget.stores.first;
-      widget.onChanged(selectedStore!);
-    }
+    // Sempre usa o initialValue se fornecido, senão pega a primeira
+    selectedStore = widget.initialValue ??
+                   (widget.stores.isNotEmpty ? widget.stores.first : null);
   }
 
   @override

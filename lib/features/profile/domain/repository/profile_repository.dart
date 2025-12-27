@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:zeeppay/core/injector.dart';
 import 'package:zeeppay/core/pos_data_store.dart';
 import 'package:zeeppay/features/profile/domain/external/urls_profile.dart';
@@ -18,14 +19,28 @@ class ProfileRepositoryImpl implements ProfileRepository {
 
   @override
   Future<List<ClienteModel>> call(String cpf) async {
-    final response = await zeeppayDio.get(
-      url:
-          '${posData.settings!.erCardsModel.endpoint}${UrlsProfile.getConsultarPerfil("31871423899")}',
+    try {
+      final response = await zeeppayDio.get(
+        url:
+            '${posData.settings!.erCardsModel.endpoint}${UrlsProfile.getConsultarPerfil(cpf)}',
+        password: database.getString("password") ?? '',
+        username: database.getString("user") ?? '',
+      );
 
-      password: database.getString("password") ?? '',
-      username: database.getString("user") ?? '',
-    );
+      if (response.data == null) {
+        throw Exception('Resposta vazia do servidor');
+      }
 
-    return ClienteModel.fromJsonList(response.data);
+      return ClienteModel.fromJsonList(response.data);
+    } on DioException catch (e) {
+      if (e.response != null) {
+        throw Exception(
+          'Erro ao consultar perfil: ${e.response?.statusCode} - ${e.response?.data}',
+        );
+      }
+      throw Exception('Erro de conexão ao consultar perfil: ${e.message}');
+    } catch (e) {
+      throw Exception('Erro inesperado ao consultar perfil: $e');
+    }
   }
 }

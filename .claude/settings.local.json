@@ -15,7 +15,13 @@
       "mcp__ide__getDiagnostics",
       "Bash(find:*)",
       "Bash(dir \"C:\\projetos\\zeeppay\\lib\\shared\\dio\")",
-      "Bash(chmod:*)"
+      "Bash(chmod:*)",
+      "Bash(dir:*)",
+      "Bash(findstr:*)",
+      "Bash(for flavor in yano bandcard jbcard taustepay queirozpremium tridico sindbank)",
+      "Bash(done)",
+      "Bash(git checkout:*)",
+      "Bash(./gradlew:*)"
     ],
     "deny": []
   }

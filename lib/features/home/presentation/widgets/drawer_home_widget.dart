@@ -10,10 +10,12 @@ class DrawerHomeWidget extends StatelessWidget {
     required this.cancelButtonFunction,
     required this.settingsButtonFunction,
     required this.closeCashier,
+    required this.testPrintFunction,
   });
   Function() cancelButtonFunction;
   Function() settingsButtonFunction;
   Function() closeCashier;
+  Function() testPrintFunction;
 
   final appColor = GetIt.instance.get<ColorsApp>();
 
@@ -46,6 +48,13 @@ class DrawerHomeWidget extends StatelessWidget {
             title: Text('Fechar Caixa'),
             onTap: () {
               closeCashier();
+            },
+          ),
+          ListTile(
+            leading: Icon(Icons.print),
+            title: Text('Testar Impressão'),
+            onTap: () {
+              testPrintFunction();
             },
           ),
         ],

@@ -1,10 +1,16 @@
 import 'package:flutter/services.dart';
 import 'package:zeeppay/features/payments/domain/model/receive_model.dart';
 import 'package:zeeppay/features/profile/domain/models/cliente_model.dart';
+import 'package:zeeppay/flavors/flavor_config.dart';
 import 'package:zeeppay/shared/formatters/formatters.dart';
 
 class GertecService {
   static const _channel = MethodChannel('com.example.zeeppay/printer');
+  static FlavorConfig get _flavorConfig => FlavorConfig.instance;
+
+  static Future<void> printProfile(String content) async {
+    await _channel.invokeMethod('printProfile', {"content": content});
+  }
 
   static Future<void> printClientProfile(ClienteModel client) async {
     final content =
@@ -38,12 +44,12 @@ Próxima Fatura: ${Formatters.formatDateTime(client.dataProximaFatura, 'dd/MM/yy
 ============================
 ''';
 
-    await _channel.invokeMethod('printProfile', {"content": content});
+    await printProfile(content);
   }
 
   static Future<void> printReceive(ReceiveModel model, bool isBuyer) async {
     final ByteData imageData = await rootBundle.load(
-      'assets/flavors/tridicopay/tridicopay.png',
+      'assets/flavors/${_flavorConfig.subdomain}/logo.png',
     );
     final Uint8List imageBytes = imageData.buffer.asUint8List();
 

@@ -11,6 +11,7 @@ import 'package:zeeppay/features/payments/presentation/widgets/payments_term_wid
 import 'package:zeeppay/features/payments/presentation/widgets/payments_type_payment_widget.dart';
 import 'package:zeeppay/shared/service/gertec_service.dart';
 import 'package:zeeppay/shared/widgets/show_dialog_erro_widget.dart';
+import 'package:zeeppay/shared/service/log_service.dart';
 
 class PaymentsPage extends StatefulWidget {
   const PaymentsPage({super.key});
@@ -64,6 +65,41 @@ class _PaymentsPageState extends State<PaymentsPage> with PaymentsMixin {
                 }
               }
 
+              if (state is PaymentsStateAskClientReceipt) {
+                if (mounted) {
+                  showDialog(
+                    context: context,
+                    barrierDismissible: false,
+                    builder: (dialogContext) => AlertDialog(
+                      title: const Text('Imprimir Via do Cliente?'),
+                      content: const Text('Deseja imprimir a via do cliente?'),
+                      actions: [
+                        TextButton(
+                          onPressed: () {
+                            Navigator.pop(dialogContext);
+                            paymentsBloc.add(PaymentsEventPrintClientReceipt(
+                              receiveModel: state.receiveModel,
+                              printClient: false,
+                            ));
+                          },
+                          child: const Text('Não'),
+                        ),
+                        TextButton(
+                          onPressed: () {
+                            Navigator.pop(dialogContext);
+                            paymentsBloc.add(PaymentsEventPrintClientReceipt(
+                              receiveModel: state.receiveModel,
+                              printClient: true,
+                            ));
+                          },
+                          child: const Text('Sim'),
+                        ),
+                      ],
+                    ),
+                  );
+                }
+              }
+
               if (state is PaymentsStateSuccess) {
                 resetDatas();
                 return paymentsBloc.add(PaymentsEventSetInicialState());
@@ -76,10 +112,47 @@ class _PaymentsPageState extends State<PaymentsPage> with PaymentsMixin {
                   case PaymentsStatePutPassword():
                     return PaymentsPasswordsWidget(
                       onConfirm: () {
-                        setPassword(controllerPasswordCard.text);
-                        paymentsBloc.add(
-                          PaymentsEventTransact(sellModel: sellModel),
-                        );
+                        try {
+                          LogService.instance.logInfo(
+                            'PaymentsPage',
+                            'onConfirm CHAMADO - Iniciando confirmação de senha',
+                            details: {
+                              'senhaPreenchida': controllerPasswordCard.text.isNotEmpty,
+                              'tamanhoSenha': controllerPasswordCard.text.length,
+                            },
+                          );
+
+                          setPassword(controllerPasswordCard.text);
+
+                          LogService.instance.logInfo(
+                            'PaymentsPage',
+                            'Senha setada - SellModel antes de disparar evento',
+                            details: sellModel.toJson(),
+                          );
+
+                          LogService.instance.logInfo(
+                            'PaymentsPage',
+                            'PRESTES A DISPARAR PaymentsEventTransact',
+                          );
+
+                          paymentsBloc.add(
+                            PaymentsEventTransact(sellModel: sellModel),
+                          );
+
+                          LogService.instance.logInfo(
+                            'PaymentsPage',
+                            'PaymentsEventTransact DISPARADO COM SUCESSO',
+                          );
+                        } catch (e, stackTrace) {
+                          LogService.instance.logError(
+                            'PaymentsPage',
+                            'ERRO no onConfirm',
+                            details: {
+                              'error': e.toString(),
+                              'stackTrace': stackTrace.toString(),
+                            },
+                          );
+                        }
                       },
                       controllerPasswordCard: controllerPasswordCard,
                       paymentsBloc: paymentsBloc,

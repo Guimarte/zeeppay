@@ -1,19 +1,50 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:zeeppay/flavors/flavor_config.dart';
 
-class CpfFormFieldWidget extends StatelessWidget {
+class CpfFormFieldWidget extends StatefulWidget {
   const CpfFormFieldWidget({super.key, required this.cpfController});
   final TextEditingController cpfController;
 
   @override
+  State<CpfFormFieldWidget> createState() => _CpfFormFieldWidgetState();
+}
+
+class _CpfFormFieldWidgetState extends State<CpfFormFieldWidget> {
+  late FocusNode _focusNode;
+
+  @override
+  void initState() {
+    super.initState();
+    _focusNode = FocusNode();
+    final hasPhysicalKeyboard = FlavorConfig.instance.hasPhysicalKeyboard;
+    if (hasPhysicalKeyboard) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _focusNode.requestFocus();
+      });
+    }
+  }
+
+  @override
+  void dispose() {
+    _focusNode.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
+    final hasPhysicalKeyboard = FlavorConfig.instance.hasPhysicalKeyboard;
 
     return SizedBox(
       width: width * 0.7,
       child: TextField(
-        controller: cpfController,
-        enabled: false, // impede edição manual
+        controller: widget.cpfController,
+        focusNode: _focusNode,
+        enabled: hasPhysicalKeyboard ? true : false,
+        readOnly: !hasPhysicalKeyboard,
+        keyboardType: hasPhysicalKeyboard ? TextInputType.none : null,
+        maxLength: hasPhysicalKeyboard ? 14 : null,
         textAlign: TextAlign.center,
         style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
         decoration: InputDecoration(
@@ -24,6 +55,14 @@ class CpfFormFieldWidget extends StatelessWidget {
           disabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(16),
             borderSide: const BorderSide(color: Colors.grey),
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(16),
+            borderSide: const BorderSide(color: Colors.grey),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(16),
+            borderSide: const BorderSide(color: Colors.blue, width: 2),
           ),
         ),
       ),

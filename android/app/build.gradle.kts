@@ -32,7 +32,7 @@ android {
         applicationId = "com.example.zeeppay"
         // You can update the following values to match your application needs.
         // For more information, see: https://flutter.dev/to/review-gradle-config.
-        minSdk = flutter.minSdkVersion
+        minSdk = 26
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
         versionName = flutter.versionName
@@ -66,47 +66,74 @@ android {
 }
 
     
-    flavorDimensions += "product"
+    flavorDimensions += listOf("device", "brand")
     productFlavors {
+        // Dimensão de dispositivo (GPOS)
+        create("gpos760") {
+            dimension = "device"
+        }
+        create("gpos780") {
+            dimension = "device"
+        }
+
+        // Dimensão de marca
         create("devee") {
-            dimension = "product"
+            dimension = "brand"
             applicationIdSuffix = ".devee"
-            versionNameSuffix = "-devee"
+            manifestPlaceholders["appName"] = "Devee"
         }
         create("yano") {
-            dimension = "product"
+            dimension = "brand"
             applicationIdSuffix = ".yano"
-            versionNameSuffix = "-yano"
+            manifestPlaceholders["appName"] = "Yano"
         }
         create("bandcard") {
-            dimension = "product"
+            dimension = "brand"
             applicationIdSuffix = ".bandcard"
-            versionNameSuffix = "-bandcard"
+            manifestPlaceholders["appName"] = "Bandcard"
         }
         create("jbcard") {
-            dimension = "product"
+            dimension = "brand"
             applicationIdSuffix = ".jbcard"
-            versionNameSuffix = "-jbcard"
+            manifestPlaceholders["appName"] = "JBCard"
         }
         create("taustepay") {
-            dimension = "product"
+            dimension = "brand"
             applicationIdSuffix = ".taustepay"
-            versionNameSuffix = "-taustepay"
+            manifestPlaceholders["appName"] = "Taustepay"
         }
         create("queirozpremium") {
-            dimension = "product"
+            dimension = "brand"
             applicationIdSuffix = ".queirozpremium"
-            versionNameSuffix = "-queirozpremium"
+            manifestPlaceholders["appName"] = "Queiroz Premium"
         }
         create("tridico") {
-            dimension = "product"
+            dimension = "brand"
             applicationIdSuffix = ".tridicopay"
-            versionNameSuffix = "-tridicopay"
+            manifestPlaceholders["appName"] = "Tridicopay"
+        }
+        create("sindbank") {
+            dimension = "brand"
+            applicationIdSuffix = ".sindbank"
+            manifestPlaceholders["appName"] = "Sindbank"
+        }
+    }
+
+    // Adicionar dependências de libs por device após as variants serem criadas
+    applicationVariants.all {
+        val variantName = name
+        when {
+            variantName.contains("gpos760", ignoreCase = true) -> {
+                project.dependencies.add("${variantName}Implementation", fileTree(mapOf("dir" to "libs/760", "include" to listOf("*.aar"))))
+            }
+            variantName.contains("gpos780", ignoreCase = true) -> {
+                project.dependencies.add("${variantName}Implementation", fileTree(mapOf("dir" to "libs/780", "include" to listOf("*.aar"))))
+            }
         }
     }
 }
+
 dependencies {
-    implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.aar"))))
 }
 
 flutter {

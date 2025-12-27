@@ -23,8 +23,6 @@ class LoginRepositoryImpl implements LoginRepository {
         password: password,
       );
 
-      print(response);
-
       final token = response.data['access_token'];
 
       if (token == null || token is! String) {

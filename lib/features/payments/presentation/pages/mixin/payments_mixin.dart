@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/widgets.dart';
 import 'package:flutter_masked_text2/flutter_masked_text2.dart';
 import 'package:zeeppay/core/default_options.dart';
@@ -6,9 +8,12 @@ import 'package:zeeppay/core/pos_data_store.dart';
 import 'package:zeeppay/features/payments/presentation/bloc/payments_bloc.dart';
 import 'package:zeeppay/features/payments/presentation/pages/payments_page.dart';
 import 'package:zeeppay/flavors/flavor_config.dart';
+import 'package:zeeppay/shared/database/database.dart';
 import 'package:zeeppay/shared/formatters/formatters.dart';
 import 'package:zeeppay/shared/models/sell_model.dart';
+import 'package:zeeppay/shared/models/store_pos_model.dart';
 import 'package:zeeppay/shared/service/encript_service.dart';
+import 'package:zeeppay/shared/service/log_service.dart';
 
 mixin PaymentsMixin<T extends StatefulWidget> on State<PaymentsPage> {
   final TextEditingController controllerPasswordCard = TextEditingController();
@@ -25,6 +30,8 @@ mixin PaymentsMixin<T extends StatefulWidget> on State<PaymentsPage> {
   final PaymentsBloc paymentsBloc = getIt.get<PaymentsBloc>();
   FlavorConfig get flavorConfig => FlavorConfig.instance;
   SettingsPosDataStore get posData => SettingsPosDataStore();
+  final database = getIt<Database>();
+
   late SellModel sellModel = SellModel();
   @override
   void initState() {
@@ -48,8 +55,19 @@ mixin PaymentsMixin<T extends StatefulWidget> on State<PaymentsPage> {
     sellModel.nsuCaptura = "1";
   }
 
-  void setCodigoEstabelecimento(String codigoEstabelecimento) {
-    sellModel.codigoEstabelecimento = codigoEstabelecimento;
+  void setCodigoEstabelecimento() {
+    try {
+      StorePosModel store = StorePosModel.fromJson(
+        json.decode(database.getString("store")!),
+      );
+      sellModel.codigoEstabelecimento = '0${store.cnpj}';
+    } catch (e) {
+      LogService.instance.logInfo('Erro de cnpj', 'CNPJ NAO INFORMADO');
+    }
+  }
+
+  void setTipoCripitografia() {
+    sellModel.tipoCriptografia = '3DES';
   }
 
   void setDataLocalAndDataCompra() {
@@ -71,13 +89,16 @@ mixin PaymentsMixin<T extends StatefulWidget> on State<PaymentsPage> {
     );
     setNsu("1");
     setDataLocalAndDataCompra();
-    setCodigoEstabelecimento("003688316000378");
+    setCodigoEstabelecimento();
   }
 
   void resetDatas() {
     controllerPasswordCard.clear();
     controllerValue.text = 'R\$ 0,00';
-    sellModel = SellModel.empty();
+
+    // FIX: Pega nova instância do Factory ao invés de tentar resetar Singleton
+    // Agora cada transação terá um SellModel completamente novo e isolado
+    sellModel = getIt.get<SellModel>();
   }
 
   void onSelectedInstallmentChanged(int installment) {

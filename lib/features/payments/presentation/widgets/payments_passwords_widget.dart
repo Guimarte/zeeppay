@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:zeeppay/features/payments/presentation/bloc/payments_bloc.dart';
 import 'package:zeeppay/features/payments/presentation/widgets/custom_back_button_widget.dart';
 import 'package:zeeppay/features/payments/presentation/widgets/input_password_card_widget.dart';
+import 'package:zeeppay/flavors/flavor_config.dart';
 import 'package:zeeppay/shared/widgets/button_digital_widget.dart';
 import 'package:zeeppay/shared/widgets/button_numbers_widget.dart';
 import 'package:zeeppay/shared/widgets/digital_keyboard.dart';
@@ -38,6 +39,7 @@ class PaymentsPasswordsWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final hasPhysicalKeyboard = FlavorConfig.instance.hasPhysicalKeyboard;
 
     return BlocBuilder(
       bloc: paymentsBloc,
@@ -67,39 +69,90 @@ class PaymentsPasswordsWidget extends StatelessWidget {
                     controllerPasswordCard: controllerPasswordCard,
                   ),
                   Spacer(),
-                  DigitalKeyboard(
-                    numbers: numbers,
-                    confirmButton: ButtonDigitalWidget(
-                      function: () {
-                        onConfirm();
-                      },
-                      icon: Icons.check_circle,
-                      cardText: '',
-                      isConfirmButton: true,
+                  // Oculta o teclado digital no GPOS 760 (usa teclado físico)
+                  if (!hasPhysicalKeyboard)
+                    DigitalKeyboard(
+                      numbers: numbers,
+                      confirmButton: ButtonDigitalWidget(
+                        function: () {
+                          if (controllerPasswordCard.text.isEmpty ||
+                              controllerPasswordCard.text.length < 4) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text(
+                                  'Digite a senha de 4 dígitos do cartão',
+                                ),
+                                backgroundColor: Colors.red,
+                              ),
+                            );
+                            return;
+                          }
+                          onConfirm();
+                        },
+                        icon: Icons.check_circle,
+                        cardText: '',
+                        isConfirmButton: true,
+                      ),
+                      eraseButton: ButtonDigitalWidget(
+                        function: () {
+                          if (controllerPasswordCard.text.isNotEmpty) {
+                            controllerPasswordCard.text = controllerPasswordCard
+                                .text
+                                .substring(
+                                  0,
+                                  controllerPasswordCard.text.length - 1,
+                                );
+                          }
+                        },
+                        cardText: '',
+                        isConfirmButton: false,
+                        icon: Icons.backspace,
+                      ),
+                      numberButton: (String number) => ButtonNumbersWidget(
+                        number: number,
+                        function: (string) {
+                          if (controllerPasswordCard.text.length == 4) return;
+                          controllerPasswordCard.text += string;
+                        },
+                      ),
                     ),
-                    eraseButton: ButtonDigitalWidget(
-                      function: () {
-                        if (controllerPasswordCard.text.isNotEmpty) {
-                          controllerPasswordCard.text = controllerPasswordCard
-                              .text
-                              .substring(
-                                0,
-                                controllerPasswordCard.text.length - 1,
-                              );
-                        }
-                      },
-                      cardText: '',
-                      isConfirmButton: false,
-                      icon: Icons.backspace,
+                  // No GPOS 760, adiciona um botão de confirmar já que não tem teclado virtual
+                  if (hasPhysicalKeyboard)
+                    Padding(
+                      padding: const EdgeInsets.only(top: 20),
+                      child: ElevatedButton(
+                        onPressed: () {
+                          if (controllerPasswordCard.text.isEmpty ||
+                              controllerPasswordCard.text.length < 4) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text(
+                                  'Digite a senha de 4 dígitos do cartão',
+                                ),
+                                backgroundColor: Colors.red,
+                              ),
+                            );
+                            return;
+                          }
+                          onConfirm();
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: theme.primaryColor,
+                          minimumSize: const Size(double.infinity, 56),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                        ),
+                        child: const Text(
+                          'Confirmar',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black,
+                          ),
+                        ),
+                      ),
                     ),
-                    numberButton: (String number) => ButtonNumbersWidget(
-                      number: number,
-                      function: (string) {
-                        if (controllerPasswordCard.text.length == 6) return;
-                        controllerPasswordCard.text += string;
-                      },
-                    ),
-                  ),
                 ],
               ),
             ),

@@ -49,12 +49,12 @@ class SellModel {
 
   SellModel({
     this.senha,
-    this.tipoCriptografia,
+    String? tipoCriptografia,
     this.plastico,
     this.tipoParcelamento,
-    this.tipoOperacao,
+    String? tipoOperacao,
     this.valorCompra,
-    this.calculaPrestacao,
+    bool? calculaPrestacao,
     this.nsuCaptura,
     this.codigoEstabelecimento,
     this.terminal,
@@ -62,11 +62,16 @@ class SellModel {
     this.dataLocal,
     this.prazo,
     this.plano,
-    this.produto,
-    this.cartao,
-    this.cpf,
+    String? produto,
+    String? cartao,
+    String? cpf,
     this.usuario,
-  });
+  })  : tipoCriptografia = tipoCriptografia ?? "3DES",
+        tipoOperacao = tipoOperacao ?? "C",
+        calculaPrestacao = calculaPrestacao ?? true,
+        produto = produto ?? "",
+        cartao = cartao ?? "",
+        cpf = cpf ?? "";
 
   Map<String, dynamic> toJson() {
     return {

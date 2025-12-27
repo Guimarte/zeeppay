@@ -61,8 +61,12 @@ class MainActivity : FlutterActivity() {
                     val content = call.argument<String>("content")
 
                     if (content != null) {
-                        val success = printProfile(content)
-                        result.success(success)
+                        try {
+                            val success = printProfile(content)
+                            result.success(success)
+                        } catch (e: Exception) {
+                            result.error("PRINT_ERROR", e.message ?: "Erro desconhecido ao imprimir", null)
+                        }
                     } else {
                         result.error("INVALID_ARGUMENTS", "One or more parameters are null", null)
                     }
@@ -245,24 +249,37 @@ class MainActivity : FlutterActivity() {
             mCL.PowerOff()
             iprntr = iGedi!!.prntr
             iprntr?.let { printer ->
-                printer.Init()
-                val strconfig = GEDI_PRNTR_st_StringConfig(Paint())
-                strconfig.paint.textAlign = Paint.Align.LEFT
-                strconfig.paint.textSize = 24.0F
-                strconfig.paint.isFakeBoldText = false
-                strconfig.offset = 0
-                strconfig.lineSpace = 5
-                val lines = content.split("\n")
-                for (line in lines) {
-                    printer.DrawStringExt(strconfig, line.trim())
+                try {
+                    printer.Init()
+                    val strconfig = GEDI_PRNTR_st_StringConfig(Paint())
+                    strconfig.paint.textAlign = Paint.Align.LEFT
+                    strconfig.paint.textSize = 24.0F
+                    strconfig.paint.isFakeBoldText = false
+                    strconfig.offset = 0
+                    strconfig.lineSpace = 5
+                    val lines = content.split("\n")
+                    for (line in lines) {
+                        printer.DrawStringExt(strconfig, line.trim())
+                    }
+                    printer.DrawBlankLine(10)
+                    printer.Output()
+                } catch (e: GediException) {
+                    // Verificar código de erro específico
+                    when {
+                        e.message?.contains("OUT_OF_PAPER") == true ||
+                        e.message?.contains("138") == true -> {
+                            throw Exception("Impressora sem papel ou tampa aberta")
+                        }
+                        else -> {
+                            throw Exception("Erro na impressora: ${e.message}")
+                        }
+                    }
                 }
-                printer.DrawBlankLine(10)
-                printer.Output()
             }
             true
-        } catch (e: GediException) {
+        } catch (e: Exception) {
             e.printStackTrace()
-            false
+            throw e
         }
     }
 

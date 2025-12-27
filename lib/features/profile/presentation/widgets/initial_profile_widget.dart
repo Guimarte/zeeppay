@@ -4,8 +4,9 @@ import 'package:zeeppay/core/pos_data_store.dart';
 import 'package:zeeppay/shared/widgets/card_widget.dart';
 
 class InitialProfileWidget extends StatelessWidget {
-  const InitialProfileWidget({super.key, required this.function});
+  const InitialProfileWidget({super.key, required this.function, required this.onBack});
   final Function() function;
+  final Function() onBack;
 
   @override
   Widget build(BuildContext context) {
@@ -20,6 +21,15 @@ class InitialProfileWidget extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
+              Row(
+                children: [
+                  IconButton(
+                    icon: const Icon(Icons.arrow_back),
+                    onPressed: onBack,
+                  ),
+                  const Spacer(),
+                ],
+              ),
               const SizedBox(height: 24),
               CachedNetworkImage(
                 imageUrl: logoUrl,
@@ -40,21 +50,12 @@ class InitialProfileWidget extends StatelessWidget {
               ),
               const SizedBox(height: 32),
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   Expanded(
                     child: CardWidget(
                       icon: Icons.badge,
                       cardName: "CPF",
                       onTap: function,
-                    ),
-                  ),
-                  const SizedBox(width: 16),
-                  Expanded(
-                    child: CardWidget(
-                      icon: Icons.credit_card,
-                      cardName: "Cartão",
-                      onTap: () {},
                     ),
                   ),
                 ],

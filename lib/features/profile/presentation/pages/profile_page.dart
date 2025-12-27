@@ -24,6 +24,9 @@ class ProfilePage extends StatelessWidget with ProfilePageMixin {
                 function: () {
                   profileBloc.add(ProfileCpfEventSet());
                 },
+                onBack: () {
+                  Navigator.of(context).pop();
+                },
               );
             }
             if (state is ProfileStateLoading) {
@@ -39,12 +42,46 @@ class ProfilePage extends StatelessWidget with ProfilePageMixin {
                     ),
                   );
                 },
+                onBack: () {
+                  profileBloc.add(ProfileSetInitialEvent());
+                },
               );
             }
             if (state is ProfileStateSucess) {
               return LoadedProfileWidget(
                 client: state.cliente.first,
                 profileBloc: profileBloc,
+              );
+            }
+            if (state is ProfileStateError) {
+              return Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(Icons.error_outline, color: Colors.red, size: 60),
+                    SizedBox(height: 16),
+                    Text(
+                      'Erro ao consultar perfil',
+                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    ),
+                    SizedBox(height: 8),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 24),
+                      child: Text(
+                        state.message,
+                        style: TextStyle(color: Colors.red),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                    SizedBox(height: 24),
+                    ElevatedButton(
+                      onPressed: () {
+                        profileBloc.add(ProfileSetInitialEvent());
+                      },
+                      child: Text('Voltar'),
+                    ),
+                  ],
+                ),
               );
             }
             return Center(

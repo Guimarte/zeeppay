@@ -61,6 +61,54 @@ flutter_native_splash:
   android_12:
     image: assets/default/splash.png
 
+flutter_launcher_icons:
+  android: true
+  ios: false
+  image_path: "assets/default/splash.png"
+  flavors:
+    gpos760Bandcard:
+      android: true
+      image_path: "assets/flavors/bandcard/icon.png"
+    gpos780Bandcard:
+      android: true
+      image_path: "assets/flavors/bandcard/icon.png"
+    gpos760Jbcard:
+      android: true
+      image_path: "assets/flavors/jbcard/icon.png"
+    gpos780Jbcard:
+      android: true
+      image_path: "assets/flavors/jbcard/icon.png"
+    gpos760Queirozpremium:
+      android: true
+      image_path: "assets/flavors/queirozpremium/icon.png"
+    gpos780Queirozpremium:
+      android: true
+      image_path: "assets/flavors/queirozpremium/icon.png"
+    gpos760Taustepay:
+      android: true
+      image_path: "assets/flavors/taustepay/icon.png"
+    gpos780Taustepay:
+      android: true
+      image_path: "assets/flavors/taustepay/icon.png"
+    gpos760Tridico:
+      android: true
+      image_path: "assets/flavors/tridico/icon.png"
+    gpos780Tridico:
+      android: true
+      image_path: "assets/flavors/tridico/icon.png"
+    gpos760Sindbank:
+      android: true
+      image_path: "assets/flavors/sindbank/icon.png"
+    gpos780Sindbank:
+      android: true
+      image_path: "assets/flavors/sindbank/icon.png"
+    gpos760Yano:
+      android: true
+      image_path: "assets/flavors/yano/icon.png"
+    gpos780Yano:
+      android: true
+      image_path: "assets/flavors/yano/icon.png"
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -71,6 +119,7 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^5.0.0
+  flutter_launcher_icons: ^0.14.2
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -87,19 +136,36 @@ flutter:
     - assets/default/
     - path: assets/flavors/bandcard/
       flavors:
-        - bandcard
+        - gpos760Bandcard
+        - gpos780Bandcard
     - path: assets/flavors/devee/
       flavors:
-        - devee
+        - gpos760Devee
+        - gpos780Devee
     - path: assets/flavors/queirozpremium/
       flavors:
-        - queirozpremium
+        - gpos760Queirozpremium
+        - gpos780Queirozpremium
     - path: assets/flavors/taustepay/
       flavors:
-        - taustepay
+        - gpos760Taustepay
+        - gpos780Taustepay
     - path: assets/flavors/jbcard/
       flavors:
-        - jbcard
+        - gpos760Jbcard
+        - gpos780Jbcard
+    - path: assets/flavors/tridico/
+      flavors:
+        - gpos760Tridico
+        - gpos780Tridico
+    - path: assets/flavors/sindbank/
+      flavors:
+        - gpos760Sindbank
+        - gpos780Sindbank
+    - path: assets/flavors/yano/
+      flavors:
+        - gpos760Yano
+        - gpos780Yano
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

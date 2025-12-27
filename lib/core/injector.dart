@@ -37,7 +37,10 @@ void setupDependencies(SharedPreferences prefs) async {
   getIt.registerSingleton<SharedPreferences>(prefs);
   getIt.registerSingleton<Database>(Database(prefs));
   getIt.registerSingleton<ColorsApp>(ColorsApp());
-  getIt.registerSingleton<SellModel>(SellModel());
+
+  // SellModel como Factory - cada transação deve ter sua própria instância
+  // FIX: Evita que dados de uma transação contaminem a próxima
+  getIt.registerFactory<SellModel>(() => SellModel());
 
   // Register Repositories (mais baixo nível)
   getIt.registerLazySingleton<SplashStoreRepository>(

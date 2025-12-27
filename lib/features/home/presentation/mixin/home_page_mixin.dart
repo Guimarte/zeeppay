@@ -9,6 +9,7 @@ import 'package:zeeppay/features/home/domain/repository/home_repository.dart';
 import 'package:zeeppay/features/home/domain/usecase/home_usecase.dart';
 import 'package:zeeppay/shared/database/database.dart';
 import 'package:zeeppay/shared/formatters/formatters.dart';
+import 'package:zeeppay/shared/service/gertec_service.dart';
 import 'package:zeeppay/shared/widgets/show_dialog_confirm_widget.dart';
 import 'package:zeeppay/shared/widgets/show_dialog_erro_widget.dart';
 import 'package:zeeppay/shared/widgets/show_dialog_loading_widget.dart';
@@ -69,6 +70,43 @@ mixin HomePageMixin {
         ],
       ),
     );
+  }
+
+  Future<void> testPrint(BuildContext context) async {
+    try {
+      showLoadingDialog(context);
+
+      final testContent = '''
+============================
+    TESTE DE IMPRESSÃO
+============================
+
+Data: ${Formatters.formatDateTime(DateTime.now(), 'dd/MM/yyyy HH:mm')}
+
+Este é um teste de impressão
+da impressora GERTEC.
+
+Linha 1
+Linha 2
+Linha 3
+
+============================
+   IMPRESSÃO REALIZADA
+============================
+''';
+
+      await GertecService.printProfile(testContent);
+
+      if (!context.mounted) return;
+      Navigator.of(context).pop();
+
+      showDialogConfirm(context, message: 'Impressão de teste enviada!');
+    } catch (e) {
+      if (!context.mounted) return;
+      Navigator.of(context).pop();
+
+      showErrorDialog(context, message: 'Erro ao testar impressão: ${e.toString()}');
+    }
   }
 
   Future<void> _handleCancelLastSale(BuildContext context) async {

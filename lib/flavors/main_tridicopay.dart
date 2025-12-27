@@ -4,12 +4,14 @@ import 'package:zeeppay/app/my_app.dart';
 import 'package:zeeppay/core/injector.dart';
 import 'package:zeeppay/core/routes.dart';
 import 'package:zeeppay/flavors/flavor_config.dart';
+import 'package:zeeppay/flavors/device_detector.dart';
 
 Future<void> main() async {
   FlavorConfig(
     flavor: Flavor.tridicopay,
     name: 'Tridicopay',
     subdomain: 'tridico',
+    deviceModel: DeviceDetector.detectDeviceModel(),
   );
   WidgetsFlutterBinding.ensureInitialized();
 
