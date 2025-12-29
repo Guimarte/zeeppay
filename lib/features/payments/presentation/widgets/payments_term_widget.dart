@@ -91,15 +91,12 @@ class PaymentsTermWidget extends StatelessWidget {
                         child: Card(
                           elevation: isSelected ? 4 : 1,
                           color: isSelected
-                              ? theme.colorScheme.primary.withOpacity(0.1)
+                              ? Colors.green.withOpacity(0.1)
                               : Colors.white,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(12),
                             side: isSelected
-                                ? BorderSide(
-                                    color: theme.colorScheme.primary,
-                                    width: 2,
-                                  )
+                                ? BorderSide(color: Colors.green, width: 2)
                                 : BorderSide(color: Colors.grey.shade300),
                           ),
                           child: ListTile(
@@ -107,16 +104,12 @@ class PaymentsTermWidget extends StatelessWidget {
                               isSelected
                                   ? Icons.check_circle
                                   : Icons.radio_button_unchecked,
-                              color: isSelected
-                                  ? theme.colorScheme.primary
-                                  : Colors.grey,
+                              color: isSelected ? Colors.green : Colors.grey,
                             ),
                             title: Text(
                               '$parcela parcelas',
                               style: theme.textTheme.bodyLarge?.copyWith(
-                                color: isSelected
-                                    ? theme.colorScheme.primary
-                                    : null,
+                                color: isSelected ? Colors.black : null,
                                 fontWeight: isSelected
                                     ? FontWeight.bold
                                     : FontWeight.normal,
@@ -164,15 +157,17 @@ class InterestButtonWidget extends StatelessWidget {
     return Expanded(
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
-          backgroundColor: isSelected
-              ? theme.colorScheme.primary
-              : Colors.grey[300],
+          backgroundColor: isSelected ? Colors.green : Colors.grey[300],
           foregroundColor: isSelected ? Colors.white : Colors.black,
         ),
         onPressed: () {
           onTap();
         },
-        child: Text(label, style: theme.textTheme.labelMedium),
+        child: Text(
+          label,
+          style: theme.textTheme.labelMedium,
+          textAlign: TextAlign.center,
+        ),
       ),
     );
   }
