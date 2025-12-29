@@ -32,7 +32,7 @@ class PaymentsTypePaymentWidget extends StatelessWidget {
                     bloc: paymentsBloc,
                     builder: (context, state) {
                       return GestureDetector(
-                        child: Icon(Icons.arrow_back),
+                        child: const Icon(Icons.arrow_back, size: 32),
                         onTap: () {
                           context.pop();
                         },

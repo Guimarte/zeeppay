@@ -10,7 +10,7 @@ class CustomBackButtonWidget extends StatelessWidget {
     return Row(
       children: [
         GestureDetector(
-          child: Icon(Icons.arrow_back),
+          child: const Icon(Icons.arrow_back, size: 32),
           onTap: () {
             backButton();
           },

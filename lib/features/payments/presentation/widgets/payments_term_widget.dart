@@ -55,7 +55,7 @@ class PaymentsTermWidget extends StatelessWidget {
                     InterestButtonWidget(
                       isSelected: interestType == 'comprador',
                       value: 'comprador',
-                      label: 'Juros comprador',
+                      label: 'Parcelado emissor',
                       onTap: () {
                         onInterestTypeChanged('comprador');
                       },
@@ -63,7 +63,7 @@ class PaymentsTermWidget extends StatelessWidget {
                     const SizedBox(width: 12),
                     InterestButtonWidget(
                       value: 'loja',
-                      label: 'Juros loja',
+                      label: 'Parcelado loja',
                       isSelected: interestType == 'loja',
                       onTap: () {
                         onInterestTypeChanged('loja');

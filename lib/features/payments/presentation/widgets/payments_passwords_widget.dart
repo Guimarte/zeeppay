@@ -137,7 +137,7 @@ class PaymentsPasswordsWidget extends StatelessWidget {
                           onConfirm();
                         },
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: theme.primaryColor,
+                          backgroundColor: Colors.green,
                           minimumSize: const Size(double.infinity, 56),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(16),

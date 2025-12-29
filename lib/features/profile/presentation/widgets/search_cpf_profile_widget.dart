@@ -47,7 +47,7 @@ class SearchCpfProfileWidget extends StatelessWidget {
               Row(
                 children: [
                   IconButton(
-                    icon: const Icon(Icons.arrow_back),
+                    icon: const Icon(Icons.arrow_back, size: 32),
                     onPressed: onBack,
                   ),
                   const Spacer(),
@@ -63,9 +63,7 @@ class SearchCpfProfileWidget extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 16),
-              Center(
-                child: CpfFormFieldWidget(cpfController: cpfController),
-              ),
+              Center(child: CpfFormFieldWidget(cpfController: cpfController)),
               const Spacer(),
               if (!hasPhysicalKeyboard)
                 DigitalKeyboard(
@@ -103,7 +101,7 @@ class SearchCpfProfileWidget extends StatelessWidget {
                   child: ElevatedButton(
                     onPressed: onConfirm,
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: theme.primaryColor,
+                      backgroundColor: Colors.green,
                       minimumSize: const Size(double.infinity, 56),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(16),

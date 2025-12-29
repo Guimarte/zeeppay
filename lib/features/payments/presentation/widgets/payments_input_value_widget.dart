@@ -103,7 +103,7 @@ class PaymentsInputValueWidget extends StatelessWidget {
                       functionConfirm();
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: theme.primaryColor,
+                      backgroundColor: Colors.green,
                       minimumSize: const Size(double.infinity, 56),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(16),

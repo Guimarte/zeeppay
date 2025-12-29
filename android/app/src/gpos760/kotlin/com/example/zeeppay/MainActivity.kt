@@ -48,7 +48,7 @@ class MainActivity : FlutterActivity() {
 
 
 
-                    if (header != null && middle != null && footer != null && storeInfo != null && logo != null) {
+                    if (header != null && middle != null && footer != null && storeInfo != null && logo != null ) {
                         val success = printReceive(header, middle, footer, storeInfo, logo)
                         result.success(success)
                     } else {
@@ -187,7 +187,7 @@ class MainActivity : FlutterActivity() {
         middle: String,
         footer: String,
         storeInfo: String,
-        logo: ByteArray
+        logo: ByteArray,
     ): Boolean {
         return try {
             val mCL = iGedi!!.cl
@@ -231,6 +231,8 @@ class MainActivity : FlutterActivity() {
                 footerConfig.paint.isFakeBoldText = false // normal
                 footerConfig.lineSpace = 2
 
+
+
                 val printBlock: (GEDI_PRNTR_st_StringConfig, String) -> Unit = { config, block ->
                     printer.DrawStringExt(config, block.trim())
                 }
@@ -239,6 +241,7 @@ class MainActivity : FlutterActivity() {
                 printBlock(storeInfoConfig, storeInfo) // header negrito
                 printBlock(bodyConfig, middle)   // middle normal
                 printBlock(footerConfig, footer)
+                printer.DrawBlankLine(20)
                 printer.DrawBlankLine(20)
                 printer.Output()
             }

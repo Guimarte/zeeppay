@@ -31,7 +31,7 @@ class LoadedProfileWidget extends StatelessWidget {
                   bloc: profileBloc,
                   builder: (context, state) {
                     return GestureDetector(
-                      child: Icon(Icons.arrow_back),
+                      child: const Icon(Icons.arrow_back, size: 32),
                       onTap: () {
                         profileBloc.add(ProfileSetInitialEvent());
                       },
@@ -39,7 +39,7 @@ class LoadedProfileWidget extends StatelessWidget {
                   },
                 ),
                 GestureDetector(
-                  child: Icon(Icons.print),
+                  child: const Icon(Icons.print, size: 32),
                   onTap: () => GertecService.printClientProfile(client),
                 ),
               ],

@@ -73,7 +73,7 @@ class HomePage extends StatelessWidget with HomePageMixin {
                         Expanded(
                           child: CardWidget(
                             cardName: "VENDA",
-                            icon: Icons.shopping_cart,
+                            icon: Icons.attach_money,
                             onTap: () {
                               context.push('/payments');
                             },

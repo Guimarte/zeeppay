@@ -234,6 +234,7 @@ class MainActivity : FlutterActivity() {
                 printBlock(bodyConfig, middle)   // middle normal
                 printBlock(footerConfig, footer)
                 printer.DrawBlankLine(20)
+                printer.DrawBlankLine(20)
                 printer.Output()
             }
             true
