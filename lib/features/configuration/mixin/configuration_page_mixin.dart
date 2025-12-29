@@ -38,4 +38,32 @@ mixin ConfigurationPageMixin {
   String? getDeviceId() {
     return database.getString("device_id");
   }
+
+  StorePosModel? getSavedStore() {
+    final storeJson = database.getString("store");
+    if (storeJson != null) {
+      return StorePosModel.fromJson(json.decode(storeJson));
+    }
+    return null;
+  }
+
+  StorePosModel? getInitialStore(List<StorePosModel> stores) {
+    if (stores.isEmpty) return null;
+
+    final savedStore = getSavedStore();
+    if (savedStore != null) {
+      // Procura uma loja com o mesmo nome
+      try {
+        return stores.firstWhere(
+          (store) => store.name == savedStore.name,
+        );
+      } catch (e) {
+        // Se não encontrar loja com o mesmo nome, retorna a primeira
+        return stores.first;
+      }
+    }
+
+    // Se não tiver loja salva, retorna a primeira
+    return stores.first;
+  }
 }

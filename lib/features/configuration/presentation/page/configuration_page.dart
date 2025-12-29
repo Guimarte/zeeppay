@@ -49,6 +49,7 @@ class _ConfigurationPageState extends State<ConfigurationPage>
                 width: MediaQuery.sizeOf(context).width * 0.8,
                 child: DropDownStores(
                   stores: posDataStore.settings!.store,
+                  initialValue: getInitialStore(posDataStore.settings!.store),
                   onChanged: (store) {
                     setData(store: store);
                   },
