@@ -6,7 +6,6 @@ import 'package:zeeppay/shared/database/database.dart';
 import 'package:zeeppay/shared/dio/dio_implementation.dart';
 
 import 'package:dartz/dartz.dart';
-import 'package:zeeppay/shared/external/urls.dart';
 import 'package:zeeppay/shared/models/failure.dart';
 import 'package:zeeppay/shared/service/log_service.dart';
 
@@ -22,7 +21,9 @@ class PaymentsRepositoryImpl implements PaymentsRepository {
   @override
   Future<Either<Failure, Response>> call(Map<String, dynamic> data) async {
     try {
-      final url = UrlsPayments.insertPayments(_posData.settings!.erCardsModel.endpoint);
+      final url = UrlsPayments.insertPayments(
+        _posData.settings!.erCardsModel.endpoint,
+      );
       final username = database.getString("user") ?? '';
 
       LogService.instance.logInfo(
@@ -75,10 +76,7 @@ class PaymentsRepositoryImpl implements PaymentsRepository {
       LogService.instance.logError(
         'PaymentsRepository',
         'Erro inesperado na requisição',
-        details: {
-          'error': e.toString(),
-          'errorType': e.runtimeType.toString(),
-        },
+        details: {'error': e.toString(), 'errorType': e.runtimeType.toString()},
       );
       return Left(Failure.fromMessage('Erro inesperado: ${e.toString()}'));
     }

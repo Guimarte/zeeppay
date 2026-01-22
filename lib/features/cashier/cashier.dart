@@ -6,7 +6,6 @@ export 'domain/usecases/cashier_usecase.dart';
 
 // Data
 export 'data/models/cashier_model.dart';
-export 'data/repositories/cashier_repository_impl.dart';
 
 // Presentation
 export 'presentation/bloc/cashier_bloc.dart';

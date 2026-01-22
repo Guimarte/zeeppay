@@ -24,12 +24,14 @@ class CashierRepositoryImpl implements CashierRepository {
       if (response.data != null) {
         // Tenta diferentes estruturas de dados
         Map<String, dynamic>? cashierData;
-        
+
         if (response.data is Map<String, dynamic>) {
           // Tenta estrutura aninhada primeiro
-          if (response.data['data'] != null && response.data['data']['cashier'] != null) {
-            cashierData = response.data['data']['cashier'] as Map<String, dynamic>;
-          } 
+          if (response.data['data'] != null &&
+              response.data['data']['cashier'] != null) {
+            cashierData =
+                response.data['data']['cashier'] as Map<String, dynamic>;
+          }
           // Tenta estrutura direta
           else if (response.data['cashier'] != null) {
             cashierData = response.data['cashier'] as Map<String, dynamic>;
@@ -39,23 +41,30 @@ class CashierRepositoryImpl implements CashierRepository {
             cashierData = response.data as Map<String, dynamic>;
           }
         }
-        
+
         if (cashierData != null) {
           return Right(CashierModel.fromJson(cashierData));
         }
       }
-      
+
       // Se chegou aqui, não conseguiu extrair dados válidos
-      return Left(Failure.fromMessage('Não foi possível extrair dados do caixa da resposta (Status: ${response.statusCode})'));
-      
+      return Left(
+        Failure.fromMessage(
+          'Não foi possível extrair dados do caixa da resposta (Status: ${response.statusCode})',
+        ),
+      );
     } on DioException catch (e) {
-      return Left(Failure.fromApiResponse(
-        e.response?.data,
-        statusCode: e.response?.statusCode,
-        fallbackMessage: 'Erro de rede ao abrir caixa: ${e.message}',
-      ));
+      return Left(
+        Failure.fromApiResponse(
+          e.response?.data,
+          statusCode: e.response?.statusCode,
+          fallbackMessage: 'Erro de rede ao abrir caixa: ${e.message}',
+        ),
+      );
     } catch (e) {
-      return Left(Failure.fromMessage('Erro inesperado ao abrir caixa: ${e.toString()}'));
+      return Left(
+        Failure.fromMessage('Erro inesperado ao abrir caixa: ${e.toString()}'),
+      );
     }
   }
 
@@ -72,13 +81,17 @@ class CashierRepositoryImpl implements CashierRepository {
 
       return Right(response.statusCode == 200);
     } on DioException catch (e) {
-      return Left(Failure.fromApiResponse(
-        e.response?.data,
-        statusCode: e.response?.statusCode,
-        fallbackMessage: 'Erro de rede ao fechar caixa: ${e.message}',
-      ));
+      return Left(
+        Failure.fromApiResponse(
+          e.response?.data,
+          statusCode: e.response?.statusCode,
+          fallbackMessage: 'Erro de rede ao fechar caixa: ${e.message}',
+        ),
+      );
     } catch (e) {
-      return Left(Failure.fromMessage('Erro inesperado ao fechar caixa: ${e.toString()}'));
+      return Left(
+        Failure.fromMessage('Erro inesperado ao fechar caixa: ${e.toString()}'),
+      );
     }
   }
 
@@ -91,21 +104,28 @@ class CashierRepositoryImpl implements CashierRepository {
         url: UrlsShared.currentSession(deviceId),
         isStoreRequest: true,
       );
+      print(response);
 
-      if (response.data != null && response.data['data'] != null && response.data['data']['cashier'] != null) {
+      if (response.data != null &&
+          response.data['data'] != null &&
+          response.data['data']['cashier'] != null) {
         return Right(CashierModel.fromJson(response.data['data']['cashier']));
       }
 
       return Right(null);
     } on DioException catch (e) {
-      return Left(Failure.fromApiResponse(
-        e.response?.data,
-        statusCode: e.response?.statusCode,
-        fallbackMessage: 'Erro de rede ao buscar sessão atual: ${e.message}',
-      ));
+      return Left(
+        Failure.fromApiResponse(
+          e.response?.data,
+          statusCode: e.response?.statusCode,
+          fallbackMessage: 'Erro de rede ao buscar sessão atual: ${e.message}',
+        ),
+      );
     } catch (e) {
       return Left(
-        Failure.fromMessage('Erro inesperado ao buscar sessão atual: ${e.toString()}'),
+        Failure.fromMessage(
+          'Erro inesperado ao buscar sessão atual: ${e.toString()}',
+        ),
       );
     }
   }

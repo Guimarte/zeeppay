@@ -23,7 +23,8 @@ import 'package:zeeppay/features/splash/domain/usecase/splash_usecase.dart';
 import 'package:zeeppay/features/splash/presentation/bloc/splash_bloc.dart';
 import 'package:zeeppay/features/invoice/presentation/bloc/invoice_bloc.dart';
 import 'package:zeeppay/features/cashier/data/repositories/cashier_repository_impl.dart';
-import 'package:zeeppay/features/cashier/domain/repositories/cashier_repository.dart';
+import 'package:zeeppay/features/cashier/domain/repositories/cashier_repository.dart'
+    hide CashierRepositoryImpl;
 import 'package:zeeppay/features/cashier/domain/usecases/cashier_usecase.dart';
 import 'package:zeeppay/features/cashier/presentation/bloc/cashier_bloc.dart';
 import 'package:zeeppay/shared/database/database.dart';

@@ -115,19 +115,24 @@ class InvoiceBloc extends Bloc<InvoiceEvent, InvoiceState> {
     InvoiceRegisterTransactionEvent event,
     Emitter<InvoiceState> emit,
   ) async {
+    print('🟢 _registerTransaction CHAMADO');
     emit(InvoiceRegisterTransactionProcessingState());
 
     try {
+      print('🟢 Criando RegisterTransactionModel');
       final transaction = RegisterTransactionModel(
         amount: event.amount,
         paymentMethod: event.paymentMethod,
         cardNumber: event.cardNumber,
       );
 
+      print('🟢 Chamando invoiceUsecase.registerTransaction');
       final result = await invoiceUsecase.registerTransaction(transaction);
+      print('🟢 Resultado: $result');
 
       emit(InvoiceRegisterTransactionSuccessState(transactionResult: result));
     } catch (e) {
+      print('❌ Erro em _registerTransaction: $e');
       emit(
         InvoiceError(message: 'Erro ao registrar transação: ${e.toString()}'),
       );

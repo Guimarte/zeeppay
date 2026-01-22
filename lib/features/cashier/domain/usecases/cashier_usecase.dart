@@ -13,13 +13,13 @@ abstract class CashierUsecase {
 }
 
 class CashierUsecaseImpl implements CashierUsecase {
-  final CashierRepository cashierRepository;
+  final CashierRepository _cashierRepository;
 
-  CashierUsecaseImpl(this.cashierRepository);
+  CashierUsecaseImpl(this._cashierRepository);
 
   @override
   Future<Either<Failure, CashierModel>> openCashier(String deviceId) async {
-    return await cashierRepository.openCashier(deviceId);
+    return await _cashierRepository.openCashier(deviceId);
   }
 
   @override
@@ -27,13 +27,13 @@ class CashierUsecaseImpl implements CashierUsecase {
     String deviceId,
     String cashierSessionId,
   ) async {
-    return await cashierRepository.closeCashier(deviceId, cashierSessionId);
+    return await _cashierRepository.closeCashier(deviceId, cashierSessionId);
   }
 
   @override
   Future<Either<Failure, CashierModel?>> getCurrentSession(
     String deviceId,
   ) async {
-    return await cashierRepository.getCurrentSession(deviceId);
+    return await _cashierRepository.getCurrentSession(deviceId);
   }
 }

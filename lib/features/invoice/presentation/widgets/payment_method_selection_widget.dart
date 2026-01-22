@@ -44,11 +44,14 @@ class PaymentMethodSelectionWidget extends StatelessWidget {
               const SizedBox(height: 16),
               ElevatedButton(
                 onPressed: () {
+                  print('🔵 BOTÃO CONTINUAR PAGAMENTO CLICADO');
                   final currentState = invoiceBloc.state;
+                  print('🔵 Estado atual: ${currentState.runtimeType}');
 
                   if (currentState is InvoicePaymentMethodSelectionState &&
                       currentState.cardNumber != null &&
                       currentState.fatura != null) {
+                    print('🔵 Validação passou - disparando evento');
                     PaymentMethod paymentMethod;
                     switch (selectedPaymentMethod) {
                       case 'PIX':
@@ -67,6 +70,7 @@ class PaymentMethodSelectionWidget extends StatelessWidget {
                         paymentMethod = PaymentMethod.pix;
                     }
 
+                    print('🔵 Disparando InvoiceRegisterTransactionEvent');
                     invoiceBloc.add(
                       InvoiceRegisterTransactionEvent(
                         cardNumber: currentState.cardNumber!,
@@ -76,6 +80,8 @@ class PaymentMethodSelectionWidget extends StatelessWidget {
                         invoiceId: currentState.fatura!.numeroFatura.toString(),
                       ),
                     );
+                  } else {
+                    print('❌ Validação falhou - cardNumber ou fatura é null');
                   }
                 },
                 style: ElevatedButton.styleFrom(
