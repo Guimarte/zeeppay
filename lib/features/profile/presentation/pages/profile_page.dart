@@ -8,9 +8,20 @@ import 'package:zeeppay/features/profile/presentation/widgets/initial_profile_wi
 import 'package:zeeppay/features/profile/presentation/widgets/loaded_profile_widget.dart';
 import 'package:zeeppay/features/profile/presentation/widgets/search_cpf_profile_widget.dart';
 
-// ignore: must_be_immutable
-class ProfilePage extends StatelessWidget with ProfilePageMixin {
-  ProfilePage({super.key});
+class ProfilePage extends StatefulWidget {
+  const ProfilePage({super.key});
+
+  @override
+  State<ProfilePage> createState() => _ProfilePageState();
+}
+
+class _ProfilePageState extends State<ProfilePage> with ProfilePageMixin {
+  @override
+  void dispose() {
+    profileBloc.close();
+    cpfController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {

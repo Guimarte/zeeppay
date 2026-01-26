@@ -22,6 +22,14 @@ class PaymentsPage extends StatefulWidget {
 
 class _PaymentsPageState extends State<PaymentsPage> with PaymentsMixin {
   @override
+  void dispose() {
+    paymentsBloc.close();
+    controllerPasswordCard.dispose();
+    controllerValue.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(

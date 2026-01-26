@@ -46,9 +46,14 @@ class InvoiceBloc extends Bloc<InvoiceEvent, InvoiceState> {
   }
 
   _resetInvoice(ResetInvoice event, Emitter<InvoiceState> emit) {
+    emit(InvoiceInitial());
+  }
+
+  @override
+  Future<void> close() {
     _currentCliente = null;
     _currentFatura = null;
-    emit(InvoiceInitial());
+    return super.close();
   }
 
   Future<void> _readCard(

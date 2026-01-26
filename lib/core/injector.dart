@@ -1,5 +1,6 @@
 import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:zeeppay/features/cashier/domain/repositories/cashier_repository.dart';
 import 'package:zeeppay/features/home/domain/repository/home_repository.dart';
 import 'package:zeeppay/features/home/domain/usecase/home_usecase.dart';
 import 'package:zeeppay/features/invoice/domain/repository/invoice_repository.dart';
@@ -23,12 +24,11 @@ import 'package:zeeppay/features/splash/domain/usecase/splash_usecase.dart';
 import 'package:zeeppay/features/splash/presentation/bloc/splash_bloc.dart';
 import 'package:zeeppay/features/invoice/presentation/bloc/invoice_bloc.dart';
 import 'package:zeeppay/features/cashier/data/repositories/cashier_repository_impl.dart';
-import 'package:zeeppay/features/cashier/domain/repositories/cashier_repository.dart'
-    hide CashierRepositoryImpl;
 import 'package:zeeppay/features/cashier/domain/usecases/cashier_usecase.dart';
 import 'package:zeeppay/features/cashier/presentation/bloc/cashier_bloc.dart';
 import 'package:zeeppay/shared/database/database.dart';
 import 'package:zeeppay/shared/models/sell_model.dart';
+import 'package:zeeppay/shared/service/configuration_service.dart';
 import 'package:zeeppay/theme/colors_app.dart';
 
 final getIt = GetIt.instance;
@@ -38,6 +38,9 @@ void setupDependencies(SharedPreferences prefs) async {
   getIt.registerSingleton<SharedPreferences>(prefs);
   getIt.registerSingleton<Database>(Database(prefs));
   getIt.registerSingleton<ColorsApp>(ColorsApp());
+  getIt.registerSingleton<ConfigurationService>(
+    ConfigurationService(getIt<Database>()),
+  );
 
   // SellModel como Factory - cada transação deve ter sua própria instância
   // FIX: Evita que dados de uma transação contaminem a próxima

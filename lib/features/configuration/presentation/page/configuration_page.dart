@@ -66,6 +66,7 @@ class _ConfigurationPageState extends State<ConfigurationPage>
                 onPressed: () {
                   if (selectedDevice != null) {
                     setSelectedDevice(selectedDevice!.id);
+                    setDeviceData(selectedDevice!);
                   }
                   context.go('/home');
                 },

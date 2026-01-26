@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:zeeppay/features/cashier/data/models/cashier_model.dart';
 import 'package:zeeppay/features/cashier/domain/usecases/cashier_usecase.dart';
 import 'package:zeeppay/features/cashier/presentation/bloc/cashier_event.dart';
 import 'package:zeeppay/features/cashier/presentation/bloc/cashier_state.dart';
@@ -13,40 +14,64 @@ class CashierBloc extends Bloc<CashierEvent, CashierState> {
     on<CashierEventReset>(_onReset);
   }
 
-  void _onOpenCashier(CashierEventOpenCashier event, Emitter<CashierState> emit) async {
+  void _onOpenCashier(
+    CashierEventOpenCashier event,
+    Emitter<CashierState> emit,
+  ) async {
     emit(CashierStateLoading());
-    
+
     final result = await cashierUsecase.openCashier(event.deviceId);
-    
+
     result.fold(
-      (failure) => emit(CashierStateError(error: failure.message ?? 'Erro desconhecido ao abrir caixa')),
-      (cashier) => emit(CashierStateSuccess(
-        message: 'Caixa aberto com sucesso!',
-        cashier: cashier,
-      )),
+      (failure) => emit(
+        CashierStateError(
+          error: failure.message ?? 'Erro desconhecido ao abrir caixa',
+        ),
+      ),
+      (cashier) => emit(CashierStateSuccess(cashier: cashier)),
     );
   }
 
-  void _onCloseCashier(CashierEventCloseCashier event, Emitter<CashierState> emit) async {
+  void _onCloseCashier(
+    CashierEventCloseCashier event,
+    Emitter<CashierState> emit,
+  ) async {
     emit(CashierStateLoading());
-    
-    final result = await cashierUsecase.closeCashier(event.deviceId, event.cashierSessionId);
-    
+
+    final result = await cashierUsecase.closeCashier(
+      event.deviceId,
+      event.cashierSessionId,
+    );
+
     result.fold(
-      (failure) => emit(CashierStateError(error: failure.message ?? 'Erro desconhecido ao fechar caixa')),
-      (success) => emit(CashierStateSuccess(
-        message: success ? 'Caixa fechado com sucesso!' : 'Falha ao fechar caixa',
-      )),
+      (failure) => emit(
+        CashierStateError(
+          error: failure.message ?? 'Erro desconhecido ao fechar caixa',
+        ),
+      ),
+      (success) => emit(
+        CashierCloseSuccessState(
+          closed: success
+              ? 'Caixa fechado com sucesso!'
+              : 'Falha ao fechar caixa',
+        ),
+      ),
     );
   }
 
-  void _onGetCurrentSession(CashierEventGetCurrentSession event, Emitter<CashierState> emit) async {
+  void _onGetCurrentSession(
+    CashierEventGetCurrentSession event,
+    Emitter<CashierState> emit,
+  ) async {
     emit(CashierStateLoading());
-    
+
     final result = await cashierUsecase.getCurrentSession(event.deviceId);
-    
     result.fold(
-      (failure) => emit(CashierStateError(error: failure.message ?? 'Erro desconhecido ao buscar sessão')),
+      (failure) => emit(
+        CashierStateError(
+          error: failure.message ?? 'Erro desconhecido ao buscar sessão',
+        ),
+      ),
       (cashier) => emit(CashierStateCurrentSession(cashier: cashier)),
     );
   }

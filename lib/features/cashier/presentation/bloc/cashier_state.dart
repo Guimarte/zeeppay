@@ -7,10 +7,9 @@ class CashierStateInitial extends CashierState {}
 class CashierStateLoading extends CashierState {}
 
 class CashierStateSuccess extends CashierState {
-  final String message;
-  final CashierModel? cashier;
+  final CashierModel cashier;
 
-  CashierStateSuccess({required this.message, this.cashier});
+  CashierStateSuccess({required this.cashier});
 }
 
 class CashierStateError extends CashierState {
@@ -23,4 +22,10 @@ class CashierStateCurrentSession extends CashierState {
   final CashierModel? cashier;
 
   CashierStateCurrentSession({this.cashier});
+}
+
+class CashierCloseSuccessState extends CashierState {
+  final String closed;
+
+  CashierCloseSuccessState({required this.closed});
 }

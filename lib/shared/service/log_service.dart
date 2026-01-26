@@ -111,28 +111,36 @@ class LogService {
   /// Retorna logs formatados para exibição
   Future<List<LogEntry>> getFormattedLogs({int? limit}) async {
     try {
-      final content = await getLogs();
-      if (content == 'Nenhum log encontrado.' || content.startsWith('Erro ao ler logs:')) {
+      final file = await _logFile;
+      if (!await file.exists()) {
         return [];
       }
-      
-      final lines = content.trim().split('\n');
+
+      // Lê o arquivo linha por linha ao invés de carregar tudo na memória
       final logs = <LogEntry>[];
-      
-      for (final line in lines.reversed) {
-        if (line.trim().isEmpty) continue;
-        
+      final stream = file.openRead();
+      final lines = stream.transform(utf8.decoder).transform(const LineSplitter());
+
+      final allLines = <String>[];
+      await for (final line in lines) {
+        if (line.trim().isNotEmpty) {
+          allLines.add(line);
+        }
+      }
+
+      // Processa em ordem reversa
+      for (final line in allLines.reversed) {
         try {
           final json = jsonDecode(line) as Map<String, dynamic>;
           logs.add(LogEntry.fromJson(json));
-          
+
           if (limit != null && logs.length >= limit) break;
         } catch (e) {
           // Ignora linhas mal formadas
           continue;
         }
       }
-      
+
       return logs;
     } catch (e) {
       return [];

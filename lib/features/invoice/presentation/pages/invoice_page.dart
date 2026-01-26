@@ -10,8 +10,20 @@ import 'package:zeeppay/features/invoice/presentation/widgets/payment_method_sel
 import 'package:zeeppay/shared/widgets/payments_insert_card_widget.dart';
 import 'package:zeeppay/shared/validators/cpf_validator.dart';
 
-class InvoicePage extends StatelessWidget with InvoicePageMixin {
-  InvoicePage({super.key});
+class InvoicePage extends StatefulWidget {
+  const InvoicePage({super.key});
+
+  @override
+  State<InvoicePage> createState() => _InvoicePageState();
+}
+
+class _InvoicePageState extends State<InvoicePage> with InvoicePageMixin {
+  @override
+  void dispose() {
+    invoiceBloc.close();
+    cpfController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {

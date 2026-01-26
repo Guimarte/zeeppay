@@ -23,6 +23,14 @@ class _LoginPageState extends State<LoginPage> with LoginPageMixin {
   bool _obscurePassword = true;
 
   @override
+  void dispose() {
+    loginBloc.close();
+    controllerLogin.dispose();
+    controllerPassword.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(

@@ -1,4 +1,5 @@
 import 'package:go_router/go_router.dart';
+import 'package:zeeppay/features/cashier/presentation/cashier_page.dart';
 import 'package:zeeppay/features/configuration/presentation/page/configuration_page.dart';
 import 'package:zeeppay/features/configuration/presentation/page/logs_page.dart';
 import 'package:zeeppay/features/home/presentation/pages/home_page.dart';
@@ -13,7 +14,10 @@ class Routes {
   final GoRouter goRouter = GoRouter(
     routes: <RouteBase>[
       GoRoute(path: '/', builder: (context, state) => SplashPage()),
-      GoRoute(path: '/token-setup', builder: (context, state) => const TokenSetupPage()),
+      GoRoute(
+        path: '/token-setup',
+        builder: (context, state) => const TokenSetupPage(),
+      ),
       GoRoute(path: '/login', builder: (context, state) => LoginPage()),
       GoRoute(
         path: '/settings',
@@ -24,6 +28,10 @@ class Routes {
       GoRoute(path: '/profile', builder: (context, state) => ProfilePage()),
       GoRoute(path: '/invoice', builder: (context, state) => InvoicePage()),
       GoRoute(path: '/logs', builder: (context, state) => const LogsPage()),
+      GoRoute(
+        path: '/cashier',
+        builder: (context, state) => const CashierPage(),
+      ),
     ],
   );
 }

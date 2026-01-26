@@ -23,7 +23,7 @@ class CustomTextField extends StatelessWidget {
   final InputDecoration? decoration;
 
   const CustomTextField({
-    Key? key,
+    super.key,
     this.controller,
     this.labelText,
     this.hintText,
@@ -42,7 +42,7 @@ class CustomTextField extends StatelessWidget {
     this.autofocus = false,
     this.textCapitalization = TextCapitalization.none,
     this.decoration,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -66,7 +66,8 @@ class CustomTextField extends StatelessWidget {
       showCursor: true,
       readOnly: hasPhysicalKeyboard ? false : false, // Mantém editável
       enableInteractiveSelection: true,
-      decoration: decoration ??
+      decoration:
+          decoration ??
           InputDecoration(
             labelText: labelText,
             hintText: hintText,

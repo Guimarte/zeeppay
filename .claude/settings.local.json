@@ -21,7 +21,8 @@
       "Bash(for flavor in yano bandcard jbcard taustepay queirozpremium tridico sindbank)",
       "Bash(done)",
       "Bash(git checkout:*)",
-      "Bash(./gradlew:*)"
+      "Bash(./gradlew:*)",
+      "Bash(dart analyze:*)"
     ],
     "deny": []
   }

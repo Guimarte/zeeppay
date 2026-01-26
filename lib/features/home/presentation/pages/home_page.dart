@@ -102,6 +102,15 @@ class HomePage extends StatelessWidget with HomePageMixin {
                             },
                           ),
                         ),
+                        Expanded(
+                          child: CardWidget(
+                            cardName: "CAIXA",
+                            icon: Icons.point_of_sale,
+                            onTap: () {
+                              context.push('/cashier');
+                            },
+                          ),
+                        ),
                       ],
                     ),
                   ],

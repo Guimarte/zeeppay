@@ -7,7 +7,7 @@ class UrlsShared {
       'https://${_flavorConfig.subdomain}.zeeppay.com.br/api';
 
   static String openCash(String deviceId) {
-    return '$urlDefault/point-of-sales/devices/$deviceId/cashier/open';
+    return '$urlDefault/point-of-sales/devices/$deviceId/cashier-sessions/open';
   }
 
   static String closeCashier(String deviceId, String cashierSessionId) {
@@ -15,6 +15,6 @@ class UrlsShared {
   }
 
   static String currentSession(String deviceId) {
-    return '$urlDefault/point-of-sales/devices/$deviceId/cashier/current';
+    return '$urlDefault/point-of-sales/devices/$deviceId/cashier-sessions/current';
   }
 }

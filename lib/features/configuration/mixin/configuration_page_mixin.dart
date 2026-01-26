@@ -1,69 +1,42 @@
-import 'dart:convert';
-
 import 'package:zeeppay/core/injector.dart';
 import 'package:zeeppay/core/pos_data_store.dart';
-import 'package:zeeppay/shared/database/database.dart';
 import 'package:zeeppay/shared/models/store_pos_model.dart';
 import 'package:zeeppay/shared/models/device_pos_model.dart';
+import 'package:zeeppay/shared/service/configuration_service.dart';
 
 mixin ConfigurationPageMixin {
   SettingsPosDataStore get posDataStore => SettingsPosDataStore();
-  final database = getIt<Database>();
+  final configService = getIt<ConfigurationService>();
 
   void setData({required StorePosModel store}) {
-    database.setString("store", json.encode(store.toJson()));
+    configService.setStore(store);
   }
 
   void setSelectedDevice(String deviceId) {
-    database.setString("selected_device", deviceId);
+    configService.setSelectedDevice(deviceId);
   }
 
   String? getSelectedDevice() {
-    return database.getString("selected_device");
+    return configService.getSelectedDeviceId();
   }
 
   void setDeviceData(DeviceModel device) {
-    database.setString("device_data", json.encode(device.toJson()));
-    database.setString("device_id", device.id);
+    configService.setDeviceData(device);
   }
 
   DeviceModel? getDeviceData() {
-    final deviceJson = database.getString("device_data");
-    if (deviceJson != null) {
-      return DeviceModel.fromJson(json.decode(deviceJson));
-    }
-    return null;
+    return configService.getDeviceData();
   }
 
   String? getDeviceId() {
-    return database.getString("device_id");
+    return configService.getDeviceId();
   }
 
   StorePosModel? getSavedStore() {
-    final storeJson = database.getString("store");
-    if (storeJson != null) {
-      return StorePosModel.fromJson(json.decode(storeJson));
-    }
-    return null;
+    return configService.getStore();
   }
 
   StorePosModel? getInitialStore(List<StorePosModel> stores) {
-    if (stores.isEmpty) return null;
-
-    final savedStore = getSavedStore();
-    if (savedStore != null) {
-      // Procura uma loja com o mesmo nome
-      try {
-        return stores.firstWhere(
-          (store) => store.name == savedStore.name,
-        );
-      } catch (e) {
-        // Se não encontrar loja com o mesmo nome, retorna a primeira
-        return stores.first;
-      }
-    }
-
-    // Se não tiver loja salva, retorna a primeira
-    return stores.first;
+    return configService.getInitialStore(stores);
   }
 }

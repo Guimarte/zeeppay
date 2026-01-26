@@ -1,7 +1,13 @@
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:zeeppay/core/pos_data_store.dart';
+import 'package:zeeppay/features/cashier/data/models/cashier_device_model.dart';
 import 'package:zeeppay/features/cashier/data/models/cashier_model.dart';
+import 'package:zeeppay/features/cashier/data/models/cashier_operator_model.dart';
+import 'package:zeeppay/features/cashier/data/models/cashier_store_model.dart';
+import 'package:zeeppay/features/cashier/data/models/cashier_summary_model.dart';
+import 'package:zeeppay/features/cashier/data/models/payments_summary_model.dart';
+import 'package:zeeppay/features/cashier/data/models/purchases_summary_model.dart';
 import 'package:zeeppay/features/cashier/domain/repositories/cashier_repository.dart';
 import 'package:zeeppay/shared/dio/dio_implementation.dart';
 import 'package:zeeppay/shared/models/failure.dart';
@@ -20,51 +26,18 @@ class CashierRepositoryImpl implements CashierRepository {
         isStoreRequest: true,
       );
 
-      // Mesmo com status 500, vamos tentar processar se houver dados
-      if (response.data != null) {
-        // Tenta diferentes estruturas de dados
-        Map<String, dynamic>? cashierData;
-
-        if (response.data is Map<String, dynamic>) {
-          // Tenta estrutura aninhada primeiro
-          if (response.data['data'] != null &&
-              response.data['data']['cashier'] != null) {
-            cashierData =
-                response.data['data']['cashier'] as Map<String, dynamic>;
-          }
-          // Tenta estrutura direta
-          else if (response.data['cashier'] != null) {
-            cashierData = response.data['cashier'] as Map<String, dynamic>;
-          }
-          // Usa a resposta inteira se tiver 'id'
-          else if (response.data['id'] != null) {
-            cashierData = response.data as Map<String, dynamic>;
-          }
-        }
-
-        if (cashierData != null) {
-          return Right(CashierModel.fromJson(cashierData));
-        }
-      }
-
-      // Se chegou aqui, não conseguiu extrair dados válidos
-      return Left(
-        Failure.fromMessage(
-          'Não foi possível extrair dados do caixa da resposta (Status: ${response.statusCode})',
-        ),
-      );
-    } on DioException catch (e) {
-      return Left(
-        Failure.fromApiResponse(
-          e.response?.data,
-          statusCode: e.response?.statusCode,
-          fallbackMessage: 'Erro de rede ao abrir caixa: ${e.message}',
-        ),
-      );
+      return Right(CashierModel.fromJson(response.data['data']));
     } catch (e) {
-      return Left(
-        Failure.fromMessage('Erro inesperado ao abrir caixa: ${e.toString()}'),
-      );
+      if (e is DioException) {
+        return Left(
+          Failure.fromApiResponse(
+            e.response?.data,
+            statusCode: e.response?.statusCode,
+            fallbackMessage: 'Erro ao abrir caixa: ${e.message}',
+          ),
+        );
+      }
+      return Left(Failure.fromMessage('Erro ao abrir caixa: $e'));
     }
   }
 
@@ -80,18 +53,17 @@ class CashierRepositoryImpl implements CashierRepository {
       );
 
       return Right(response.statusCode == 200);
-    } on DioException catch (e) {
-      return Left(
-        Failure.fromApiResponse(
-          e.response?.data,
-          statusCode: e.response?.statusCode,
-          fallbackMessage: 'Erro de rede ao fechar caixa: ${e.message}',
-        ),
-      );
     } catch (e) {
-      return Left(
-        Failure.fromMessage('Erro inesperado ao fechar caixa: ${e.toString()}'),
-      );
+      if (e is DioException) {
+        return Left(
+          Failure.fromApiResponse(
+            e.response?.data,
+            statusCode: e.response?.statusCode,
+            fallbackMessage: 'Erro ao fechar caixa: ${e.message}',
+          ),
+        );
+      }
+      return Left(Failure.fromMessage('Erro ao fechar caixa: $e'));
     }
   }
 
@@ -99,34 +71,65 @@ class CashierRepositoryImpl implements CashierRepository {
   Future<Either<Failure, CashierModel?>> getCurrentSession(
     String deviceId,
   ) async {
-    try {
-      final response = await _dio.get(
-        url: UrlsShared.currentSession(deviceId),
-        isStoreRequest: true,
-      );
-      print(response);
-
-      if (response.data != null &&
-          response.data['data'] != null &&
-          response.data['data']['cashier'] != null) {
-        return Right(CashierModel.fromJson(response.data['data']['cashier']));
-      }
-
-      return Right(null);
-    } on DioException catch (e) {
-      return Left(
-        Failure.fromApiResponse(
-          e.response?.data,
-          statusCode: e.response?.statusCode,
-          fallbackMessage: 'Erro de rede ao buscar sessão atual: ${e.message}',
+    return Right(
+      CashierModel(
+        id: 'fake-cashier-001',
+        status: 'ABERTO',
+        store: CashierStoreModel(
+          id: 'store-001',
+          name: 'Loja Teste',
+          document: '12.345.678/0001-90',
+          address: 'Rua Teste, 123',
+          phone: '(11) 98765-4321',
         ),
-      );
-    } catch (e) {
-      return Left(
-        Failure.fromMessage(
-          'Erro inesperado ao buscar sessão atual: ${e.toString()}',
+        device: CashierDeviceModel(
+          id: 'device-001',
+          name: 'POS Teste',
+          serialNumber: 'SN123456789',
         ),
-      );
-    }
+        operator: CashierOperatorModel(
+          id: 'operator-001',
+          name: 'Operador Teste',
+        ),
+        openAt: '2026-01-23T08:00:00',
+        closedAt: null,
+        summary: CashierSummaryModel(
+          paymentsSummary: PaymentsSummaryModel(
+            totalPaymentsAmount: 10,
+            totalPaymentsByPix: 3.0,
+            totalPaymentsByCreditCard: 4.0,
+            totalPaymentsByDebitCard: 2.0,
+            totalPaymentsByCash: 1.0,
+            totalPaymentsByCheck: 0.0,
+            totalPaymentsByTransfer: 0.0,
+            totalPaymentsValue: 1250.00,
+            paymentsValueByPix: 350.00,
+            paymentsValueByCreditCard: 500.00,
+            paymentsValueByDebitCard: 250.00,
+            paymentsValueByCash: 150.00,
+            paymentsValueByCheck: 0.0,
+            paymentsValueByTransfer: 0.0,
+          ),
+          purchasesSummary: PurchasesSummaryModel(
+            totalPurchasesAmount: 10,
+            totalPurchasesValue: 1250.00,
+          ),
+          openDate: '2026-01-23T08:00:00',
+          closeDate: null,
+          durationInSeconds: 14400,
+        ),
+      ),
+    );
+    // try {
+    //   final response = await _dio.get(
+    //     url: UrlsShared.currentSession(deviceId),
+    //     isStoreRequest: true,
+    //   );
+
+    //   final data = response.data?['data'];
+    //   return Right(data != null ? CashierModel.fromJson(data) : null);
+    // } catch (e) {
+    //   return Left(Failure.fromMessage('Erro ao buscar sessão: $e'));
+    // }
   }
 }
