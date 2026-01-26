@@ -9,11 +9,6 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   FlavorConfig(flavor: Flavor.devee, name: 'Devee', subdomain: 'devee');
-
-  // Configurar cache de imagens com limite
-  PaintingBinding.instance.imageCache.maximumSize = 100;
-  PaintingBinding.instance.imageCache.maximumSizeBytes = 50 << 20; // 50 MB
-
   final prefs = await SharedPreferences.getInstance();
   setupDependencies(prefs);
   final routes = Routes();
